@@ -1,0 +1,95 @@
+side {
+    display: inline-block;
+    height: calc(100vh - 50px);
+    width: 250px;
+    box-shadow: 2px 2px  2px  0 rgba(0,0,0,0.16),
+                2px 10px 10px 0 rgba(0,0,0,0.16)!important; 
+    position: fixed; 
+    top: 50px; 
+    left: 0;
+}
+
+side tab.show {
+    width: calc(100% - 20px);
+    height: 24px;
+    display: block;
+    padding: 10px;
+    line-height: 24px;
+    text-align: center;
+    font-weight: bold;
+    color: #ffffff;
+    font-variant: SMALL-CAPS;
+    background-color: #00aaff;
+    cursor: pointer;
+    position: relative;
+}
+
+side tab {
+    width: calc(100% - 20px);
+    height: 24px;
+    display: block;
+    padding: 10px;
+    line-height: 24px;
+    text-align: center;
+    font-weight: bold;
+    color: #555555;
+    font-variant: SMALL-CAPS;
+    background-color: #f0f0f0;
+    cursor: pointer;
+    position: relative;
+    transition-duration: 500ms;
+}
+
+side > h3 {
+    width: calc(100% - 20px);
+    height: 20px;
+    display: block;
+    padding: 10px;
+    line-height: 22px;
+    text-align: center;
+    font-weight: bold;
+    cursor: pointer;
+    position: relative;
+    background-color: #ffffff;
+    border-top: 2px solid #555555;
+    border-bottom: 2px solid #555555;
+}
+
+side > tab:hover {
+    color: #555555;
+    background-color: #99ddff;
+}
+
+
+side > tab.show:hover {
+    color: #ffffff;
+    background-color: #00aaff;
+}
+
+side > span#tab-wrapper {
+    width: calc(100% - 20px);
+    height: 24px;
+    display: block;
+    padding: 10px;
+    line-height: 24px;
+    position: absolute;
+    left: 0;
+    top: 44px;
+    transition-duration: 500ms;
+}
+
+side > span#tab-wrapper:after {
+    content: '';
+    position: absolute;
+    top: 6px;
+    right: -32px;
+    border: 16px solid;
+    transition: all 500ms;
+    border-color: transparent transparent transparent #00aaff;
+}
+
+content {
+    width: 100%;
+    height: calc(100vh - 4em - 50px);
+    display: none;
+}

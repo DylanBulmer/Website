@@ -1,0 +1,37 @@
+extends layout
+
+block content
+    #barba-wrapper
+      .barba-container
+        link(rel="stylesheet" href="/css/account.css")
+        side
+            span#tab-wrapper
+            h3 Manage Your Sign In's
+            tab.show#change_password(onclick="viewPage('change_password')") Change Password
+            tab#google(onclick="viewPage('google')") Google
+            tab#twitter(onclick="viewPage('twitter')") Twitter
+            tab#facebook(onclick="viewPage('facebook')") Facebook
+            tab#steam(onclick="viewPage('steam')") Steam
+        page(style= "display: inline-block; width: calc(100% - 4em - 250px); position: absolute; right: 0; top: 50px; left: auto;")
+            content#_change_password
+                h2(style="text-align: center;display: block;") Change Password
+                    br
+                    br
+                span(style="text-align: center;display: block;") You can change your password with the following form!
+                form(action="" method="post")
+                    br
+                    err(style="display:block;color:#f00;font-size:0.9em;text-align:center;") #{err}
+                    br
+                    input(name="form" value="man_pass" style="display:none;")
+                    input(placeholder="Current Password" type="password" name="password_current")
+                    br
+                    br
+                    input(placeholder="New Password" type="password" name="password" required pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&amp;*_=+-]).{8,}$")
+                    input(placeholder="Confirm Password" type="password" name="password_confirm" required)
+                    br
+                    br
+                    input(type="submit" class="submit" value="Change!" style="width: calc(80% - 12px);")
+            content#_google Google
+            content#_twitter Twitter
+            content#_facebook Facebook
+            content#_steam Steam

@@ -7,6 +7,7 @@ html
     link(rel="icon" type="image/x-icon" href="favicon.ico")
 
     link(rel='stylesheet', href='/css/main.css')
+
     link(rel='stylesheet', href='/css/ionicons.min.css')
     script(src="/js/barba.js" type="text/javascript")
   body
@@ -21,9 +22,7 @@ html
         a(href='http://account.' + url) My Account
         a(href='http://blog.' + url) Blog
         a(href='http://gaming.' + url) Gaming
-        a(href='http://account.' + url + '/signin') Sign in / Sign out
-        a(href='http://account.' + url + '/signup') Signup
-    #barba-wrapper
-      .barba-container
-        block content
+        a(href='http://account.' + url + '/signin') Sign in / Sign up
+        a(href='http://account.' + url + '/signout') Sign out
+    block content
     script(src="/js/page.js" type="text/javascript")

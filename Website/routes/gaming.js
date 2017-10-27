@@ -1,11 +1,11 @@
-﻿'use strict';
+'use strict';
 var express = require('express');
 var router = express.Router();
 var data = require('../config.json');
 
-/* GET home page. */
+/* GET users listing. */
 router.get('/', function (req, res) {
-    res.render('index', { title: 'Home', url: data.url });
+    res.render('index', { title: 'Gaming', url: data.url });
 });
 
 module.exports = router;

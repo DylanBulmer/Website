@@ -6,26 +6,84 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var subdomain = require('subdomain');
+var passport = require('passport');
 
-var routes = require('./routes/index');
-var users = require('./routes/users');
+var data = require('./config.json');
+
+// Route Files
+var www = require('./routes/index');
+var account = require('./routes/account');
+var blog = require('./routes/blog');
+var gaming = require('./routes/gaming');
 
 var app = express();
+
+app.use(require('express-session')({
+    secret: data.secret,
+    resave: false,
+    saveUninitialized: true
+}));
+app.use(passport.initialize());
+app.use(passport.session());
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
 
-// uncomment after placing your favicon in /public
-//app.use(favicon(__dirname + '/public/favicon.ico'));
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', routes);
-app.use('/users', users);
+// Set Up Subdomains
+app.use(subdomain({ base: data.url, removeWWW: true }));
+app.use('/subdomain/blog/', blog);
+app.use('/subdomain/gaming/', gaming);
+app.use('/subdomain/account/', account);
+
+// Set subdomain directories
+
+app.get('/subdomain/*/css/:file', function (req, res) {
+    var options = {
+        root: __dirname + '/public/css',
+        dotfiles: 'deny',
+        index: false,
+        headers: {
+            'x-timestamp': Date.now(),
+            'x-sent': true
+        }
+    };
+    res.sendFile(req.params.file, options, function (err) { });
+});
+app.get('/subdomain/*/js/:file', function (req, res) {
+    var options = {
+        root: __dirname + '/public/css',
+        dotfiles: 'deny',
+        index: false,
+        headers: {
+            'x-timestamp': Date.now(),
+            'x-sent': true
+        }
+    };
+    res.sendFile(req.params.file, options, function (err) { });
+});
+
+app.use('/', www);
+
+// Create Redirects
+app.get('/blog', function (req, res) {
+    res.redirect('http://blog.' + data.url);
+});
+
+app.get('/account', function (req, res) {
+    res.redirect('http://account.' + data.url);
+});
+
+app.get('/gaming', function (req, res) {
+    res.redirect('http://gaming.' + data.url);
+});
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
@@ -43,7 +101,8 @@ if (app.get('env') === 'development') {
         res.status(err.status || 500);
         res.render('error', {
             message: err.message,
-            error: err
+            error: err,
+            url: data.url
         });
     });
 }
@@ -54,12 +113,11 @@ app.use(function (err, req, res, next) {
     res.status(err.status || 500);
     res.render('error', {
         message: err.message,
-        error: {}
+        error: {},
+        url: data.url
     });
 });
 
-app.set('port', process.env.PORT || 3000);
+app.set('port', data.port);
 
-var server = app.listen(app.get('port'), function () {
-    debug('Express server listening on port ' + server.address().port);
-});
+app.listen(app.get('port'));

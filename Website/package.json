@@ -5,17 +5,30 @@
   "scripts": {
     "start": "node app"
   },
-  "description": "Website",
+  "description": "My Website hosted with NodeJS",
   "author": {
-    "name": "Programming"
+    "name": "Dylan Bulmer"
   },
   "dependencies": {
+    "bcrypt": "^1.0.3",
     "body-parser": "^1.15.0",
     "cookie-parser": "^1.4.0",
     "debug": "^2.2.0",
     "express": "^4.14.0",
+    "express-session": "^1.15.6",
+    "express-subdomain": "^1.0.5",
+    "http-errors": "^1.6.2",
     "morgan": "^1.7.0",
+    "mysql": "^2.15.0",
+    "passport": "^0.4.0",
+    "passport-facebook": "^2.1.1",
+    "passport-google-oauth2": "^0.1.6",
+    "passport-local": "^1.0.0",
+    "passport-steam": "^1.0.8",
+    "passport-twitter": "^1.0.4",
     "pug": "^2.0.0-beta6",
-    "serve-favicon": "^2.3.0"
+    "serve-favicon": "^2.3.0",
+    "socket.io-client": "^2.0.3",
+    "subdomain": "^1.2.0"
   }
 }

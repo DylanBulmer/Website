@@ -1,0 +1,26 @@
+﻿{
+  "port": 80,
+  "url": "localhost.com",
+  "secret": "aYHrqyNETHQ4/6BaEBG5T1{567@$#!$",
+  "mysql": {
+    "url": "localhost",
+    "database": "website",
+    "user": "website",
+    "password": "password"
+  },
+  "google": {
+    "clientID": "998686719090-ic3fu760a1tld25lp389kd7h4geqe5tf.apps.googleusercontent.com",
+    "clientSecret": "7Po7lSkq8ZjidQ8OPL2PSj1t"
+  },
+  "facebook": {
+    "clientID": "1204442526266502",
+    "clientSecret": "68568bcf89fa2ffcf2fb3a4404cf1e58"
+  },
+  "twitter": {
+    "clientID": "lHeibsCX32BH2jSnsbQFtqokN",
+    "clientSecret": "3IlcQvFAXGab0Rhbp5bYydl8nwXcQCl7YVMYLA8AKcYfnIuigj"
+  },
+  "steam": {
+    "key": "CE954ACBDB318328CBF1A36D8F502F32"
+  }
+}

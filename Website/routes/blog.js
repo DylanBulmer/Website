@@ -1,10 +1,11 @@
 ﻿'use strict';
 var express = require('express');
 var router = express.Router();
+var data = require('../config.json');
 
 /* GET users listing. */
 router.get('/', function (req, res) {
-    res.send('respond with a resource');
+    res.render('blog', { title: 'Blog', url: data.url });
 });
 
 module.exports = router;

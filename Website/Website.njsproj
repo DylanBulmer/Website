@@ -11,7 +11,8 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>f3ae18bb-f231-4a6d-97cf-a1107eafa7ae</ProjectGuid>
-    <ProjectHome>.</ProjectHome>
+    <ProjectHome>
+    </ProjectHome>
     <StartupFile>app.js</StartupFile>
     <SearchPath>
     </SearchPath>
@@ -30,22 +31,46 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="app.js" />
+    <Compile Include="public\js\barba.js" />
+    <Compile Include="public\js\page.js" />
+    <Compile Include="public\js\tabs.js" />
+    <Compile Include="routes\account.js" />
+    <Compile Include="routes\gaming.js" />
     <Compile Include="routes\index.js" />
-    <Compile Include="routes\users.js" />
+    <Compile Include="routes\blog.js" />
+    <Content Include="config.json">
+      <SubType>Code</SubType>
+    </Content>
     <Content Include="package.json" />
-    <Content Include="public\stylesheets\main.css" />
+    <Content Include="public\css\account.css" />
+    <Content Include="public\css\ionicons.css" />
+    <Content Include="public\css\ionicons.min.css" />
+    <Content Include="public\css\main.css" />
+    <Content Include="public\favicon.ico" />
+    <Content Include="public\fonts\ionicons.eot" />
+    <Content Include="public\fonts\ionicons.svg" />
+    <Content Include="public\fonts\ionicons.ttf" />
+    <Content Include="public\fonts\ionicons.woff" />
     <Content Include="README.md" />
+    <Content Include="views\account.pug" />
+    <Content Include="views\account\layout.pug" />
+    <Content Include="views\account\manage.pug" />
+    <Content Include="views\blog.pug" />
     <Content Include="views\index.pug" />
     <Content Include="views\layout.pug" />
     <Content Include="views\error.pug" />
+    <Content Include="views\signin.pug" />
+    <Content Include="views\signup.pug" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="public\" />
+    <Folder Include="public\css\" />
+    <Folder Include="public\fonts\" />
     <Folder Include="public\images\" />
-    <Folder Include="public\javascripts\" />
-    <Folder Include="public\stylesheets\" />
+    <Folder Include="public\js\" />
     <Folder Include="routes\" />
     <Folder Include="views\" />
+    <Folder Include="views\account\" />
   </ItemGroup>
   <!-- Do not delete the following Import Project.  While this appears to do nothing it is a marker for setting TypeScript properties before our import that depends on them. -->
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets" Condition="False" />
