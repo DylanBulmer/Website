@@ -1,0 +1,57 @@
+extends layout
+
+block content
+    #barba-wrapper
+      .barba-container
+        link(rel="stylesheet" href="/css/account.css")
+        side
+            span#tab-wrapper
+            tab.show#home(onclick="viewPage('home')") Home
+            tab#account_information(onclick="viewPage('account_information')") Account Info
+            //- Adjusting the side panel
+            if user.password
+                tab#change_password(onclick="viewPage('change_password')") Change Password
+            else
+                tab#create_password(onclick="viewPage('create_password')") Create Password
+
+            tab#social_logins(onclick="viewPage('social_logins')") Social Logins
+        page(style= "display: inline-block; width: calc(100% - 4em - 250px); position: absolute; right: 0; top: 50px; left: auto;")
+            content#_home 
+                h2(style="text-align: center;display: block;") Welcome #{user.name_first}!
+            content#_account_information
+                h2(style="text-align: center;display: block;") Edit Your Account Information
+            content#_change_password
+                h2(style="text-align: center;display: block;") Change Password
+                    br
+                    br
+                span(style="text-align: center;display: block;") You can change your password with the following form!
+                form(action="" method="post")
+                    br
+                    err(style="display:block;color:#f00;font-size:0.9em;text-align:center;") #{err}
+                    br
+                    input(name="form" value="man_pass" style="display:none;")
+                    input(placeholder="Current Password" type="password" name="password_current")
+                    br
+                    br
+                    input(placeholder="New Password" type="password" name="password" required pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&amp;*_=+-]).{8,}$")
+                    input(placeholder="Confirm Password" type="password" name="password_confirm" required)
+                    br
+                    br
+                    input(type="submit" class="submit" value="Change!" style="width: calc(80% - 12px);")
+            content#_create_password
+                h2(style="text-align: center;display: block;") Create Password
+                    br
+                    br
+                span(style="text-align: center;display: block;") Create a password with this form!
+                form(action="" method="post")
+                    br
+                    err(style="display:block;color:#f00;font-size:0.9em;text-align:center;") #{err}
+                    br
+                    input(name="form" value="create_pass" style="display:none;")
+                    input(placeholder="New Password" type="password" name="password" required pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&amp;*_=+-]).{8,}$")
+                    input(placeholder="Confirm Password" type="password" name="password_confirm" required)
+                    br
+                    br
+                    input(type="submit" class="submit" value="Create!" style="width: calc(80% - 12px);")
+            content#_social_logins
+                h2(style="text-align: center;display: block;") Manage Social Logins

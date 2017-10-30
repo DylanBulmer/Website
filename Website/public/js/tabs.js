@@ -1,7 +1,7 @@
-var ctag = "";                                          // Current URL Hash
-var cbtn = document.getElementById('change_password');  // Current Tab Selected
-var cpg = document.getElementById('_change_password');  // Current Page Displayed
-var tab = document.getElementById('tab-wrapper');       // Tab Pointer
+var ctag = "";                                      // Current URL Hash
+var cbtn = document.getElementById('home');         // Current Tab Selected
+var cpg = document.getElementById('_home');         // Current Page Displayed
+var tab = document.getElementById('tab-wrapper');   // Tab Pointer
       
 var viewPage = function (pg) {
     let nbtn = document.getElementById(pg);
@@ -22,12 +22,12 @@ var viewPage = function (pg) {
       
 if (window.location.hash == ""){
     cpg.setAttribute('style', 'display: block;');
-    window.location.hash = "change_password";
+    window.location.hash = "home";
 } else {
     let hash = window.location.hash.slice(1, window.location.hash.length);
     try {
         viewPage(hash);
     } catch(err) {
-        viewPage('change_password');
+        viewPage('home');
     }
 }

@@ -32,6 +32,10 @@
   <ItemGroup>
     <Compile Include="app.js" />
     <Compile Include="public\js\barba.js" />
+    <Compile Include="public\js\logo.js">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="public\js\p5.min.js" />
     <Compile Include="public\js\page.js" />
     <Compile Include="public\js\tabs.js" />
     <Compile Include="routes\account.js" />
@@ -53,6 +57,7 @@
     <Content Include="public\fonts\ionicons.woff" />
     <Content Include="README.md" />
     <Content Include="views\account.pug" />
+    <Content Include="views\account\index.pug" />
     <Content Include="views\account\layout.pug" />
     <Content Include="views\account\manage.pug" />
     <Content Include="views\blog.pug" />

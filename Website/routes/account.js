@@ -157,7 +157,9 @@ passport.use(new SteamStrategy({
 app.get('/', function (req, res) {
     userTest(req, function ( test ) {
         if (test) {
-            res.render('account', { title: 'Account', url: data.url });
+            let user = getUser(req);
+            console.log(user);
+            res.render('account/index', { title: 'Account', url: data.url, user: user });
         } else {
             res.redirect('/signin');
         }
@@ -379,13 +381,23 @@ app.get('/signup/steam/callback',
 
 module.exports = app;
 
-// Test to see if user is signed in
+// User Functions
 
-var userTest = function testUser(req, callback) {
+var userTest = function userTest(req, callback) {
     if (req.user || req.session.user) {
         callback(true);
     } else {
         callback(false);
+    }
+}
+
+var getUser = function getUser(req) {
+    if (req.user) {
+        return req.user;
+    } else if (req.session.user) {
+        return req.session.user;
+    } else {
+        return null;
     }
 }
 
@@ -403,7 +415,6 @@ var signin = function (provider, profile, callback) {
                         bcrypt.compare(profile.password, result[i].password, function (err, pass) {
                             if (pass) {
                                 user = result[i];
-                                delete user.password;
                                 if (user != null) {
                                     return callback({
                                         "result": result[i],
@@ -424,7 +435,6 @@ var signin = function (provider, profile, callback) {
                 } else {
                     if (result[i][provider + "_id"] == profile.id) {
                         user = result[i];
-                        delete user.password;
                         if (user != null) {
                             return callback({
                                 "result": user,

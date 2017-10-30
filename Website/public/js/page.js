@@ -1,36 +1,39 @@
 document.addEventListener("DOMContentLoaded", function () {
-    Barba.Pjax.init();
-    Barba.Pjax.cacheEnabled = false;
-    Barba.Pjax.start();
+    try {
+        Barba.Pjax.init();
+        Barba.Pjax.cacheEnabled = false;
+        Barba.Pjax.start();
 
-    var HideShowTransition = Barba.BaseTransition.extend({
-        start: function () {
-            let thing = this;
-            document.getElementById("barba-wrapper").style.opacity = 0;
-            document.body.style.overflowY = "hidden";
-            setTimeout(function () {
-                thing.newContainerLoading.then(thing.finish.bind(thing));
-            }, 250);
-        },
+        var HideShowTransition = Barba.BaseTransition.extend({
+            start: function () {
+                let thing = this;
+                document.getElementById("barba-wrapper").style.opacity = 0;
+                document.body.style.overflowY = "hidden";
+                setTimeout(function () {
+                    thing.newContainerLoading.then(thing.finish.bind(thing));
+                }, 250);
+            },
 
-        finish: function () {
-            // Load Javascript for page
-            addPageSources();
-            // Close Nav
-            navClose();
-            // Fix page transition
-            window.location.hash = '';
-            document.body.style.overflowY = "auto";
-            document.getElementById("barba-wrapper").style.opacity = 1;
-            document.body.scrollTop = 0;
-            // Finish
-            this.done();
-        }
-    });
+            finish: function () {
+                // Load Javascript for page
+                addPageSources();
+                // Close Nav
+                navClose();
+                // Fix page transition
+                document.body.style.overflowY = "auto";
+                document.getElementById("barba-wrapper").style.opacity = 1;
+                document.body.scrollTop = 0;
+                // Finish
+                this.done();
+            }
+        });
 
-    Barba.Pjax.getTransition = function () {
-        return HideShowTransition;
-    };
+        Barba.Pjax.getTransition = function () {
+            return HideShowTransition;
+        };
+    } catch(e) {
+        addPageSources();
+    }
 });
 
 var navOpen = function navOpen() {
@@ -45,12 +48,17 @@ var navClose = function navClose() {
 
 var addPageSources = function addPageSources() {
     window.location.hash = '';
-    switch (window.location.pathname) {
-        case '/manage':
+    switch (window.location.hostname.split('.')[0]) {
+        case 'account':
             let tag = document.createElement("script");
             tag.src = "/js/tabs.js";
             document.getElementsByTagName("head")[0].appendChild(tag);
             break;
+        default:
+            switch (window.location.pathname) {
+                case '/':
+                    break;
+            }
     }
 }
 
