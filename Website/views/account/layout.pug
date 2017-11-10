@@ -7,22 +7,14 @@ html
     link(rel="icon" type="image/x-icon" href="favicon.ico")
 
     link(rel='stylesheet', href='/css/main.css')
-
+    link(rel='stylesheet', href='/css/font-awesome.min.css')
     link(rel='stylesheet', href='/css/ionicons.min.css')
     script(src="/js/barba.js" type="text/javascript")
   body
     bar
         span#nav-btn(onclick = "navOpen()")
-            i.icon.ion-navicon-round
+            i.fa.fa-bars
         a.title(href="http://" + url) Piggah Bro Studios
-    nav
-        span#nav-cls(onclick = "navClose()") Close 
-            i.icon.ion-close-round
-        a(href='http://' + url) Home
-        a(href='http://account.' + url) My Account
-        a(href='http://blog.' + url) Blog
-        a(href='http://gaming.' + url) Gaming
-        a(href='http://account.' + url + '/signin') Sign in / Sign up
-        a(href='http://account.' + url + '/signout') Sign out
+    include ../modules/nav.pug
     block content
     script(src="/js/page.js" type="text/javascript")

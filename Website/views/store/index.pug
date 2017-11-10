@@ -1,0 +1,94 @@
+doctype html
+html
+  head
+    title= 'Piggah Bro Studios | Store'
+
+    meta(name="viewport" content="width=device-width, initial-scale=1.0")
+    link(rel="icon" type="image/x-icon" href="favicon.ico")
+
+    link(rel='stylesheet', href='/css/main.css')
+    link(rel='stylesheet', href='/css/font-awesome.min.css')
+
+    script(src="/js/barba.js" type="text/javascript")
+
+    style.
+        div#carousel {
+            position: relative;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 250px;
+        }
+        div#carousel img {
+            width: 100%;
+            height: 250px;
+        }
+        div#controller {
+            position: absolute;
+            display: inline-block;
+            width: 100px;
+            bottom: 10px;
+            text-align: center;
+            margin: 0 calc(50% - 50px);
+        }
+        div#controller > i {
+            display: inline-block;
+            width: 1em;
+            height: 1em;
+        }
+  body
+    bar
+        span#nav-btn(onclick = "navOpen()")
+            i.fa.fa-bars
+        a.title(href="http://" + url) Piggah Bro Studios
+    include ../modules/nav.pug
+    div#carousel
+        div
+            img
+        div#controller
+            i#c-0.fa.fa-circle
+            i#c-1.fa.fa-circle-o
+            i#c-2.fa.fa-circle-o
+    page(style="min-height: calc(100vh - 300px - 4em); position: relative; top: auto;")
+        h1 Products
+        div(style = "width: 100%; height: 148px; margin: 10px 0; white-space: nowrap; overflow: hidden;")
+            span(style = "width: 100%; height: 125; padding: 10px 0; white-space: nowrap; overflow-y: hidden; display: block;")
+                product(style = "width: 125px; height: 125px; border-radius: 5px; box-shadow: 0 2px 4px 0 rgba(0,0,0,.25); display: inline-block; margin: 0 5px;")
+                product(style = "width: 125px; height: 125px; border-radius: 5px; box-shadow: 0 2px 4px 0 rgba(0,0,0,.25); display: inline-block; margin: 0 5px;")
+                product(style = "width: 125px; height: 125px; border-radius: 5px; box-shadow: 0 2px 4px 0 rgba(0,0,0,.25); display: inline-block; margin: 0 5px;")
+                product(style = "width: 125px; height: 125px; border-radius: 5px; box-shadow: 0 2px 4px 0 rgba(0,0,0,.25); display: inline-block; margin: 0 5px;")
+                product(style = "width: 125px; height: 125px; border-radius: 5px; box-shadow: 0 2px 4px 0 rgba(0,0,0,.25); display: inline-block; margin: 0 5px;")
+                product(style = "width: 125px; height: 125px; border-radius: 5px; box-shadow: 0 2px 4px 0 rgba(0,0,0,.25); display: inline-block; margin: 0 5px;")
+                product(style = "width: 125px; height: 125px; border-radius: 5px; box-shadow: 0 2px 4px 0 rgba(0,0,0,.25); display: inline-block; margin: 0 5px;")
+                product(style = "width: 125px; height: 125px; border-radius: 5px; box-shadow: 0 2px 4px 0 rgba(0,0,0,.25); display: inline-block; margin: 0 5px;")
+                product(style = "width: 125px; height: 125px; border-radius: 5px; box-shadow: 0 2px 4px 0 rgba(0,0,0,.25); display: inline-block; margin: 0 5px;")
+                product(style = "width: 125px; height: 125px; border-radius: 5px; box-shadow: 0 2px 4px 0 rgba(0,0,0,.25); display: inline-block; margin: 0 5px;")
+                product(style = "width: 125px; height: 125px; border-radius: 5px; box-shadow: 0 2px 4px 0 rgba(0,0,0,.25); display: inline-block; margin: 0 5px;")
+        h1 Services
+        span.content
+            span
+                h2 Web Development
+                p.
+                    If you own a business or an organization and you want a website, come to us and we will
+                    make you a website from scratch to fit your business or organization's needs!
+            box
+                h3 Build Your Site!
+                p Find out more information about our web development service.
+                a(href="http://store." + url) Let's Develop!
+        span.content
+            span
+                h2 Web Maintenance
+                p Already have a website? No problem, we will help you maintain your website and update it whenever you need it!
+            box
+                h3 Countinue the Journey!
+                p Find out more information about our web maintenance service.
+                a(href="http://store." + url) Let's Work!
+        span.content
+            span
+                h2 IT Repair
+                p If you have a broken laptop or desktop we can fix it! Dylan Bulmer has his CompTIA A+ Certification.
+            box
+                h3 Don't Let Your Work Stop!
+                p Find out more information about our IT Repair service.
+                a(href="http://store." + url) Let's Fix It!
+    script(src="/js/page.js" type="text/javascript")

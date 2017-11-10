@@ -2,10 +2,13 @@
 var express = require('express');
 var router = express.Router();
 var data = require('../config.json');
+var tools = require('../tools');
 
 /* GET home page. */
 router.get('/', function (req, res) {
-    res.render('index', { title: 'Home', url: data.url });
+    let user = tools.getUser(req);
+    console.log(user);
+    res.render('index', { title: 'Home', url: data.url, user: user });
 });
 
 module.exports = router;

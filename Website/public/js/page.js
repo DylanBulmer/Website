@@ -50,9 +50,13 @@ var addPageSources = function addPageSources() {
     window.location.hash = '';
     switch (window.location.hostname.split('.')[0]) {
         case 'account':
-            let tag = document.createElement("script");
-            tag.src = "/js/tabs.js";
-            document.getElementsByTagName("head")[0].appendChild(tag);
+            switch (window.location.pathname) {
+                case '/':
+                    let tag = document.createElement("script");
+                    tag.src = "/js/tabs.js";
+                    document.getElementsByTagName("head")[0].appendChild(tag);
+                    break;
+            }
             break;
         default:
             switch (window.location.pathname) {

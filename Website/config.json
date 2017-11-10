@@ -22,5 +22,9 @@
   },
   "steam": {
     "key": "CE954ACBDB318328CBF1A36D8F502F32"
+  },
+  "discord": {
+    "clientID": "328282624038535168",
+    "clientSecret": "byqK2uIZ3wxdF32_imu52Xt4BR_mBceW"
   }
 }

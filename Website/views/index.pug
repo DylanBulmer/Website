@@ -7,6 +7,7 @@ html
     link(rel="icon" type="image/x-icon" href="favicon.ico")
 
     link(rel='stylesheet', href='/css/main.css')
+    link(rel='stylesheet', href='/css/font-awesome.min.css')
     link(rel='stylesheet', href='/css/ionicons.min.css')
     style.
         page {
@@ -16,45 +17,63 @@ html
             height: calc(100vh - 4em);
         }
   body(style="overflow: hidden")
-    nav
-        span#nav-cls(onclick = "navClose()") Close 
-            i.icon.ion-close-round
-        a(href='http://' + url) Home
-        a(href='http://account.' + url) My Account
-        a(href='http://blog.' + url) Blog
-        a(href='http://gaming.' + url) Gaming
-        a(href='http://account.' + url + '/signin') Sign in / Sign out
-        a(href='http://account.' + url + '/signup') Signup
-    span(style="display: block; width: calc(100% + 16px); height: 100vh; overflow-y: scroll;")
-        page(style="position: absolute; top: 0; left: 0;")
+    include modules/nav.pug
+    span(style="display: block; width: calc(100% + 17px); height: 100vh; overflow-y: scroll;")
+        page(style="position: absolute; top: 0; left: 0; background-image: url('/images/background.png');")
             span#title(style="display: table; position: absolute; font-size: 1.25em;")
                 div#logo(style="display: inline-block; vertical-align: middle; height: 240px; width: 240px;")
                 div(style="display: inline-block; text-align: center; font-size: 1.25em; vertical-align: middle; margin-left: 50px;")
                     h1 Piggah Bro Studios
                     h3 Web and Game<br>Development
-            span(style="display: block; position: absolute; bottom: 25px; left: calc(50% - 60px); width: 120px; text-align: center; font-size: 1.25em;")
+            span#downArrow(style="display: block; position: absolute; bottom: 25px; left: calc(50% - 60px); width: 120px; text-align: center; font-size: 1.25em;")
                 h3 Scroll Down
                     br
-                    i.icon.ion-chevron-down
+                    i.fa.fa-chevron-down
         span#p2(style="top: 100vh;left: 0;position: absolute;width: 100%;height: 100vh;background-color: #fff;transition-duration: 1.5s;transition-timing-function: ease-in-out;")
             bar
                 span#nav-btn(onclick = "navOpen()")
-                    i.icon.ion-navicon-round
+                    i.fa.fa-bars
                 a.title(href="http://" + url) Piggah Bro Studios
-            page(style="height: calc(100vh - 50px - 4em);")
-                h1=title
-                p Welcome to our #{title} page
+            page(style="height: calc(100vh - 50px - 4em); overflow-y: auto; width: calc(60% + 16px); padding: 2em 20%;")
+                span.content
+                    span
+                        h2 Store
+                        p We have many services and products including, web development, IT repairs, ethernet and more to come!
+                    box
+                        h3 Get `Em Products
+                        p We have many products and services, go check them out!
+                        a(href="http://store." + url) Let's Go!
+                span.content
+                    span
+                        h2 Blogs
+                        p Find out everything that we are up to on this page!
+                    box
+                        h3 The Latest and Greatest
+                        p Keep up-to-date with us and know what projects we are working on!
+                        a(href="http://blog." + url) Read Up!
+                span.content
+                    span
+                        h2 Gaming Community
+                        p Come join our gaming community!
+                    box
+                        h3 Play Games?
+                        p Come join the fun with us!
+                        a(href="http://gaming." + url) Join Now!
     script(src="/js/p5.min.js" type="text/javascript")
     script(src="/js/logo.js" type="text/javascript")
     script(src="/js/page.js" type="text/javascript")
     script.
-         document.getElementById('title').style.top = 'calc(40vh - ' + document.getElementById('title').getBoundingClientRect()['height'] / 2 + 'px)';
-         document.getElementById('title').style.left = 'calc(50% - ' + document.getElementById('title').getBoundingClientRect()['width'] / 2 + 'px)';
-         window.addEventListener('wheel', function(e) {
-            let pg = document.getElementById('p2');
-            if (e.deltaY < 0 && pg.style.top == '0px') {
-                pg.style.top = "100vh";
-            } else if (e.deltaY > 0 && pg.style.top == '100vh') {
-                pg.style.top = "0px";
+        document.getElementById('title').style.top = 'calc(40vh - ' + document.getElementById('title').getBoundingClientRect()['height'] / 2 + 'px)';
+        document.getElementById('title').style.left = 'calc(50% - ' + document.getElementById('title').getBoundingClientRect()['width'] / 2 + 'px)';
+        window.addEventListener('wheel', function(e) {
+        let pg = document.getElementById('p2');
+        for (i = 0; i < p2.children.length; i++){
+            if (p2.children[i].tagName == "PAGE" && p2.children[i].scrollTop == 0){
+                if (e.deltaY < 0 && pg.style.top == '0px') {
+                    pg.style.top = "100vh";
+                } else if (e.deltaY > 0 && pg.style.top == '100vh') {
+                    pg.style.top = "0px";
+                }
             }
-         });
+        }
+        });

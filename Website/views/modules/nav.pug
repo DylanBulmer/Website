@@ -1,0 +1,13 @@
+nav
+    span#nav-cls(onclick = "navClose()") Close 
+        i.fa.fa-times
+    a(href='http://' + url) Home
+    a(href='http://account.' + url) My Account
+    a(href='http://blog.' + url) Blog
+    a(href='http://gaming.' + url) Gaming
+    //- Adjusting nav based on if user is signed in
+    if user
+        a(href='http://account.' + url + '/logout') Logout
+    else
+        a(href='http://account.' + url + '/signin') Sign in
+        a(href='http://account.' + url + '/signup') Sign Up

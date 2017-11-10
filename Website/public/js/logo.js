@@ -7,7 +7,7 @@ function setup() {
 }
 
 function draw() {
-    background(255);
+    background(0,0,0,0);
     rotateY(rotationY * 0.1);
     texture(img);
     sphere(100);

@@ -16,14 +16,29 @@ var www = require('./routes/index');
 var account = require('./routes/account');
 var blog = require('./routes/blog');
 var gaming = require('./routes/gaming');
+var store = require('./routes/store');
 
 var app = express();
 
 app.use(require('express-session')({
     secret: data.secret,
     resave: false,
-    saveUninitialized: true
+    saveUninitialized: true,
+    cookie: {
+        path: '/',
+        domain: data.url
+    },
 }));
+
+
+app.use(function (req, res, next) {
+    res.header('Access-Control-Allow-Credentials', true);
+    res.header('Access-Control-Allow-Origin', req.headers.origin);
+    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
+    res.header('Access-Control-Allow-Headers', 'X-Requested-With, X-HTTP-Method-Override, Content-Type, Accept');
+    next();
+});
+
 app.use(passport.initialize());
 app.use(passport.session());
 
@@ -42,6 +57,7 @@ app.use(subdomain({ base: data.url, removeWWW: true }));
 app.use('/subdomain/blog/', blog);
 app.use('/subdomain/gaming/', gaming);
 app.use('/subdomain/account/', account);
+app.use('/subdomain/store/', store);
 
 // Set subdomain directories
 
@@ -83,6 +99,10 @@ app.get('/account', function (req, res) {
 
 app.get('/gaming', function (req, res) {
     res.redirect('http://gaming.' + data.url);
+});
+
+app.get('/store', function (req, res) {
+    res.redirect('http://store.' + data.url);
 });
 
 // catch 404 and forward to error handler
