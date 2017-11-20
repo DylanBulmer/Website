@@ -7,16 +7,14 @@ var passport = require('passport');
 var bcrypt = require('bcrypt');
 var tools = require('../tools');
 
-
-/* Add headers
+/* Add headers */
 app.use(function (req, res, next) {
-    res.setHeader('Access-Control-Allow-Origin', 'http://account.localhost.com');
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST'); 
-    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
-    res.setHeader('Access-Control-Allow-Credentials', true);
+    res.header('Access-Control-Allow-Credentials', true);
+    res.header('Access-Control-Allow-Origin', req.headers.origin);
+    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
+    res.header('Access-Control-Allow-Headers', 'X-Requested-With, X-HTTP-Method-Override, Content-Type, Accept');
     next();
 });
-*/
 
 // Setup Passport
 

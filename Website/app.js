@@ -26,10 +26,10 @@ app.use(require('express-session')({
     saveUninitialized: true,
     cookie: {
         path: '/',
-        domain: data.url
-    },
+        domain: data.url,
+        maxAge: 1000 * 60 * 24 // 24 hours
+    }
 }));
-
 
 app.use(function (req, res, next) {
     res.header('Access-Control-Allow-Credentials', true);
