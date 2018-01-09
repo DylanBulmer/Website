@@ -44,9 +44,7 @@
     <Compile Include="routes\blog.js" />
     <Compile Include="routes\store.js" />
     <Compile Include="tools.js" />
-    <Content Include="config.json">
-      <SubType>Code</SubType>
-    </Content>
+    <Content Include="config.json" />
     <Content Include="package.json" />
     <Content Include="public\css\account.css" />
     <Content Include="public\css\font-awesome.css" />
