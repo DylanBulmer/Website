@@ -5,6 +5,7 @@
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
     <Name>Website</Name>
     <RootNamespace>Website</RootNamespace>
+    <LastActiveSolutionConfig>Debug|Any CPU</LastActiveSolutionConfig>
   </PropertyGroup>
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -20,8 +21,8 @@
     <OutputPath>.</OutputPath>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <ProjectTypeGuids>{3AF33F2E-1136-4D97-BBB7-1795711AC8B8};{349c5851-65df-11da-9384-00065b846f21};{9092AA53-FB77-4645-B42D-1CCCA6BD08BD}</ProjectTypeGuids>
-    <NodejsPort>1337</NodejsPort>
-    <StartWebBrowser>true</StartWebBrowser>
+    <NodejsPort>80</NodejsPort>
+    <StartWebBrowser>False</StartWebBrowser>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugSymbols>true</DebugSymbols>
@@ -44,16 +45,18 @@
     <Compile Include="routes\blog.js" />
     <Compile Include="routes\store.js" />
     <Compile Include="tools.js" />
-    <Content Include="config.json">
-      <SubType>Code</SubType>
-    </Content>
+    <Content Include="config.json" />
+    <Content Include="files\cookies.md" />
     <Content Include="package.json" />
     <Content Include="public\css\account.css" />
+    <Content Include="public\css\blog.css" />
     <Content Include="public\css\font-awesome.css" />
     <Content Include="public\css\font-awesome.min.css" />
     <Content Include="public\css\ionicons.min.css" />
     <Content Include="public\css\main.css" />
     <Content Include="public\favicon.ico" />
+    <Content Include="files\privacy.md" />
+    <Content Include="files\terms.md" />
     <Content Include="public\fonts\fontawesome-webfont.eot" />
     <Content Include="public\fonts\fontawesome-webfont.svg" />
     <Content Include="public\fonts\fontawesome-webfont.ttf" />
@@ -68,11 +71,13 @@
     <Content Include="views\account\index.pug" />
     <Content Include="views\account\layout.pug" />
     <Content Include="views\account\manage.pug" />
-    <Content Include="views\blog.pug" />
+    <Content Include="views\blog\index.pug" />
+    <Content Include="views\blog\layout.pug" />
     <Content Include="views\index.pug" />
     <Content Include="views\layout.pug" />
     <Content Include="views\error.pug" />
     <Content Include="views\modules\nav.pug" />
+    <Content Include="views\policy.pug" />
     <Content Include="views\signin.pug" />
     <Content Include="views\signup.pug" />
     <Content Include="views\store\index.pug" />
@@ -80,6 +85,7 @@
   <ItemGroup>
     <Folder Include="public\" />
     <Folder Include="public\css\" />
+    <Folder Include="files\" />
     <Folder Include="public\fonts\" />
     <Folder Include="public\images\" />
     <Folder Include="public\js\" />

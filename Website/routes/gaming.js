@@ -1,11 +1,13 @@
 'use strict';
 var express = require('express');
-var router = express.Router();
+var app = express();
 var data = require('../config.json');
+var tools = require('../tools');
 
 /* GET users listing. */
-router.get('/', function (req, res) {
-    res.render('index', { title: 'Gaming', url: data.url });
+app.get('/', function (req, res) {
+    let user = tools.getUser(req);
+    res.render('index', { title: 'Gaming', url: data.url, user: user });
 });
 
-module.exports = router;
+module.exports = app;

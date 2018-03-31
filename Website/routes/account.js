@@ -7,16 +7,14 @@ var passport = require('passport');
 var bcrypt = require('bcrypt');
 var tools = require('../tools');
 
-
-/* Add headers
+/* Add headers */
 app.use(function (req, res, next) {
-    res.setHeader('Access-Control-Allow-Origin', 'http://account.localhost.com');
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST'); 
-    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
-    res.setHeader('Access-Control-Allow-Credentials', true);
+    res.header('Access-Control-Allow-Credentials', true);
+    res.header('Access-Control-Allow-Origin', req.headers.origin);
+    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
+    res.header('Access-Control-Allow-Headers', 'X-Requested-With, X-HTTP-Method-Override, Content-Type, Accept');
     next();
 });
-*/
 
 // Setup Passport
 
@@ -187,25 +185,22 @@ app.get('/', function (req, res) {
     tools.userTest(req, function ( test ) {
         if (test) {
             let user = tools.getUser(req);
-            res.render('account/index', { title: 'Account', url: data.url, user: user });
+
+            let socialLogins = {
+                'google': (user['google_id'] && user['google_id'] != '') ? true : false,
+                'facebook': (user['facebook_id'] && user['facebook_id'] != '') ? true : false,
+                'twitter': (user['twitter_id'] && user['twitter_id'] != '') ? true : false,
+                'steam': (user['steam_id'] && user['steam_id'] != '') ? true : false
+            }
+
+            res.render('account/index', { title: 'Account', url: data.url, user: user, logins: socialLogins });
         } else {
             res.redirect('/signin');
         }
     });
 });
 
-app.get('/manage', function (req, res) {
-    tools.userTest( req, function ( test ) {
-        if (test) {
-            let user = tools.getUser(req);
-            res.render('account/manage', { title: 'Manage Sign Ins', url: data.url, user: user });
-        } else {
-            res.redirect('/signin');
-        }
-    });
-});
-
-app.post('/manage', function (req, res) {
+app.post('/', function (req, res) {
     tools.userTest( req, function ( test ) {
         if (test) {
             let user = tools.getUser(req);
@@ -218,12 +213,12 @@ app.post('/manage', function (req, res) {
                                 // Store hash in database
                                 db.query('UPDATE users SET password="' + hash + '" where id=' + req.user.id);
                             });
-                            res.redirect('/');
+                            res.render('account/index', { title: 'Account', url: data.url, pass: "Password Reset!", user: user });
                         } else {
-                            res.render('account/manage', { title: 'Manage Sign Ins', url: data.url, err: "Passwords do not match!", user: user });
+                            res.render('account/index', { title: 'Account', url: data.url, err: "Passwords do not match!", user: user });
                         }
                     } else {
-                        res.render('account/manage', { title: 'Manage Sign Ins', url: data.url, err: "Current password is incorrect!", user: user });
+                        res.render('account/index', { title: 'Account', url: data.url, err: "Current password is incorrect!", user: user });
                     }
                     break;
                 case 'deact-google':    // Deactivate Google

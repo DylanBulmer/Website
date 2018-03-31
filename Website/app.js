@@ -26,10 +26,10 @@ app.use(require('express-session')({
     saveUninitialized: true,
     cookie: {
         path: '/',
-        domain: data.url
-    },
+        domain: data.url,
+        maxAge: 1000 * 60 * 24 // 24 hours
+    }
 }));
-
 
 app.use(function (req, res, next) {
     res.header('Access-Control-Allow-Credentials', true);
@@ -75,7 +75,7 @@ app.get('/subdomain/*/css/:file', function (req, res) {
 });
 app.get('/subdomain/*/js/:file', function (req, res) {
     var options = {
-        root: __dirname + '/public/css',
+        root: __dirname + '/public/js',
         dotfiles: 'deny',
         index: false,
         headers: {
@@ -138,6 +138,26 @@ app.use(function (err, req, res, next) {
     });
 });
 
-app.set('port', data.port);
 
-app.listen(app.get('port'));
+if (data.https) {
+    // HTTPS Settings
+    app.set('port', 443);
+
+    require('greenlock-express').create({
+
+        server: 'staging',
+        email: 'piggahbro@gmail.com',
+        agreeTos: true,
+        approvedDomains: ['piggahbrostudios.com', 'www.piggahbrostudios.com', 'blog.piggahbrostudios.com', 'account.piggahbrostudios.com', 'gaming.piggahbrostudios.com', 'store.piggahbrostudios.com'],
+        app: app,
+        renewWithin: (91 * 24 * 60 * 60 * 1000),
+        renewBy: (90 * 24 * 60 * 60 * 1000),
+        debug: true
+
+    }).listen(80, 443);
+} else {
+    // HTTP Settings
+    app.set('port', 80);
+
+    app.listen(app.get('port'));
+}
