@@ -202,6 +202,7 @@ function approveDomains(opts, certs, cb) {
     }
     else {
         opts.email = 'piggahbro@gmail.com';
+        opts.domains = ['piggahbrostudios.com', 'www.piggahbrostudios.com', 'blog.piggahbrostudios.com', 'account.piggahbrostudios.com', 'gaming.piggahbrostudios.com', 'store.piggahbrostudios.com'];
         opts.agreeTos = true;
     }
 
