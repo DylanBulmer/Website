@@ -158,7 +158,6 @@ if (data.https) {
         //, sni: require('le-sni-auto').create({})
 
         approveDomains: approveDomains,
-
         renewWithin: (91 * 24 * 60 * 60 * 1000),
         renewBy: (90 * 24 * 60 * 60 * 1000),
         debug: true
