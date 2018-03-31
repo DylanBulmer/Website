@@ -5,9 +5,16 @@ nav
     a(href='http://account.' + url) My Account
     a(href='http://blog.' + url) Blog
     a(href='http://gaming.' + url) Gaming
+    a(href='http://store.' + url) Store
     //- Adjusting nav based on if user is signed in
     if user
         a(href='http://account.' + url + '/logout') Logout
     else
         a(href='http://account.' + url + '/signin') Sign in
         a(href='http://account.' + url + '/signup') Sign Up
+    span(style="bottom: 15px; left: 0; top: auto; padding: 0 15px; text-align: center;")#policy
+        a(href='http://' + url + '/policy/privacy') &nbsp;Privacy&nbsp;
+        | &bull;
+        a(href='http://' + url + '/policy/cookies') &nbsp;Cookies&nbsp;
+        | &bull;
+        a(href='http://' + url + '/policy/terms') &nbsp;Terms&nbsp;

@@ -96,6 +96,15 @@ nav > span:hover {
     color: #f1f1f1;
 }
 
+nav > span#policy {
+    color: #555555;
+}
+
+nav > span#policy:hover {
+    color: #555555;
+    cursor: default;
+}
+
 page {
     display: block;
     width: calc(100% - 4em);
