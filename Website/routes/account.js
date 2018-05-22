@@ -42,7 +42,7 @@ passport.use('local-signup', new LocalStrategy(
                 last: req.body.lname,
                 full: req.body.fname + ' ' + req.body.lname
             }
-        }
+        };
         signup("local", profile, function (data) {
             if (data.err) {
                 return done(data.err);
@@ -187,11 +187,11 @@ app.get('/', function (req, res) {
             let user = tools.getUser(req);
 
             let socialLogins = {
-                'google': (user['google_id'] && user['google_id'] != '') ? true : false,
-                'facebook': (user['facebook_id'] && user['facebook_id'] != '') ? true : false,
-                'twitter': (user['twitter_id'] && user['twitter_id'] != '') ? true : false,
-                'steam': (user['steam_id'] && user['steam_id'] != '') ? true : false
-            }
+                'google': user['google_id'] && user['google_id'] !== '' ? true : false,
+                'facebook': user['facebook_id'] && user['facebook_id'] !== '' ? true : false,
+                'twitter': user['twitter_id'] && user['twitter_id'] !== '' ? true : false,
+                'steam': user['steam_id'] && user['steam_id'] !== '' ? true : false
+            };
 
             res.render('account/index', { title: 'Account', url: data.url, user: user, logins: socialLogins });
         } else {
@@ -207,8 +207,8 @@ app.post('/', function (req, res) {
             let profile = db.query('SELECT * FROM users WHERE id = ' + req.user.id)[0];
             switch (req.body.form) {
                 case 'man_pass': // Change Password
-                    if (profile.password == req.body['password_current']) {
-                        if (req.body.password == req.body.password_confirm) {
+                    if (profile.password === req.body['password_current']) {
+                        if (req.body.password === req.body.password_confirm) {
                             bcrypt.hash(req.body.password, 10, function (err, hash) {
                                 // Store hash in database
                                 db.query('UPDATE users SET password="' + hash + '" where id=' + req.user.id);
@@ -293,7 +293,7 @@ app.post('/signup', function (req, res, next) {
                 } else {
                     return res.redirect('/');
                 }
-            })(req, res, next)
+            })(req, res, next);
         } else {
             res.redirect('/');
         }
@@ -428,13 +428,13 @@ var signin = function (provider, profile, callback) {
         db.query("SELECT * FROM users", function (err, result) {
             if (err) throw err;
             for (let i = 0; i < result.length; i++) {
-                if (provider == "local") {
-                    if (result[i].username == profile.username || result[i].email == profile.username) {
+                if (provider === "local") {
+                    if (result[i].username === profile.username || result[i].email === profile.username) {
                         // Tests to see if passwords match
                         bcrypt.compare(profile.password, result[i].password, function (err, pass) {
                             if (pass) {
                                 user = result[i];
-                                if (user != null) {
+                                if (user !== null) {
                                     return callback({
                                         "result": result[i],
                                         "err": ''
@@ -446,21 +446,21 @@ var signin = function (provider, profile, callback) {
                                 });
                             }
                         });
-                    } else if (i == result.length) {
+                    } else if (i === result.length) {
                         return callback({
                             "err": "Invaild Username/Email"
                         });
                     }
                 } else {
-                    if (result[i][provider + "_id"] == profile.id) {
+                    if (result[i][provider + "_id"] === profile.id) {
                         user = result[i];
-                        if (user != null) {
+                        if (user !== null) {
                             return callback({
                                 "result": user,
                                 "err": ""
                             });
                         }
-                    } else if (i == result.length) {
+                    } else if (i === result.length) {
                         return callback({
                             "err": "That " + provider + ' id is not in our system'
                         });
@@ -473,7 +473,7 @@ var signin = function (provider, profile, callback) {
             "err": "No database connected!"
         });
     }
-}
+};
 
 var signup = function (provider, profile, callback) {
     if (DBisConnected) {
@@ -481,26 +481,26 @@ var signup = function (provider, profile, callback) {
             if (err) throw err;
             console.log(provider + "_id");
             for (let i = 0; i < result.length; i++) {
-                if (provider == "local") {
-                    if (result[i].username == profile.username) {
+                if (provider === "local") {
+                    if (result[i].username === profile.username) {
                         return callback({
                             err: "That username has been taken!"
                         });
                     }
-                    else if (result[i].email == profile.email) {
+                    else if (result[i].email === profile.email) {
                         return callback({
                             err: "That email is already in use!"
                         });
                     } else {
                         if (profile.password[0] === profile.password[1]) {
                             bcrypt.hash(profile.password[1], 10, function (err, hash) {
-                                db.query("INSERT TO users ('name_first', 'name_last', 'name_full', 'username', 'email', 'password') values (" + profile.name.first + ", " + profile.name.last + ", " + profile.name.full + ", " + profile.username + ", " + profile.email + ", " + hash + " )")
+                                db.query("INSERT TO users ('name_first', 'name_last', 'name_full', 'username', 'email', 'password') values (" + profile.name.first + ", " + profile.name.last + ", " + profile.name.full + ", " + profile.username + ", " + profile.email + ", " + hash + " )");
                             });
                         }
                     }
                 } else {
-                    console.log(result[i][provider + "_id"] == profile.id);
-                    if (result[i][provider + "_id"] == profile.id) {
+                    console.log(result[i][provider + "_id"] === profile.id);
+                    if (result[i][provider + "_id"] === profile.id) {
                         return callback({
                             err: "That " + provider + " account is already in our database!"
                         });
@@ -516,7 +516,7 @@ var signup = function (provider, profile, callback) {
             "err": "No database connected!"
         });
     }
-}
+};
 
 // Database Functions
 
@@ -537,7 +537,7 @@ function handleDisconnect() {
             console.log("MySQL ERROR: " + err.code);
             setTimeout(handleDisconnect, 2000);
         } else {
-            if (data.mysql.database == "") {
+            if (data.mysql.database === "") {
                 console.log("Please enter a database in the config.json file!");
             } else {
                 console.log("MySQL Connection Established");

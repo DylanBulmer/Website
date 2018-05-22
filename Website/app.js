@@ -85,6 +85,18 @@ app.get('/subdomain/*/js/:file', function (req, res) {
     };
     res.sendFile(req.params.file, options, function (err) { });
 });
+app.get('/subdomain/*/images/:file', function (req, res) {
+    var options = {
+        root: __dirname + '/public/images',
+        dotfiles: 'deny',
+        index: false,
+        headers: {
+            'x-timestamp': Date.now(),
+            'x-sent': true
+        }
+    };
+    res.sendFile(req.params.file, options, function (err) { });
+});
 
 app.use('/', www);
 
@@ -158,8 +170,8 @@ if (data.https) {
         //, sni: require('le-sni-auto').create({})
 
         approveDomains: approveDomains,
-        renewWithin: (91 * 24 * 60 * 60 * 1000),
-        renewBy: (90 * 24 * 60 * 60 * 1000),
+        renewWithin: 91 * 24 * 60 * 60 * 1000,
+        renewBy: 90 * 24 * 60 * 60 * 1000,
         debug: true
     });
 
@@ -170,19 +182,6 @@ if (data.https) {
     require('https').createServer(lex.httpsOptions, lex.middleware(app)).listen(443, function () {
         console.log("Listening for ACME tls-sni-01 challenges and serve app on", this.address());
     });
-
-    //require('greenlock-express').create({
-
-    //    server: 'staging',
-    //    email: 'piggahbro@gmail.com',
-    //    agreeTos: true,
-    //    approvedDomains: ['piggahbrostudios.com', 'www.piggahbrostudios.com', 'blog.piggahbrostudios.com', 'account.piggahbrostudios.com', 'gaming.piggahbrostudios.com', 'store.piggahbrostudios.com'],
-    //    app: app,
-    //    renewWithin: (91 * 24 * 60 * 60 * 1000),
-    //    renewBy: (90 * 24 * 60 * 60 * 1000),
-    //    debug: true
-
-    //}).listen(80, 443);
 } else {
     // HTTP Settings
     app.set('port', 80);
