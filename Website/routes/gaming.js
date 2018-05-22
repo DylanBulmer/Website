@@ -9,7 +9,7 @@ var dateformat = require('dateformat');
 /* GET users listing. */
 app.get('/', function (req, res) {
     let user = tools.getUser(req);
-    res.render('gaming/index', {
+    res.render('gaming/index.pug', {
         title: 'Gaming',
         url: data.url,
         user: user
@@ -29,7 +29,7 @@ app.get('/forums', function (req, res) {
             }
         }
 
-        res.render('gaming/forum', {
+        res.render('gaming/forum.pug', {
             title: 'Cummunity Forums',
             url: data.url,
             forums: JSON.stringify(forums),
