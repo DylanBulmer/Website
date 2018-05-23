@@ -12,5 +12,13 @@ module.exports = {
         } else if (req.session.user) {
             return req.session.user;
         } else return null;
+    },
+    logoutUser: function logoutUser(req) {
+        if (req.user) {
+            delete req.user;
+        }
+        if (req.session.user) {
+            delete req.session.user;
+        }
     }
 };
