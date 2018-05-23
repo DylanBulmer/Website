@@ -247,8 +247,9 @@ app.post('/', function (req, res) {
 
 // I FORGOT A LOGOUT!!!! AHHHH.... I have this extensive signin/sign up system... but no logout... Time to fix that!
 app.get('/logout', (req, res) => {
-    tools.logoutUser(req);
-    res.redirect('/signin');
+    tools.logoutUser(req, () => {
+        res.redirect('/signin');
+    });
 });
 
 app.get('/signin', function (req, res) {

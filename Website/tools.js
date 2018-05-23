@@ -13,12 +13,13 @@ module.exports = {
             return req.session.user;
         } else return null;
     },
-    logoutUser: function logoutUser(req) {
-        if (req.user) {
-            delete req.user;
-        }
-        if (req.session.user) {
-            delete req.session.user;
+    logoutUser: function logoutUser(req, callback) {
+        if (req.user || req.session.user) {
+            req.session.destroy(function (err) {
+                callback();
+            });
+        } else {
+            callback();
         }
     }
 };
