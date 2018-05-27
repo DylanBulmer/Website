@@ -1,7 +1,7 @@
 doctype html
 html
     head
-        title= 'Piggah Bro Studios | '+ title
+        title= 'Piggah Bro\'s | '+ title
         
         meta(name="viewport" content="width=device-width, initial-scale=1.0")
         link(rel="icon" type="image/x-icon" href="favicon.ico")
@@ -10,10 +10,10 @@ html
         link(rel='stylesheet', href='/css/font-awesome.min.css')
         link(rel='stylesheet', href='/css/ionicons.min.css')
     body
-        header(style="width: calc(100% - 250px);margin: 0;top:0")
-            h2 Piggah Bro Studios
+        header(style="width: calc(100% - 250px);margin: 0;top:0;")
+            h2 Piggah Bro's
             | #{title}
-            main(style="font-size: 0.6em; min-width: 600px; width: 65%; padding: 0; margin: auto;")
+            main(style="font-size: 0.6em; min-width: calc(100% - 400px); width: 65%; padding: 0; margin: auto;")
                 section
                     columns
                         column
@@ -22,8 +22,6 @@ html
                             a(href="/forums") Forums
                         column
                             a(href="http://steamcommunity.com/groups/piggahbrostudios" target="_BLANK") Steam Group
-                        column
-                            a(href="https://discord.gg/A2db8se" target="_BLANK") Discord
                         if user
                             column
                                 a(href="https://account." + url + "/logout" target="_BLANK") Logout
@@ -40,11 +38,11 @@ html
                     a(href="https://discord.gg/A2db8se" target="_BLANK") Connect!
             if user
                 member
-                    name= 'Welcome, '+user.name_first+'!'
+                    name= 'Welcome, '+(user.nickname || user.name_first)+'!'
                     joined(style="margin-bottom:1em;")= 'Joined on '+user.joined
-                    posts
+                    posts(style="margin-bottom:1em;")= 'Posts: ' + 0
                     settings
-                        a(href="https://account." + url target="_BLANK")
+                        a(href="https://account." + url target="_BLANK") Account Settings
             else
                 member(style="text-align: center;")
                     b Join the community Today!

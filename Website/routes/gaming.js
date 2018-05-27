@@ -23,14 +23,14 @@ app.get('/forums', function (req, res) {
         if (user && user.joined) {
             try {
                 let joined = new Date(user.joined);
-                user.joined = dateformat(joined, "ddd, mmm dS, yyyy") + " at " + dateformat(joined, "h:MM TT");
+                user.joined = dateformat(joined, "mmm dS, yyyy h:MM TT");
             } catch (e) {
                 console.log(e);
             }
         }
 
         res.render('gaming/forum.pug', {
-            title: 'Cummunity Forums',
+            title: 'Community Forums',
             url: data.url,
             forums: JSON.stringify(forums),
             user: user

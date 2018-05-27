@@ -64,7 +64,7 @@ passport.use(new GoogleStrategy({
 },
     function (accessToken, refreshToken, profile, done) {
         process.nextTick(function () {
-            signin("google", profile, function (data) {
+            login("google", profile, function (data) {
                 if (data.err) {
                     return done(data.err);
                 } else {
@@ -104,7 +104,7 @@ passport.use(new FacebookStrategy({
 },
 function (accessToken, refreshToken, profile, done) {
     process.nextTick(function () {
-        signin("facebook", profile, function (data) {
+        login("facebook", profile, function (data) {
             if (data.err) {
                 return done(data.err);
             } else {
@@ -125,7 +125,7 @@ passport.use(new TwitterStrategy({
 },
     function (token, tokenSecret, profile, done) {
         process.nextTick(function () {
-            signin("twitter", profile, function (data) {
+            login("twitter", profile, function (data) {
                 if (data.err) {
                     return done(data.err);
                 } else {
@@ -148,7 +148,7 @@ passport.use(new DiscordStrategy({
     function (accessToken, refreshToken, profile, done) {
         process.nextTick(function () {
             console.log(profile);
-            signin("discord", profile, function (data) {
+            login("discord", profile, function (data) {
                 if (data.err) {
                     return done(data.err);
                 } else {
@@ -170,7 +170,7 @@ passport.use(new SteamStrategy({
     },
     function (identifier, profile, done) {
         process.nextTick(function () {
-            signin("steam", profile, function (data) {
+            login("steam", profile, function (data) {
                 if (data.err) {
                     return done(data.err);
                 } else {
@@ -265,10 +265,12 @@ app.get('/signin', function (req, res) {
 app.post('/signin', function (req, res, next) {
     tools.userTest(req, function (test) {
         if (!test) {
-            signin('local', {
+            console.log("Test...", test);
+            login('local', {
                 "username": req.body.username,
                 "password": req.body.password
             }, function (result) {
+                console.log("Results...",result);
                 if (result.err) { res.render('signin', { title: 'Sign In', error: result.err, url: data.url }); }
                 else {
                     req.session.user = result.result;
@@ -276,6 +278,7 @@ app.post('/signin', function (req, res, next) {
                 }
             });
         } else {
+            console.log("Endless loop?...", test);
             res.redirect('/');
         }
     });
@@ -429,6 +432,76 @@ module.exports = app;
 
 // Data Base signin Requests
 
+// new login function.
+const login = (provider, profile, callback) => {
+    if (DBisConnected) {
+        if (provider === "local") {
+            let usernameOrEmail = isEmail(profile.username);
+            if (usernameOrEmail) {
+                // check for email
+                db.query("SELECT * FROM users WHERE email = '" + profile.username + "'", function (err, result) {
+                    if (err) throw err;
+                    if (result.length > 0) {
+                        if (bcrypt.compareSync(profile.password, result[0].password)) {
+                            callback({
+                                "result": result[0],
+                                "err": ''
+                            });
+                        }
+                    } else {
+                        callback({
+                            "err": "That email is not in our database."
+                        });
+                    }
+                });
+            } else {
+                // check for username
+                db.query("SELECT * FROM users WHERE username = '" + profile.username + "'", function (err, result) {
+                    if (err) throw err;
+                    if (result.length > 0) {
+                        if (bcrypt.compareSync(profile.password, result[0].password)) {
+                            callback({
+                                "result": result[0],
+                                "err": ''
+                            });
+                        }
+                    } else {
+                        callback({
+                            "err": "That username is not in our database."
+                        });
+                    }
+                });
+            }
+        } else {
+            // universal provider login
+            db.query("SELECT * FROM users WHERE " + provider + "_id = '" + profile.id + "'", function (err, result) {
+                if (err) throw err;
+                if (result.length > 0) {
+                    user = result[i];
+                    if (user !== null) {
+                        return callback({
+                            "result": user,
+                            "err": ""
+                        });
+                    }
+                } else if (i === result.length) {
+                    return callback({
+                        "err": "That " + provider + ' id is not in our system'
+                    });
+                }
+            });
+        }
+    } else {
+        callback({
+            "err": "No database connected!"
+        });
+    }
+};
+
+const isEmail = (username) => {
+    return /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(username);
+};
+
 var signin = function (provider, profile, callback) {
     if (DBisConnected) {
         let user = null;
@@ -459,6 +532,7 @@ var signin = function (provider, profile, callback) {
                         });
                     }
                 } else {
+                    // universal provider login
                     if (result[i][provider + "_id"] === profile.id) {
                         user = result[i];
                         if (user !== null) {
@@ -474,49 +548,6 @@ var signin = function (provider, profile, callback) {
                     }
                 }
             }
-        });
-    } else {
-        return callback({
-            "err": "No database connected!"
-        });
-    }
-};
-
-var signup = function (provider, profile, callback) {
-    if (DBisConnected) {
-        db.query("SELECT * FROM users", function (err, result) {
-            if (err) throw err;
-            console.log(provider + "_id");
-            for (let i = 0; i < result.length; i++) {
-                if (provider === "local") {
-                    if (result[i].username === profile.username) {
-                        return callback({
-                            err: "That username has been taken!"
-                        });
-                    }
-                    else if (result[i].email === profile.email) {
-                        return callback({
-                            err: "That email is already in use!"
-                        });
-                    } else {
-                        if (profile.password[0] === profile.password[1]) {
-                            bcrypt.hash(profile.password[1], 10, function (err, hash) {
-                                db.query("INSERT TO users ('name_first', 'name_last', 'name_full', 'username', 'email', 'password') values (" + profile.name.first + ", " + profile.name.last + ", " + profile.name.full + ", " + profile.username + ", " + profile.email + ", " + hash + " )");
-                            });
-                        }
-                    }
-                } else {
-                    console.log(result[i][provider + "_id"] === profile.id);
-                    if (result[i][provider + "_id"] === profile.id) {
-                        return callback({
-                            err: "That " + provider + " account is already in our database!"
-                        });
-                    }
-                }
-            }
-            return callback({
-                err: "Adding user to database is being developed!"
-            });
         });
     } else {
         return callback({
