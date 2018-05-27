@@ -20,10 +20,14 @@ setInterval(function () {
 
 var topics = document.getElementsByTagName('topics')[0];
 
-forums.forEach(function (thread) {
+forums.forEach(function (thread, index, array) {
     let ntopic = document.createElement('topic');
     let tname = document.createElement('name');
     tname.innerText = thread.topic;
+
+    if (user && user.privilege > 8) {
+        tname.innerHTML += '<span style="float: right; display:block; font-weight: normal; vertical-align: middle;"><a onclick="topic.edit(\'' + thread.topic + '\')">Edit <i class="fa fa-edit"></i></a>&nbsp;&nbsp;<a onclick="topic.delete(\'' + thread.topic + '\')">Delete <i class="fa fa-trash"></i></a></span>';
+    }
 
     ntopic.appendChild(tname);
 

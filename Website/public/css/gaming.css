@@ -20,7 +20,7 @@ header {
     font-size: 1.5em;
     text-align: center;
     box-shadow: 0 8px 4px -4px rgba(0,0,0,0.16);
-    position: absolute;
+    position: relative;
     width: 100%;
     z-index: 1;
 }
@@ -240,19 +240,36 @@ side {
                     text-decoration: underline;
                 }
 
+admin {
+    display: block;
+    width: calc(100% - 20px);
+    height: 24px;
+    background-color: #11aaff;
+    border-radius: 5px;
+    margin: 20px 0;
+    color: #ffffff;
+    line-height: 24px;
+    padding: 5px 10px;
+}
+
+    admin > a {
+        background-color: transparent;
+        vertical-align: middle;
+        float: right;
+    }
+
 topics {
     display: block;
-    top: 200px;
-    position: absolute;
-    width: calc(90% - 250px);
+    position: relative;
     margin: 5%;
-    margin-top: calc(5% - 20px);
+    width: calc(90% - 250px);
     color: #ffffff;
 }
 
     topics a {
         color: #ffffff;
         text-decoration: none;
+        cursor: pointer;
     }
 
         topics a:hover {

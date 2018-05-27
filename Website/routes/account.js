@@ -447,6 +447,10 @@ const login = (provider, profile, callback) => {
                                 "result": result[0],
                                 "err": ''
                             });
+                        } else {
+                            callback({
+                                "err": "Incorrect password"
+                            });
                         }
                     } else {
                         callback({
@@ -477,7 +481,7 @@ const login = (provider, profile, callback) => {
             db.query("SELECT * FROM users WHERE " + provider + "_id = '" + profile.id + "'", function (err, result) {
                 if (err) throw err;
                 if (result.length > 0) {
-                    user = result[i];
+                    user = result[0];
                     if (user !== null) {
                         return callback({
                             "result": user,

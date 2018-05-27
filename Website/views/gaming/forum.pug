@@ -50,6 +50,13 @@ html
                     br
                     joined It's easy! Just click "Sign Up" and use a social login to continue!
         topics
-            script.
-                var forums = !{forums};
-            script(src="/js/forum.js")
+            if user && user.privilege > 8
+                admin 
+                    b Admin Panel
+                    a(onclick="return false;") New Topic
+        - var suser = user || {}; delete suser.password; delete suser.google_id; delete suser.facebook_id; delete suser.twitter_id; delete suser.steam_id;
+        - suser = JSON.stringify(suser);
+        script.
+            var forums = !{forums};
+            var user = !{suser};
+        script(src="/js/forum.js")
