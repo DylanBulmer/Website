@@ -7,7 +7,7 @@ var tools = require('../tools');
 /* GET users listing. */
 app.get('/', function (req, res) {
     let user = tools.getUser(req);
-    res.render('blog/index', { title: 'Blog', url: data.url, user: user });
+    res.render('blog/index', { title: 'Blog', config: data, user: user });
 });
 
 module.exports = app;

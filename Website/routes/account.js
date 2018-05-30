@@ -190,10 +190,11 @@ app.get('/', function (req, res) {
                 'google': user['google_id'] && user['google_id'] !== '' ? true : false,
                 'facebook': user['facebook_id'] && user['facebook_id'] !== '' ? true : false,
                 'twitter': user['twitter_id'] && user['twitter_id'] !== '' ? true : false,
-                'steam': user['steam_id'] && user['steam_id'] !== '' ? true : false
+                'steam': user['steam_id'] && user['steam_id'] !== '' ? true : false,
+                'discord': user['discord_id'] && user['discord_id'] !== '' ? true : false
             };
 
-            res.render('account/index', { title: 'Account', url: data.url, user: user, logins: socialLogins });
+            res.render('account/index', { title: 'Account', config: data, user: user, logins: socialLogins });
         } else {
             res.redirect('/signin');
         }
@@ -204,38 +205,49 @@ app.post('/', function (req, res) {
     tools.userTest( req, function ( test ) {
         if (test) {
             let user = tools.getUser(req);
-            let profile = db.query('SELECT * FROM users WHERE id = ' + req.user.id)[0];
-            switch (req.body.form) {
-                case 'man_pass': // Change Password
-                    if (profile.password === req.body['password_current']) {
-                        if (req.body.password === req.body.password_confirm) {
-                            bcrypt.hash(req.body.password, 10, function (err, hash) {
-                                // Store hash in database
-                                db.query('UPDATE users SET password="' + hash + '" where id=' + req.user.id);
-                            });
-                            res.render('account/index', { title: 'Account', url: data.url, pass: "Password Reset!", user: user });
+            db.query('SELECT * FROM users WHERE id = ' + req.user.id, (err, rows, fields) => {
+                let profile = rows[0];
+
+                let socialLogins = {
+                    'google': user['google_id'] && user['google_id'] !== '' ? true : false,
+                    'facebook': user['facebook_id'] && user['facebook_id'] !== '' ? true : false,
+                    'twitter': user['twitter_id'] && user['twitter_id'] !== '' ? true : false,
+                    'steam': user['steam_id'] && user['steam_id'] !== '' ? true : false,
+                    'discord': user['discord_id'] && user['discord_id'] !== '' ? true : false
+                };
+
+                switch (req.body.form) {
+                    case 'man_pass': // Change Password
+                        if (profile.password === req.body['password_current']) {
+                            if (req.body.password === req.body.password_confirm) {
+                                bcrypt.hash(req.body.password, 10, function (err, hash) {
+                                    // Store hash in database
+                                    db.query('UPDATE users SET password="' + hash + '" where id=' + req.user.id);
+                                });
+                                res.render('account/index', { title: 'Account', config: data, pass: "Password Reset!", user: user, logins: socialLogins });
+                            } else {
+                                res.render('account/index', { title: 'Account', config: data, err: "Passwords do not match!", user: user, logins: socialLogins });
+                            }
                         } else {
-                            res.render('account/index', { title: 'Account', url: data.url, err: "Passwords do not match!", user: user });
+                            res.render('account/index', { title: 'Account', config: data, err: "Current password is incorrect!", user: user, logins: socialLogins });
                         }
-                    } else {
-                        res.render('account/index', { title: 'Account', url: data.url, err: "Current password is incorrect!", user: user });
-                    }
-                    break;
-                case 'deact-google':    // Deactivate Google
-                    db.query('UPDATE users SET google_id ="" where id=' + req.user.id);
-                    break;
-                case 'deact-twitter':   // Deactivate Twitter
-                    db.query('UPDATE users SET twitter_id ="" where id=' + req.user.id);
-                    break;
-                case 'deact-facebook':  // Deactivate Facebook
-                    db.query('UPDATE users SET facebook_id ="" where id=' + req.user.id);
-                    break;
-                case 'deact-steam':     // Deactivate Steam
-                    db.query('UPDATE users SET steam_id ="" where id=' + req.user.id);
-                    break;
-                default:
-                    res.render('account/manage', { title: 'Manage Sign Ins', url: data.url, user: user });
-            }
+                        break;
+                    case 'deact-google':    // Deactivate Google
+                        db.query('UPDATE users SET google_id ="" where id=' + req.user.id);
+                        break;
+                    case 'deact-twitter':   // Deactivate Twitter
+                        db.query('UPDATE users SET twitter_id ="" where id=' + req.user.id);
+                        break;
+                    case 'deact-facebook':  // Deactivate Facebook
+                        db.query('UPDATE users SET facebook_id ="" where id=' + req.user.id);
+                        break;
+                    case 'deact-steam':     // Deactivate Steam
+                        db.query('UPDATE users SET steam_id ="" where id=' + req.user.id);
+                        break;
+                    default:
+                        res.render('account/index', { title: 'Account', config: data, user: user });
+                }
+            });
         } else {
             res.redirect('/signin');
         }
@@ -255,7 +267,7 @@ app.get('/logout', (req, res) => {
 app.get('/signin', function (req, res) {
     tools.userTest(req, function (test) {
         if (!test) {
-            res.render('signin', { title: 'Sign In', error: '', url: data.url });
+            res.render('signin', { title: 'Sign In', error: '', config: data });
         } else {
             res.redirect('/');
         }
@@ -265,20 +277,17 @@ app.get('/signin', function (req, res) {
 app.post('/signin', function (req, res, next) {
     tools.userTest(req, function (test) {
         if (!test) {
-            console.log("Test...", test);
             login('local', {
                 "username": req.body.username,
                 "password": req.body.password
             }, function (result) {
-                console.log("Results...",result);
-                if (result.err) { res.render('signin', { title: 'Sign In', error: result.err, url: data.url }); }
+                if (result.err) { res.render('signin', { title: 'Sign In', error: result.err, config: data }); }
                 else {
                     req.session.user = result.result;
                     return res.redirect('/');
                 }
             });
         } else {
-            console.log("Endless loop?...", test);
             res.redirect('/');
         }
     });
@@ -287,7 +296,7 @@ app.post('/signin', function (req, res, next) {
 app.get('/signup', function (req, res) {
     tools.userTest(req, function (test) {
         if (!test) {
-            res.render('signup', { title: 'Sign Up', error: '', url: data.url });
+            res.render('signup', { title: 'Sign Up', error: '', config: data });
         } else {
             res.redirect('/');
         }
@@ -299,7 +308,7 @@ app.post('/signup', function (req, res, next) {
         if (!test) {
             passport.authenticate('local-signup', function (err, user, info) {
                 if (err) {
-                    res.render('signup', { title: 'Sign Up', error: err, url: data.url });
+                    res.render('signup', { title: 'Sign Up', error: err, config: data });
                 } else {
                     return res.redirect('/');
                 }
@@ -402,6 +411,18 @@ app.get('/signin/discord/callback',
         res.redirect('/');
     });
 
+app.get('/signup/discord',
+    passport.authenticate('discord')
+);
+
+app.get('/signup/discord/callback',
+    passport.authenticate('discord', {
+        failureRedirect: '/signup'
+    }),
+    function (req, res) {
+        res.redirect('/');
+    });
+
 // Steam Routes
 
 app.get('/signin/steam',
@@ -481,7 +502,7 @@ const login = (provider, profile, callback) => {
             db.query("SELECT * FROM users WHERE " + provider + "_id = '" + profile.id + "'", function (err, result) {
                 if (err) throw err;
                 if (result.length > 0) {
-                    user = result[0];
+                    let user = result[0];
                     if (user !== null) {
                         return callback({
                             "result": user,

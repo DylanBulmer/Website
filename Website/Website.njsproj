@@ -39,6 +39,7 @@
     </Compile>
     <Compile Include="public\js\p5.min.js" />
     <Compile Include="public\js\page.js" />
+    <Compile Include="public\js\servers.js" />
     <Compile Include="public\js\tabs.js" />
     <Compile Include="routes\account.js" />
     <Compile Include="routes\gaming.js" />
@@ -72,10 +73,12 @@
     <Content Include="public\images\background.png" />
     <Content Include="public\images\logo2.png" />
     <Content Include="public\images\map.png" />
+    <Content Include="public\images\logo.png" />
+    <Content Include="public\images\logo.svg" />
+    <Content Include="public\manifest\forums.json" />
     <Content Include="README.md" />
     <Content Include="views\account\index.pug" />
     <Content Include="views\account\layout.pug" />
-    <Content Include="views\account\manage.pug" />
     <Content Include="views\blog\index.pug" />
     <Content Include="views\blog\layout.pug" />
     <Content Include="views\gaming\forum.pug" />
@@ -83,6 +86,7 @@
     <Content Include="views\index.pug" />
     <Content Include="views\layout.pug" />
     <Content Include="views\error.pug" />
+    <Content Include="views\modules\bar.pug" />
     <Content Include="views\modules\nav.pug" />
     <Content Include="views\policy.pug" />
     <Content Include="views\signin.pug" />
@@ -96,6 +100,7 @@
     <Folder Include="public\fonts\" />
     <Folder Include="public\images\" />
     <Folder Include="public\js\" />
+    <Folder Include="public\manifest\" />
     <Folder Include="routes\" />
     <Folder Include="views\" />
     <Folder Include="views\account\" />

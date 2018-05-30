@@ -13,18 +13,19 @@ var viewPage = function (pg) {
 
     // Move Pointer
     let nbb = nbtn.getBoundingClientRect();
-    tab.style.top = (nbb.top - 50) + "px";
-    
+    tab.style.top = nbb.top - 50 + "px";
+
     window.location.hash = pg;
     cbtn = nbtn;
     cpg = npg;
-}
+};
       
-if (window.location.hash == ""){
+if (window.location.hash === ""){
     cpg.setAttribute('style', 'display: block;');
     window.location.hash = "account_information";
 } else {
     let hash = window.location.hash.slice(1, window.location.hash.length);
+    console.log(hash);
     try {
         viewPage(hash);
     } catch(err) {

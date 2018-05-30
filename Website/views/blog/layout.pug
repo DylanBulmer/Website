@@ -1,22 +1,20 @@
 ﻿doctype html
 html
   head
-    title= 'Piggah Bro Studios | '+ title
+    title= 'Bulmer Solutions | '+ title
 
     meta(name="viewport" content="width=device-width, initial-scale=1.0")
     link(rel="icon" type="image/x-icon" href="favicon.ico")
 
     link(rel='stylesheet', href='/css/main.css')
-    link(rel='stylesheet', href='/css/ionicons.min.css')
     link(rel='stylesheet', href='/css/font-awesome.min.css')
+    link(rel='stylesheet' href="https://fonts.googleapis.com/css?family=Open+Sans:300,400")
+
     script(src="/js/barba.js" type="text/javascript")
 
     link(rel='stylesheet', href='/css/blog.css')
   body
-    bar
-        span#nav-btn(onclick = "navOpen()")
-            i.fa.fa-bars
-        a.title(href="http://" + url) Piggah Bro Studios | Blog
+    include ../modules/bar.pug
     include ../modules/nav.pug
     #barba-wrapper
       .barba-container

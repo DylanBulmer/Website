@@ -8,6 +8,7 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var subdomain = require('subdomain');
 var passport = require('passport');
+var compression = require('compression');
 
 var data = require('./config.json');
 
@@ -19,6 +20,8 @@ var gaming = require('./routes/gaming');
 var store = require('./routes/store');
 
 var app = express();
+
+app.use(compression());
 
 app.use(require('express-session')({
     secret: data.secret,
@@ -45,6 +48,7 @@ app.use(passport.session());
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
+app.set('env', data.env);
 
 app.use(logger('dev'));
 app.use(bodyParser.json());
@@ -97,6 +101,18 @@ app.get('/subdomain/*/images/:file', function (req, res) {
     };
     res.sendFile(req.params.file, options, function (err) { });
 });
+app.get('/subdomain/*/manifest/:file', function (req, res) {
+    var options = {
+        root: __dirname + '/public/manifest',
+        dotfiles: 'deny',
+        index: false,
+        headers: {
+            'x-timestamp': Date.now(),
+            'x-sent': true
+        }
+    };
+    res.sendFile(req.params.file, options, function (err) { });
+});
 
 app.use('/', www);
 
@@ -134,7 +150,7 @@ if (app.get('env') === 'development') {
         res.render('error', {
             message: err.message,
             error: err,
-            url: data.url
+            config: data
         });
     });
 }
@@ -146,7 +162,7 @@ app.use(function (err, req, res, next) {
     res.render('error', {
         message: err.message,
         error: {},
-        url: data.url
+        config: data
     });
 });
 

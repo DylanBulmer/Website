@@ -1,14 +1,14 @@
 ﻿doctype html
 html
   head
-    title= 'Piggah Bro Studios | '+ title
+    title= 'Bulmer Solutions | '+ title
 
     meta(name="viewport" content="width=device-width, initial-scale=1.0")
     link(rel="icon" type="image/x-icon" href="favicon.ico")
 
-    link(rel='stylesheet', href='/css/main.css')
-    link(rel='stylesheet', href='/css/font-awesome.min.css')
-    link(rel='stylesheet', href='/css/ionicons.min.css')
+    link(rel='stylesheet' href='/css/main.css')
+    link(rel='stylesheet' href='/css/font-awesome.min.css')
+    link(rel='stylesheet' href="https://fonts.googleapis.com/css?family=Open+Sans:300,400")
     style.
         page {
             position: relative;
@@ -23,17 +23,15 @@ html
             span#title(style="display: table; position: absolute; font-size: 1.25em;")
                 div#logo(style="display: inline-block; vertical-align: middle; height: 240px; width: 240px;")
                 div(style="display: inline-block; text-align: center; font-size: 1.25em; vertical-align: middle; margin-left: 50px;")
-                    h1 Piggah Bro Studios
-                    h3 Web and Game<br>Development
-            span#downArrow(style="display: block; position: absolute; bottom: 25px; left: calc(50% - 60px); width: 120px; text-align: center; font-size: 1.25em;")
+                    h1(style="font-variant-caps: small-caps;") Bulmer Solutions
+                    br
+                    h3 Where The Work Is Done <br/ > "The Bulmer Way"
+            span#downArrow(style="display: block; position: absolute; bottom: 25px; left: calc(50% - 100px); width: 200px; text-align: center; font-size: 1.25em;")
                 h3 Scroll Down
                     br
                     i.fa.fa-chevron-down
         span#p2(style="top: 100vh;left: 0;position: absolute;width: 100%;height: 100vh;background-color: #fff;transition-duration: 1.5s;transition-timing-function: ease-in-out;")
-            bar
-                span#nav-btn(onclick = "navOpen()")
-                    i.fa.fa-bars
-                a.title(href="http://" + url) Piggah Bro Studios
+            include modules/bar.pug
             page(style="height: calc(100vh - 50px - 4em); overflow-y: auto; width: calc(60% + 16px); padding: 2em 20%;")
                 span.content
                     span
@@ -42,7 +40,7 @@ html
                     box
                         h3 Get `Em Products
                         p We have many products and services, go check them out!
-                        a(href="http://store." + url) Let's Go!
+                        a(href=http + "store." + config.url) Let's Go!
                 span.content
                     span
                         h2 Blogs
@@ -50,7 +48,7 @@ html
                     box
                         h3 The Latest and Greatest
                         p Keep up-to-date with us and know what projects we are working on!
-                        a(href="http://blog." + url) Read Up!
+                        a(href=http + "blog." + config.url) Read Up!
                 span.content
                     span
                         h2 Gaming Community
@@ -58,7 +56,7 @@ html
                     box
                         h3 Play Games?
                         p Come join the fun with us!
-                        a(href="http://gaming." + url) Join Now!
+                        a(href=http + "gaming." + config.url) Join Now!
     script(src="/js/p5.min.js" type="text/javascript")
     script(src="/js/logo.js" type="text/javascript")
     script(src="/js/page.js" type="text/javascript")

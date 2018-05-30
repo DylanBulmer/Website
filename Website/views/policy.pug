@@ -1,13 +1,14 @@
 doctype html
 html
   head
-    title= 'Piggah Bro Studios | ' + title
+    title= 'Bulmer Solutions | ' + title
 
     meta(name="viewport" content="width=device-width, initial-scale=1.0")
     link(rel="icon" type="image/x-icon" href="favicon.ico")
 
     link(rel='stylesheet', href='/css/main.css')
     link(rel='stylesheet', href='/css/font-awesome.min.css')
+    link(rel='stylesheet' href="https://fonts.googleapis.com/css?family=Open+Sans:300,400")
 
     script(src="/js/barba.js" type="text/javascript")
 
@@ -18,10 +19,7 @@ html
             line-height: 1.5em;
         }
   body
-    bar
-        span#nav-btn(onclick = "navOpen()")
-            i.fa.fa-bars
-        a.title(href="http://" + url) Piggah Bro Studios
+    include modules/bar.pug
     include modules/nav.pug
     page(style="min-height: calc(100vh - 300px - 4em); position: relative; top: auto; width: 80%; margin: 0 calc(10% - 1em);")!= body
     script(src="/js/page.js" type="text/javascript")

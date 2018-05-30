@@ -37,14 +37,12 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 var navOpen = function navOpen() {
-    document.getElementsByClassName("title")[0].style.left = "260px";
     document.getElementsByTagName("nav")[0].style.width = "250px";
-}
+};
 
 var navClose = function navClose() {
-    document.getElementsByClassName("title")[0].style.left = "50px";
     document.getElementsByTagName("nav")[0].style.width = "0px";
-}
+};
 
 var addPageSources = function addPageSources() {
     window.location.hash = '';
@@ -64,6 +62,6 @@ var addPageSources = function addPageSources() {
                     break;
             }
     }
-}
+};
 
 addPageSources();

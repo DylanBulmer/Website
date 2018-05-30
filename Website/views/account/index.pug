@@ -17,8 +17,18 @@ block content
         page(style= "display: inline-block; width: calc(100% - 4em - 250px); position: absolute; right: 0; top: 50px; left: auto;")
             content#_account_information
                 h2(style="text-align: center;display: block;") Welcome #{user.name_first}!
-                span
+                br
+                span(style="text-align: center;display: block;")
                     p Edit Your Account Information
+                    br
+                    p 
+                        i This page is being developed, 
+                            b not everything will work
+                            | .
+                form
+                    input(name="name[first]" placeholder="First Name" value=user.name_first)
+                    input(name="name[last]" placeholder="Last Name" value=user.name_last)
+                    input(name="email" placeholder="Email" value=user.email)
             content#_change_password
                 h2(style="text-align: center;display: block;") Change Password
                     br

@@ -1,7 +1,7 @@
 # Cookie Policy
 Last Modified: Mar 12, 2018
 
-Piggah Bro Studios uses cookies in the http://piggahbrostudios.com website and any web application developed by Piggah Bro Studios. These cookies allow us to give you a better experience with the Service. Read about the privacy of our cookies at http://piggahbrostudios.com/policy/privacy. 
+Bulmer Solutions uses cookies in the https://piggahbrostudios.com website and any web application developed by Bulmer Solutions. These cookies allow us to give you a better experience with the Service. Read about the privacy of our cookies at https://piggahbrostudios.com/policy/privacy. 
 
 **What is a Cookie?**
 

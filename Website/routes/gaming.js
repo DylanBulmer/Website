@@ -9,16 +9,19 @@ var dateformat = require('dateformat');
 /* GET users listing. */
 app.get('/', function (req, res) {
     let user = tools.getUser(req);
-    res.render('gaming/index.pug', {
-        title: 'Gaming',
-        url: data.url,
-        user: user
+    getServers((servers) => {
+        res.render('gaming/index.pug', {
+            title: 'Gaming',
+            servers: JSON.stringify(servers),
+            config: data,
+            user: user
+        });
     });
 });
 
 app.get('/forums', function (req, res) {
     let user = tools.getUser(req);
-    getThreads( (err, forums) => {
+    getThreads((err, forums) => {
 
         if (user && user.joined) {
             try {
@@ -31,11 +34,53 @@ app.get('/forums', function (req, res) {
 
         res.render('gaming/forum.pug', {
             title: 'Community Forums',
-            url: data.url,
+            config: data,
             forums: JSON.stringify(forums),
             user: user
         });
     });
+});
+
+app.get('/forums/:subtopic', function (req, res) {
+    let user = tools.getUser(req);
+    getSubtopic(req.params.subtopic, (err, forums) => {
+
+        /*if (user && user.joined) {
+            try {
+                let joined = new Date(user.joined);
+                user.joined = dateformat(joined, "mmm dS, yyyy h:MM TT");
+            } catch (e) {
+                console.log(e);
+            }
+        }*/
+
+        if (err) {
+            res.send(err);
+        } else {
+            res.json(forums);
+        }
+    });
+});
+
+app.get('/forums/:subtopic/:thread_id', function (req, res) {
+    let user = tools.getUser(req);
+    if (req.params.thread_id === "new") {
+        res.send('New');
+    } else {
+        getThread(req.params.thread_id, (err, forums) => {
+
+            /*if (user && user.joined) {
+                try {
+                    let joined = new Date(user.joined);
+                    user.joined = dateformat(joined, "mmm dS, yyyy h:MM TT");
+                } catch (e) {
+                    console.log(e);
+                }
+            }*/
+
+            res.json(forums);
+        });
+    }
 });
 
 // Database Functions
@@ -43,58 +88,284 @@ app.get('/forums', function (req, res) {
 var DBisConnected = false;
 var db;
 
-let getThreads = (callback) => {
-    // get the threads with the user attached to each one
-    db.query("SELECT forum_threads.*, users.name_first, users.name_last, users.name_full, users.nickname, users.joined FROM forum_threads LEFT JOIN users ON forum_threads.author_id=users.id ORDER BY forum_threads.thread_id", (err, rows) => {
+let getServers = (callback) => {
+    db.query("SELECT * FROM servers", (err, rows, fields) => {
+        let data = [];
+
+        for (let i = 0; i < rows.length; i++) {
+            let server = {
+                game: rows[i].server,
+                name: rows[i].name,
+                version: rows[i].version,
+                status: rows[i].status === 0 ? "Offline" : "Online"
+            };
+
+            switch (rows[i].service) {
+                case "steam":
+                    server.target = "_self";
+                    server.url = "steam://connect/" + rows[i].url + ":" + rows[i].port;
+                    break;
+                default:
+                    server.target = "_blank";
+                    server.url = rows[i].url + ":" + rows[i].port;
+                    break;
+            }
+
+            data.push(server);
+        }
+
+        callback(data);
+
+    });
+};
+
+/**
+ * @param {number} thread Thread ID
+ * @param {Function} callback Callback function
+ */
+let getThread = (thread, callback) => {
+    db.query("SELECT forum_topics.topic, forum_topics.subtopic, forum_threads.*, posts.content, posts.author_id, posts.created, posts.last_modified, posts.post_id, users.name_first, users.name_last, users.nickname, users.joined FROM forum_topics LEFT JOIN forum_threads ON forum_threads.topic_id =forum_topics.topic_id LEFT JOIN( SELECT content, thread_id as id, author_id, created, last_modified, post_id FROM forum_posts ORDER BY last_modified DESC LIMIT 1) AS posts ON posts.id = forum_threads.thread_id LEFT JOIN users ON posts.author_id = users.id WHERE forum_threads.thread_id = \"" + thread + "\" ORDER BY forum_threads.thread_id;", (err, rows) => {
         if (err) throw err;
         if (rows.length !== 0) {
             // array for merging the topics
             let data = [];
 
             for (let i = 0; i < rows.length; i++) {
-                let author = rows[i].nickname || rows[i].name_full;
+                let author = rows[i]['nickname'] ? rows[i]['nickname'] : rows[i]['name_first'] ? rows[i]['name_first'] + " " + rows[i]['name_last'] : null;
 
-                let timestamp = new Date(rows[i].created);
-                timestamp = dateformat(timestamp, "ddd, mmm dS, yyyy") + " at " + dateformat(timestamp, "h:MM TT");
+                let timestamp;
+                if (rows[i]['last_modified']) {
+                    timestamp = new Date(rows[i]['last_modified']);
+                    timestamp = dateformat(timestamp, "ddd, mmm dS, yyyy") + " at " + dateformat(timestamp, "h:MM TT");
+                } else {
+                    timestamp = "";
+                }
 
                 // Test to see if topic is already in the data array
                 let test = { bool: false, index: 0 };
                 for (let r = 0; r < data.length; r++) {
-                    if (data[r].topic === rows[i].topic) {
+                    if (data[r]['topic'] === rows[i]['topic']) {
                         test = {
                             bool: true,
                             index: r
                         };
                     }
                 }
-                
+
                 if (!test.bool) { // if not in the array, add the topic and subtopic
                     data[data.length] = {
-                        'topic': rows[i].topic,
+                        'topic': rows[i]['topic'],
+                        'id': rows[i]['topic_id'],
                         'subtopics': [{
-                            'subtopic': rows[i].subtopic,
+                            'subtopic': rows[i]['subtopic'],
                             'thread': {
-                                'title': rows[i].title,
+                                'title': rows[i]['title'],
+                                'id': rows[i]['thread_id'],
                                 'created': timestamp,
                                 'author': {
-                                    'id': rows[i].author_id,
+                                    'id': rows[i]['author_id'],
                                     'name': author
                                 },
-                                'privilege': rows[i].privilege
+                                'privilege': rows[i]['privilege']
                             }
                         }]
                     };
                 } else { // else add the subtopic to the already created topic
                     data[test.index].subtopics.push({
-                        'subtopic': rows[i].subtopic,
+                        'subtopic': rows[i]['subtopic'],
+                        'id': rows[i]['thread_id'],
                         'thread': {
-                            'title': rows[i].title,
+                            'title': rows[i]['title'],
+                            'id': rows[i]['post_id'],
                             'created': timestamp,
                             'author': {
-                                'id': rows[i].author_id,
+                                'id': rows[i]['author_id'],
                                 'name': author
                             },
-                            'privilege': rows[i].privilege
+                            'privilege': rows[i]['privilege']
+                        }
+                    });
+                }
+
+            }
+
+            // send back error = false and the data
+            callback(false, data);
+        } else {
+            callback("No thread with id: '" + thread + "' was found!");
+        }
+    });
+};
+
+/**
+ * @param {string} subtopic Thread ID
+ * @param {Function} callback Callback function
+ */
+let getSubtopic = (subtopic, callback) => {
+    db.query("SELECT forum_topics.topic, forum_topics.subtopic, forum_threads.*, posts.content, posts.author_id, posts.created, posts.last_modified, posts.post_id, users.name_first, users.name_last, users.nickname, users.joined FROM forum_topics LEFT JOIN forum_threads ON forum_threads.topic_id =forum_topics.topic_id LEFT JOIN( SELECT content, thread_id as id, author_id, created, last_modified, post_id FROM forum_posts ORDER BY last_modified DESC LIMIT 1) AS posts ON posts.id = forum_threads.thread_id LEFT JOIN users ON posts.author_id = users.id WHERE forum_topics.subtopic = \"" + subtopic + "\" ORDER BY forum_threads.thread_id;", (err, rows) => {
+        if (err) throw err;
+        if (rows.length !== 0) {
+            // array for merging the topics
+            let data = [];
+
+            for (let i = 0; i < rows.length; i++) {
+                let author = rows[i]['nickname'] ? rows[i]['nickname'] : rows[i]['name_first'] ? rows[i]['name_first'] + " " + rows[i]['name_last'] : null;
+
+                let timestamp;
+                if (rows[i]['last_modified']) {
+                    timestamp = new Date(rows[i]['last_modified']);
+                    timestamp = dateformat(timestamp, "ddd, mmm dS, yyyy") + " at " + dateformat(timestamp, "h:MM TT");
+                } else {
+                    timestamp = "";
+                }
+
+                // Test to see if topic is already in the data array
+                let test = { bool: false, index: 0 };
+                for (let r = 0; r < data.length; r++) {
+                    if (data[r]['topic'] === rows[i]['topic']) {
+                        test = {
+                            bool: true,
+                            index: r
+                        };
+                    }
+                }
+
+                if (!test.bool) { // if not in the array, add the topic and subtopic
+                    data[data.length] = {
+                        'topic': rows[i]['topic'],
+                        'id': rows[i]['topic_id'],
+                        'subtopics': [{
+                            'subtopic': rows[i]['subtopic'],
+                            'thread': {
+                                'title': rows[i]['title'],
+                                'id': rows[i]['thread_id'],
+                                'created': timestamp,
+                                'author': {
+                                    'id': rows[i]['author_id'],
+                                    'name': author
+                                },
+                                'privilege': rows[i]['privilege']
+                            }
+                        }]
+                    };
+                } else { // else add the subtopic to the already created topic
+                    data[test.index].subtopics.push({
+                        'subtopic': rows[i]['subtopic'],
+                        'id': rows[i]['thread_id'],
+                        'thread': {
+                            'title': rows[i]['title'],
+                            'id': rows[i]['post_id'],
+                            'created': timestamp,
+                            'author': {
+                                'id': rows[i]['author_id'],
+                                'name': author
+                            },
+                            'privilege': rows[i]['privilege']
+                        }
+                    });
+                }
+
+            }
+
+            // send back error = false and the data
+            callback(false, data);
+        } else {
+            callback("No Subtopic '" + subtopic + "' was found!");
+        }
+    });
+};
+
+let getThreads = (callback) => {
+    // get the threads with the user attached to each one
+    db.query("SELECT forum_topics.topic, forum_topics.subtopic, forum_threads.*, posts.content, posts.author_id, posts.created, posts.last_modified, posts.post_id, users.name_first, users.name_last, users.nickname, users.joined FROM forum_topics LEFT JOIN forum_threads ON forum_threads.topic_id =forum_topics.topic_id LEFT JOIN( SELECT content, thread_id as id, author_id, created, last_modified, post_id FROM forum_posts ORDER BY last_modified DESC LIMIT 1) AS posts ON posts.id = forum_threads.thread_id LEFT JOIN users ON posts.author_id = users.id ORDER BY forum_threads.thread_id;", (err, rows) => {
+        if (err) throw err;
+        if (rows.length !== 0) {
+            // array for merging the topics
+            let data = [];
+
+            for (let i = 0; i < rows.length; i++) {
+                let author = rows[i]['nickname'] ? rows[i]['nickname'] : rows[i]['name_first'] ? rows[i]['name_first'] + " " + rows[i]['name_last'] : null;
+
+                let timestamp;
+                if (rows[i]['last_modified']) {
+                    timestamp = new Date(rows[i]['last_modified']);
+                    timestamp = dateformat(timestamp, "ddd, mmm dS, yyyy") + " at " + dateformat(timestamp, "h:MM TT");
+                } else {
+                    timestamp = "";
+                }
+
+                // Test to see if topic is already in the data array
+                let test = { bool: false, index: 0, isSub: false, subtopic: 0 };
+                for (let r = 0; r < data.length; r++) {
+                    if (data[r]['topic'] === rows[i]['topic']) {
+
+                        test = {
+                            bool: true,
+                            index: r,
+                            isSub: false,
+                            subtopic: 0
+                        };
+
+                        for (let t = 0; t < data[r].subtopics.length; t++) {
+                            console.log(rows[i]['subtopic'], data[r]['subtopics'][t].subtopic, rows[i]['subtopic'] === data[r]['subtopics'][t].subtopic);
+                            if (rows[i]['subtopic'] === data[r]['subtopics'][t].subtopic) {
+                                test = {
+                                    bool: true,
+                                    index: r,
+                                    isSub: true,
+                                    subtopic: t
+                                };
+                            }
+                        }
+                    }
+                }
+                
+                if (!test.bool) { // if not in the array, add the topic and subtopic
+                    data[data.length] = {
+                        'topic': rows[i]['topic'],
+                        'id': rows[i]['topic_id'],
+                        'subtopics': [{
+                            'subtopic': rows[i]['subtopic'],
+                            'thread': {
+                                'title': rows[i]['title'],
+                                'id': rows[i]['thread_id'],
+                                'created': timestamp,
+                                'author': {
+                                    'id': rows[i]['author_id'],
+                                    'name': author
+                                },
+                                'privilege': rows[i]['privilege']
+                            }
+                        }]
+                    };
+                } else if (test.bool && test.isSub) {
+                    data[test.index].subtopics[test.subtopic] = {
+                        'subtopic': rows[i]['subtopic'],
+                        'id': rows[i]['thread_id'],
+                        'thread': {
+                            'title': rows[i]['title'],
+                            'id': rows[i]['post_id'],
+                            'created': timestamp,
+                            'author': {
+                                'id': rows[i]['author_id'],
+                                'name': author
+                            },
+                            'privilege': rows[i]['privilege']
+                        }
+                    };
+                } else { // else add the subtopic to the already created topic
+                    data[test.index].subtopics.push({
+                        'subtopic': rows[i]['subtopic'],
+                        'id': rows[i]['thread_id'],
+                        'thread': {
+                            'title': rows[i]['title'],
+                            'id': rows[i]['post_id'],
+                            'created': timestamp,
+                            'author': {
+                                'id': rows[i]['author_id'],
+                                'name': author
+                            },
+                            'privilege': rows[i]['privilege']
                         }
                     });
                 }

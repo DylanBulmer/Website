@@ -5,7 +5,7 @@ var md = require('markdown-it')({
     breaks: true,
     linkify: true,
     typographer: true,
-    quotes: '“”‘’',
+    quotes: '“”‘’'
 });
 var express = require('express');
 var router = express.Router();
@@ -16,7 +16,7 @@ var fs = require('fs');
 /* GET home page. */
 router.get('/', function (req, res) {
     let user = tools.getUser(req);
-    res.render('index', { title: 'Home', url: config.url, user: user });
+    res.render('index', { title: 'Home', config: config, user: user });
 });
 
 router.get('/policy/terms', (req, res) => {
@@ -24,7 +24,7 @@ router.get('/policy/terms', (req, res) => {
     fs.readFile("./files/terms.md", 'utf8', (err, data) => {
         if (err) throw err;
         let body = md.render(data);
-        res.render('policy', { title: 'Terms of Services', url: config.url, user: user, body: body });
+        res.render('policy', { title: 'Terms of Services', config: config, user: user, body: body });
     });
 });
 
@@ -33,7 +33,7 @@ router.get('/policy/privacy', (req, res) => {
     fs.readFile("./files/privacy.md", 'utf8', (err, data) => {
         if (err) throw err;
         let body = md.render(data);
-        res.render('policy', { title: 'Privacy Policy', url: config.url, user: user, body: body });
+        res.render('policy', { title: 'Privacy Policy', config: config, user: user, body: body });
     });
 });
 
@@ -42,7 +42,7 @@ router.get('/policy/cookies', (req, res) => {
     fs.readFile("./files/cookies.md", 'utf8', (err, data) => {
         if (err) throw err;
         let body = md.render(data);
-        res.render('policy', { title: 'Cookie Policy', url: config.url, user: user, body: body });
+        res.render('policy', { title: 'Cookie Policy', config: config, user: user, body: body });
     });
 });
 
