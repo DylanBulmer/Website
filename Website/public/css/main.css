@@ -1,6 +1,7 @@
 ﻿* {
     margin: 0;
-    font-family: 'Open Sans Light', sans-serif;
+    font-family: 'Open Sans', sans-serif;
+    font-weight: lighter;
 }
 
 a {
@@ -87,14 +88,14 @@ bar {
     box-shadow: -1px 2px 4px 0 rgba(0,0,0,0.16),-1px 2px 10px 0 rgba(0,0,0,0.12);
 }
 
-bar > span#nav-btn {
+bar > #nav-btn {
     position: absolute;
     top: 9px;
     right: 9px;
     cursor: pointer;
 }
 
-bar > span#nav-btn > i {
+bar > #nav-btn > i {
     font-size: 24px;
     border: 1px solid #818181;
     border-radius: 5px;
@@ -128,11 +129,11 @@ nav > span:hover {
     color: #f1f1f1;
 }
 
-nav > span#policy {
+nav > #policy {
     color: #555555;
 }
 
-nav > span#policy:hover {
+nav > #policy:hover {
     color: #555555;
     cursor: default;
 }
@@ -166,13 +167,13 @@ form > h1, form > h3 {
     text-align: center;
 }
 
-form > span#btns {
+form > #btns {
     display: block;
     width: calc(80% - 1em - 12px);
     margin: 10%;
 }
 
-form > span#btns > a {
+form > #btns > a {
     display: inline-block;
     width: 36px;
     height: 34px;
@@ -184,7 +185,7 @@ form > span#btns > a {
     vertical-align: top;
 }
 
-form > span#btns > a > i {
+form > #btns > a > i {
     font-size: 32px;
     color: #ffffff;
 }
@@ -214,7 +215,7 @@ box > h3 {
 }
 
 box > p {
-    height: 5em;
+    min-height: 5em;
     text-align: left;
     text-indent: 1em;
     padding: 0 1em;
@@ -245,12 +246,110 @@ span.content > span {
 
 span.content > span > h2 {
     margin: 1em 0;
-}
-
-span.content > span > h2 {
     text-indent: 1em;
 }
 
-span#title h1, span#title h3, span#downArrow h3, span#downArrow i {
+#title h1, #title h3, #downArrow h3, #downArrow i {
     color: #f0f0f0;
+}
+
+#title {
+    display: block;
+    width: 100%;
+    text-align: center;
+    position: relative;
+    font-size: 1.25em;
+    margin: calc(50vh - 100px - 2em) 0;
+    vertical-align: middle;
+}
+
+#title div {
+    display: inline-block;
+    text-align: center;
+    font-size: 1.25em;
+    vertical-align: middle;
+    margin-left: 50px;
+}
+
+#title #logo {
+    height: 200px;
+    width: 200px;
+    margin-left: 0;
+}
+
+@media only screen and (max-width: 992px) {
+    #title {
+        margin: 0;
+    }
+
+        #title div {
+            display: inline-block;
+            margin-left: 0;
+            padding: 1em;
+        }
+
+        #title #title-text {
+            width: calc(90% - 240px - 2em);
+        }
+
+    bar > logo {
+        width: 80px;
+        height: 80px;
+    }
+
+    bar > logo:after {
+        height: 38px;
+    }
+
+    bar > a.title {
+        left: 100px;
+    }
+}
+
+/* Make bar change for mobile devices */
+@media only screen and (max-width: 600px) {
+    #title {
+        text-align: center;
+    }
+
+        #title #title-text {
+            width: calc(100% - 2em);
+        }
+
+    #title div {
+        margin-left: 0;
+        padding: 1em;
+    }
+
+    bar > logo {
+        display: none;
+    }
+
+    bar > a.title {
+        left: 10px;
+    }
+
+    span.content {
+        width: 100%;
+        margin: 0;
+    }
+
+        span.content > span {
+            width: 100%;
+            margin-bottom: 10px;
+        }
+
+            span.content > span > h2 {
+                text-indent: 0;
+                text-align: center;
+            }
+
+    box {
+        width: calc(100% - 20px);
+        margin: 0;
+    }
+
+    box > p {
+        margin-bottom: 10px;
+    }
 }

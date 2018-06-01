@@ -41,6 +41,7 @@
     <Compile Include="public\js\page.js" />
     <Compile Include="public\js\servers.js" />
     <Compile Include="public\js\tabs.js" />
+    <Compile Include="public\js\touch.js" />
     <Compile Include="routes\account.js" />
     <Compile Include="routes\gaming.js" />
     <Compile Include="routes\index.js" />
@@ -76,6 +77,7 @@
     <Content Include="public\images\logo.png" />
     <Content Include="public\images\logo.svg" />
     <Content Include="public\manifest\forums.json" />
+    <Content Include="public\manifest\main.json" />
     <Content Include="README.md" />
     <Content Include="views\account\index.pug" />
     <Content Include="views\account\layout.pug" />

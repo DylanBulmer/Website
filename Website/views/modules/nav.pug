@@ -1,5 +1,5 @@
 nav
-    span#nav-cls(onclick = "navClose()") Close 
+    span#nav-cls(onclick = "navClose()" style="position: absolute;") Close 
         i.fa.fa-times
     - var http = (config.https) ? 'https://':'http://'
     a(href= http + config.url) Home
