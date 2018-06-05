@@ -20,7 +20,10 @@ html
                 a(href="/") Home
                 a(href="/forums") Forums
                 a(href="http://steamcommunity.com/groups/piggahbrostudios" target="_BLANK") Steam Group
-                a(href="https://discord.gg/A2db8se" target="_BLANK") Discord
+                if user
+                    a(href=http + "account." + config.url + "/logout" target="_BLANK") Logout
+                else
+                    a(href=http + "account." + config.url + "/signin" target="_BLANK") Login / Signup
         side
             discord
                 title Discord
@@ -43,7 +46,7 @@ html
                     br
                     joined It's easy! Just click "Sign Up" and use a social login to continue!
         topics
-            if user && user.privilege > 8
+            if user && user.privilege >= 8
                 admin 
                     b Admin Panel
                     a(onclick="return false;") New Topic

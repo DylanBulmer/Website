@@ -14,7 +14,7 @@ block content
                 tab#create_password(onclick="viewPage('create_password')") Create Password
 
             tab#social_logins(onclick="viewPage('social_logins')") Social Logins
-        page(style= "display: inline-block; width: calc(100% - 4em - 250px); position: absolute; right: 0; top: 50px; left: auto;")
+        page(style= "width: calc(100% - 4em - 250px); right: 0; left: auto;")
             content#_account_information
                 h2(style="text-align: center;display: block;") Welcome #{user.name_first}!
                 br
@@ -26,8 +26,9 @@ block content
                             b not everything will work
                             | .
                 form
-                    input(name="name[first]" placeholder="First Name" value=user.name_first)
-                    input(name="name[last]" placeholder="Last Name" value=user.name_last)
+                    input(name="name[first]" style="display: inline-block; width: calc(40% - 1em - 13px); margin-right: 6px;" placeholder="First Name" value=user.name_first)
+                    input(name="name[last]" style="display: inline-block; width: calc(40% - 1em - 13px); margin-left: 6px;" placeholder="Last Name" value=user.name_last)
+                    input(name="name[user]" placeholder="Username" value=user.username)
                     input(name="email" placeholder="Email" value=user.email)
             content#_change_password
                 h2(style="text-align: center;display: block;") Change Password

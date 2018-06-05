@@ -1,7 +1,6 @@
 ﻿* {
     margin: 0;
     font-family: 'Open Sans', sans-serif;
-    font-weight: lighter;
 }
 
 a {
@@ -44,6 +43,7 @@ body {
     margin: 0;
     color: #555555;
     background-color: #ffffff;
+    font-weight: lighter;
 }
 
 nav {
@@ -167,11 +167,11 @@ form > h1, form > h3 {
     text-align: center;
 }
 
-form > #btns {
-    display: block;
-    width: calc(80% - 1em - 12px);
-    margin: 10%;
-}
+    form > #btns {
+        display: block;
+        width: calc(80%);
+        margin: 50px 10% 10px 10%;
+    }
 
 form > #btns > a {
     display: inline-block;
@@ -306,7 +306,7 @@ span.content > span > h2 {
     }
 }
 
-/* Make bar change for mobile devices */
+/* Make changes for phones */
 @media only screen and (max-width: 600px) {
     #title {
         text-align: center;
@@ -323,6 +323,11 @@ span.content > span > h2 {
 
     bar > logo {
         display: none;
+    }
+
+    form {
+        width: 100%;
+        padding: 1em 0;
     }
 
     bar > a.title {

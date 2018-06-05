@@ -27,9 +27,13 @@ forums.forEach(function (thread, index, array) {
     tname.innerText = thread.topic;
 
     // add admin controls
-    if (user && user.privilege > 8) {
-        tname.innerHTML += '<span style="float: right; display:block; font-weight: normal; vertical-align: middle;"><a onclick="topic.edit(\'' + thread.topic + '\')">Edit <i class="fa fa-edit"></i></a>&nbsp;&nbsp;<a onclick="topic.delete(\'' + thread.topic + '\')">Delete <i class="fa fa-trash"></i></a></span>';
+    tname.innerHTML += '<span style="float: right; display:block; font-weight: normal; vertical-align: middle;">';
+
+    if (user && user.privilege >= 8) {
+        tname.innerHTML += '<a onclick="topic.edit(\'' + thread.topic + '\')">Edit <i class="fa fa-edit"></i></a>&nbsp;&nbsp;<a onclick="topic.delete(\'' + thread.topic + '\')">Delete <i class="fa fa-trash"></i></a>';
     }
+
+    tname.innerHTML += '</span>';
 
     // append name to topic
     ntopic.appendChild(tname);
