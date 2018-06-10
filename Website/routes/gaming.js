@@ -5,6 +5,7 @@ var data = require('../config.json');
 var mysql = require('mysql');
 var tools = require('../tools');
 var dateformat = require('dateformat');
+var net = require('net');
 
 /* GET users listing. */
 app.get('/', function (req, res) {
@@ -97,6 +98,8 @@ let getServers = (callback) => {
                 game: rows[i].server,
                 name: rows[i].name,
                 version: rows[i].version,
+                port: rows[i].port,
+                host: rows[i].url,
                 status: rows[i].status === 0 ? "Offline" : "Online"
             };
 
@@ -111,11 +114,57 @@ let getServers = (callback) => {
                     break;
             }
 
-            data.push(server);
+            checkStatus(server, (serv) => {
+                data.push(serv);
+                if (i >= rows.length || i === 0) {
+                    callback(data);
+                }
+            });
+
         }
 
-        callback(data);
+    });
+};
 
+let checkStatus = (server, callback) => {
+    switch (server.game) {
+        case "Minecraft":
+            getServerStatus(server, (status) => {
+                callback(status);
+            });
+            break;
+        default:
+            callback(server);
+            break;
+    }
+};
+
+let getServerStatus = (server, callback) => {
+    let client = net.connect(server.port, server.host, function (data) {
+        let buff = new Buffer([0xFE, 0x01]);
+        client.write(buff);
+    }).on('data', function (data) {
+        if (data !== null && data !== '') {
+            // convert data to strings
+            let server_info = data.toString().split("\x00\x00\x00");
+            if (server_info !== null && server_info.length) {
+                server.status = "Online";
+                server.version = server_info[2].replace(/\u0000/g, '');
+                server.motd = server_info[3].replace(/\u0000/g, '');
+                server.current_players = server_info[4].replace(/\u0000/g, '');
+                server.max_players = server_info[5].replace(/\u0000/g, '');
+
+                // send back updated data
+                callback(server);
+            }
+            else {
+                server.status = "Offline";
+
+                // send back data
+                callback(server);
+            }
+        }
+        client.end();
     });
 };
 
