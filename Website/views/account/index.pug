@@ -14,7 +14,7 @@ block content
                 tab#create_password(onclick="viewPage('create_password')") Create Password
 
             tab#social_logins(onclick="viewPage('social_logins')") Social Logins
-        page(style= "width: calc(100% - 4em - 250px); right: 0; left: auto;")
+        page(style= "width: calc(100% - 4em - 250px); position: absolute; right: 0; left: auto;")
             content#_account_information
                 h2(style="text-align: center;display: block;") Welcome #{user.name_first}!
                 br

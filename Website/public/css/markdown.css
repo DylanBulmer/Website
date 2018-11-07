@@ -1,0 +1,160 @@
+p {
+    margin: 1em 0;
+    line-height: 1.5em;
+}
+
+table {
+    width: 100%;
+    max-width: 100%;
+    margin-bottom: 20px;
+    border-collapse: collapse;
+    margin: 1em 0;
+}
+
+td, th {
+    padding: 6px 12px;
+    text-align: left;
+}
+
+td {
+    border-top: 1px solid #ddd;
+}
+
+th {
+    border-bottom: 3px solid #ddd;
+}
+
+tbody > tr:nth-child(odd) > td, 
+tbody > tr:nth-child(odd) > th {
+    background-color: #f9f9f9;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    border: 0;
+}
+
+h3 {
+    color: #999;
+    font-weight: normal;
+    padding-bottom: 1em;
+}
+
+blockquote {
+    margin: 1em 0;
+    border-left: 5px solid #ddd;
+    padding-left: .6em;
+}
+
+dt {
+    font-weight: bold;
+    margin-left: 1em;
+}
+
+dd {
+    margin-left: 2em;
+    margin-bottom: 1em;
+}
+
+sup {
+    font-size: 0.83em;
+    vertical-align: super;
+    line-height: 0;
+}
+
+code {
+    background-color: #f9f9f9;
+    padding: 0 4px;
+    border-radius: 3px;
+    border: 1px solid #ddd;
+}
+
+* {
+    -webkit-print-color-adjust: exact;
+}
+
+@media print {
+    table, pre {
+        page-break-inside: avoid;
+    }
+
+    pre {
+        white-space: pre-wrap;
+        word-wrap: break-word;
+    }
+}
+
+hr {
+    background: #555555;
+}
+
+pre {
+    margin: 1em;
+    width: calc(100% - 2em);
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+pre > code {
+    color: #a9b7c6;
+    background: #282b2e;
+    display: block;
+    padding: 1em;
+    font-size: 14px;
+    font-family: monospace;
+    border: 0;
+    overflow-x: auto;
+}
+
+    pre > code > span {
+        font-family: monospace;
+    }
+
+/* HIGHLIGHT JS CSS THEME */
+
+.hljs-number, .hljs-literal, .hljs-symbol, .hljs-bullet {
+    color: #6897BB;
+    font-family: monospace;
+}
+
+.hljs-keyword, .hljs-selector-tag, .hljs-deletion {
+    color: #cc7832;
+    font-family: monospace;
+}
+
+.hljs-variable, .hljs-template-variable, .hljs-link {
+    color: #629755;
+    font-family: monospace;
+}
+
+.hljs-comment, .hljs-quote {
+    color: #808080;
+    font-family: monospace;
+}
+
+.hljs-meta {
+    color: #bbb529;
+    font-family: monospace;
+}
+
+.hljs-string, .hljs-attribute, .hljs-addition {
+    color: #6A8759;
+    font-family: monospace;
+}
+
+.hljs-section, .hljs-title, .hljs-type {
+    color: #ffc66d;
+    font-family: monospace;
+}
+
+.hljs-name, .hljs-selector-id, .hljs-selector-class {
+    color: #e8bf6a;
+    font-family: monospace;
+}
+
+.hljs-emphasis {
+    font-style: italic
+}
+
+.hljs-strong {
+    font-weight: bold
+}

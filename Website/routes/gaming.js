@@ -140,10 +140,18 @@ let checkStatus = (server, callback) => {
 };
 
 let getServerStatus = (server, callback) => {
+    // Create Network call
     let client = net.connect(server.port, server.host, function (data) {
         let buff = new Buffer([0xFE, 0x01]);
         client.write(buff);
-    }).on('data', function (data) {
+    });
+    // set timeout with callback
+    client.setTimeout(500, (data) => {
+        server.status = "Offline";
+        callback(server);
+    });
+    // on data
+    client.on('data', function (data) {
         if (data !== null && data !== '') {
             // convert data to strings
             let server_info = data.toString().split("\x00\x00\x00");
@@ -165,6 +173,13 @@ let getServerStatus = (server, callback) => {
             }
         }
         client.end();
+    });
+    // on error
+    client.on('error', (data) => {
+        console.error(data.message);
+
+        server.status = "Offline";
+        callback(server);
     });
 };
 

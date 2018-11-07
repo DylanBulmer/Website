@@ -1,0 +1,19 @@
+product {
+    position: relative;
+    width: 125px;
+    height: 125px;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px 0 rgba(0,0,0,.25);
+    display: inline-block;
+    margin: 0 5px;
+    vertical-align: top;
+}
+
+    product > p {
+        position: absolute;
+        text-align: right;
+        bottom: 10px;
+        right: 10px;
+        width: calc(100% - 20px);
+        white-space: pre-wrap;
+    }

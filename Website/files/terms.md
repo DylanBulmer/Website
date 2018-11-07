@@ -1,5 +1,6 @@
 # Terms of Service ("Terms")
-Last updated: Mar 12, 2018<br>
+Last updated: Mar 12, 2018
+Effective: April 12, 2018
 
 Please read these Terms of Service carefully before using our website (https://piggahbrostudios.com), any application, and any services developed or operated by Bulmer Solutions.
 

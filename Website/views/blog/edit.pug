@@ -1,0 +1,12 @@
+extends layout
+
+block content
+    link(rel='stylesheet', href='/css/markdown.css')
+    div#blog
+        form
+            input(type="file" name="pic" accept="image/*")#image-upload
+            input#h1(placeholder="Title here")
+            h3=(user.name_first + ' ' + user.name_last + ' | ' + date)
+            hr
+            textarea(placeholder="add blog here")#blog-post
+            input(type="submit" value="Post!")

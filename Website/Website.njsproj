@@ -32,6 +32,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="app.js" />
+    <Compile Include="https.js" />
     <Compile Include="public\js\barba.js" />
     <Compile Include="public\js\forum.js" />
     <Compile Include="public\js\logo.js">
@@ -58,6 +59,8 @@
     <Content Include="public\css\gaming.css" />
     <Content Include="public\css\ionicons.min.css" />
     <Content Include="public\css\main.css" />
+    <Content Include="public\css\markdown.css" />
+    <Content Include="public\css\store.css" />
     <Content Include="public\favicon.ico" />
     <Content Include="files\privacy.md" />
     <Content Include="files\terms.md" />
@@ -76,13 +79,17 @@
     <Content Include="public\images\map.png" />
     <Content Include="public\images\logo.png" />
     <Content Include="public\images\logo.svg" />
+    <Content Include="public\images\the-docs-advert.svg" />
     <Content Include="public\manifest\forums.json" />
     <Content Include="public\manifest\main.json" />
     <Content Include="README.md" />
     <Content Include="views\account\index.pug" />
     <Content Include="views\account\layout.pug" />
+    <Content Include="views\blog\blog.pug" />
+    <Content Include="views\blog\edit.pug" />
     <Content Include="views\blog\index.pug" />
     <Content Include="views\blog\layout.pug" />
+    <Content Include="views\blog\test.md" />
     <Content Include="views\gaming\forum.pug" />
     <Content Include="views\gaming\index.pug" />
     <Content Include="views\index.pug" />

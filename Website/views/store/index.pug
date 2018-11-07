@@ -5,8 +5,9 @@ html
 
     meta(name="viewport" content="width=device-width, initial-scale=1.0")
     link(rel="icon" type="image/x-icon" href="favicon.ico")
-
+    
     link(rel='stylesheet', href='/css/main.css')
+    link(rel='stylesheet', href='/css/store.css')
     link(rel='stylesheet', href='/css/font-awesome.min.css')
     link(rel='stylesheet' href="https://fonts.googleapis.com/css?family=Open+Sans:300,400")
 
@@ -42,7 +43,7 @@ html
     include ../modules/nav.pug
     div#carousel
         div
-            img
+            img(src="/images/The%20Docs%20Advert.svg")
         div#controller
             i#c-0.fa.fa-circle
             i#c-1.fa.fa-circle-o
@@ -51,17 +52,21 @@ html
         h1 Products
         div(style = "width: 100%; height: 148px; margin: 10px 0; white-space: nowrap; overflow: hidden;")
             span(style = "width: 100%; height: 125; padding: 10px 0; white-space: nowrap; overflow-y: hidden; display: block;")
-                product(style = "width: 125px; height: 125px; border-radius: 5px; box-shadow: 0 2px 4px 0 rgba(0,0,0,.25); display: inline-block; margin: 0 5px;")
-                product(style = "width: 125px; height: 125px; border-radius: 5px; box-shadow: 0 2px 4px 0 rgba(0,0,0,.25); display: inline-block; margin: 0 5px;")
-                product(style = "width: 125px; height: 125px; border-radius: 5px; box-shadow: 0 2px 4px 0 rgba(0,0,0,.25); display: inline-block; margin: 0 5px;")
-                product(style = "width: 125px; height: 125px; border-radius: 5px; box-shadow: 0 2px 4px 0 rgba(0,0,0,.25); display: inline-block; margin: 0 5px;")
-                product(style = "width: 125px; height: 125px; border-radius: 5px; box-shadow: 0 2px 4px 0 rgba(0,0,0,.25); display: inline-block; margin: 0 5px;")
-                product(style = "width: 125px; height: 125px; border-radius: 5px; box-shadow: 0 2px 4px 0 rgba(0,0,0,.25); display: inline-block; margin: 0 5px;")
-                product(style = "width: 125px; height: 125px; border-radius: 5px; box-shadow: 0 2px 4px 0 rgba(0,0,0,.25); display: inline-block; margin: 0 5px;")
-                product(style = "width: 125px; height: 125px; border-radius: 5px; box-shadow: 0 2px 4px 0 rgba(0,0,0,.25); display: inline-block; margin: 0 5px;")
-                product(style = "width: 125px; height: 125px; border-radius: 5px; box-shadow: 0 2px 4px 0 rgba(0,0,0,.25); display: inline-block; margin: 0 5px;")
-                product(style = "width: 125px; height: 125px; border-radius: 5px; box-shadow: 0 2px 4px 0 rgba(0,0,0,.25); display: inline-block; margin: 0 5px;")
-                product(style = "width: 125px; height: 125px; border-radius: 5px; box-shadow: 0 2px 4px 0 rgba(0,0,0,.25); display: inline-block; margin: 0 5px;")
+                product
+                    p 
+                        |Custom
+                        br 
+                        |Ethernet
+                product
+                    p The Docs
+                product
+                    p Mods
+                product
+                product
+                product
+                product
+                product
+                product
         h1 Services
         span.content
             span
@@ -72,7 +77,7 @@ html
             box
                 h3 Build Your Site!
                 p Find out more information about our web development service.
-                a(href="http://store." + url) Let's Develop!
+                a(href="http://store." + config.url) Let's Develop!
         span.content
             span
                 h2 Web Maintenance
@@ -80,7 +85,7 @@ html
             box
                 h3 Countinue the Journey!
                 p Find out more information about our web maintenance service.
-                a(href="http://store." + url) Let's Work!
+                a(href="http://store." + config.url) Let's Work!
         span.content
             span
                 h2 IT Repair
@@ -88,5 +93,5 @@ html
             box
                 h3 Don't Let Your Work Stop!
                 p Find out more information about our IT Repair service.
-                a(href="http://store." + url) Let's Fix It!
+                a(href="http://store." + config.url) Let's Fix It!
     script(src="/js/page.js" type="text/javascript")

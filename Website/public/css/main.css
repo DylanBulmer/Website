@@ -144,51 +144,10 @@ page {
     min-height: calc(100vh - 50px - 4em);
     background-color: #fff;
     padding: 2em;
-    position: absolute;
-    top: 50px;
-    left: 0;
+    position: relative;
 }
 
-form {
-    width: 400px;
-    padding: 1em;
-    margin: auto;
-}
 
-form > input {
-    width: calc(80% - 1em - 12px);
-    padding: 0.5em;
-    margin: 5px 10% 5px 10%;
-    border: 1px solid #818181;
-    border-radius: 5px;
-}
-
-form > h1, form > h3 {
-    text-align: center;
-}
-
-    form > #btns {
-        display: block;
-        width: calc(80%);
-        margin: 50px 10% 10px 10%;
-    }
-
-form > #btns > a {
-    display: inline-block;
-    width: 36px;
-    height: 34px;
-    text-align: center;
-    padding-top: 2px;
-    margin: 5px;
-    border-radius: 5px;
-    box-shadow: 0 2px 4px 0 rgba(0,0,0,.25);
-    vertical-align: top;
-}
-
-form > #btns > a > i {
-    font-size: 32px;
-    color: #ffffff;
-}
 
 #barba-wrapper, .barba-container {
     transition-duration: 250ms;
@@ -356,5 +315,11 @@ span.content > span > h2 {
 
     box > p {
         margin-bottom: 10px;
+    }
+}
+
+@media print {
+    bar {
+        display: none;
     }
 }
