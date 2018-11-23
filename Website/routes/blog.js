@@ -44,7 +44,7 @@ app.get('/:id', (req, res) => {
 
 app.get('/:id/edit', (req, res) => {
     let user = tools.getUser(req);
-    let date = Date.now();
+    let date = Date.now().toString();
     date.toString();
     res.render('blog/edit', {
         title: 'Blog Test',
