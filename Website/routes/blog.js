@@ -33,6 +33,19 @@ app.get('/', function (req, res) {
     res.render('blog/index', { title: 'Blog', config: data, user: user });
 });
 
+app.get('/sitemap', function (req, res) {
+    var options = {
+        root: __dirname + '../public/sitemaps',
+        dotfiles: 'deny',
+        index: false,
+        headers: {
+            'x-timestamp': Date.now(),
+            'x-sent': true
+        }
+    };
+    res.sendFile("blog.xml", options, function (err) { });
+});
+
 app.get('/:id', (req, res) => {
     let user = tools.getUser(req);
     fs.readFile(path.join(app.get('views'), "blog/test.md"), 'utf8', function (err, contents) {

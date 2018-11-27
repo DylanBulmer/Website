@@ -21,7 +21,7 @@ router.get('/', function (req, res) {
 
 router.get('/sitemap', function (req, res) {
     var options = {
-        root: __dirname + '/public/sitemaps',
+        root: __dirname + '../public/sitemaps',
         dotfiles: 'deny',
         index: false,
         headers: {
