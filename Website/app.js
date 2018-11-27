@@ -115,7 +115,7 @@ app.get('/subdomain/*/manifest/:file', function (req, res) {
 });
 app.get('/subdomain/*/sitemap', function (req, res) {
     var options = {
-        root: __dirname + '/public/sitemap',
+        root: __dirname + '/public/sitemaps',
         dotfiles: 'deny',
         index: false,
         headers: {
