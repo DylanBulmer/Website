@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+    <url>
+        <loc>https://piggahbrostudios.com</loc>
+        <lastmod>2018-11-27</lastmod>
+        <changefreq>monthly</changefreq>
+    </url>
+    <url>
+        <loc>https://piggahbrostudios.com/policy/privacy</loc>
+        <lastmod>2018-11-7</lastmod>
+        <changefreq>yearly</changefreq>
+    </url>
+    <url>
+        <loc>https://piggahbrostudios.com/policy/terms</loc>
+        <lastmod>2018-11-7</lastmod>
+        <changefreq>yearly</changefreq>
+    </url>
+    <url>
+        <loc>https://piggahbrostudios.com/policy/cookies</loc>
+        <lastmod>2018-11-7</lastmod>
+        <changefreq>yearly</changefreq>
+    </url>
+</urlset>

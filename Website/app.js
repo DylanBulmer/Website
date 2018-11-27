@@ -113,6 +113,18 @@ app.get('/subdomain/*/manifest/:file', function (req, res) {
     };
     res.sendFile(req.params.file, options, function (err) { });
 });
+app.get('/subdomain/*/sitemap', function (req, res) {
+    var options = {
+        root: __dirname + '/public/sitemap',
+        dotfiles: 'deny',
+        index: false,
+        headers: {
+            'x-timestamp': Date.now(),
+            'x-sent': true
+        }
+    };
+    res.sendFile(req.subdomains[0] + ".xml", options, function (err) { });
+});
 
 app.use('/', www);
 

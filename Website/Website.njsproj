@@ -82,6 +82,11 @@
     <Content Include="public\images\the-docs-advert.svg" />
     <Content Include="public\manifest\forums.json" />
     <Content Include="public\manifest\main.json" />
+    <Content Include="public\sitemaps\account.xml" />
+    <Content Include="public\sitemaps\blog.xml" />
+    <Content Include="public\sitemaps\gaming.xml" />
+    <Content Include="public\sitemaps\home.xml" />
+    <Content Include="public\sitemaps\store.xml" />
     <Content Include="README.md" />
     <Content Include="views\account\index.pug" />
     <Content Include="views\account\layout.pug" />
@@ -110,6 +115,7 @@
     <Folder Include="public\images\" />
     <Folder Include="public\js\" />
     <Folder Include="public\manifest\" />
+    <Folder Include="public\sitemaps\" />
     <Folder Include="routes\" />
     <Folder Include="views\" />
     <Folder Include="views\account\" />
