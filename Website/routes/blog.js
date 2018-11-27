@@ -4,6 +4,7 @@ var app = express();
 var data = require('../config.json');
 var tools = require('../tools');
 var fs = require('fs');
+var path = require('path');
 
 var hljs = require('highlight.js'); // https://highlightjs.org/
 
@@ -17,7 +18,9 @@ var md = require('markdown-it')({
         if (lang && hljs.getLanguage(lang)) {
             try {
                 return hljs.highlight(lang, str).value;
-            } catch (__) { }
+            } catch (e) {
+                // console.log(e);
+            }
         }
 
         return ''; // use external default escaping
@@ -32,7 +35,7 @@ app.get('/', function (req, res) {
 
 app.get('/:id', (req, res) => {
     let user = tools.getUser(req);
-    fs.readFile(app.get('views') + "\\blog\\test.md", 'utf8', function (err, contents) {
+    fs.readFile(path.join(app.get('views'), "blog/test.md"), 'utf8', function (err, contents) {
         res.render('blog/blog', {
             title: 'Blog Test',
             config: data,
@@ -44,7 +47,7 @@ app.get('/:id', (req, res) => {
 
 app.get('/:id/edit', (req, res) => {
     let user = tools.getUser(req);
-    let date = Date.now().toString();
+    let date = Date.now();
     date.toString();
     res.render('blog/edit', {
         title: 'Blog Test',

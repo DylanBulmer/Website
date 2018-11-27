@@ -4,8 +4,9 @@ block content
     link(rel='stylesheet', href='/css/markdown.css')
     div#blog
         !=body
-    a(href="/test/edit")
-        div#edit
-            i.fa.fa-edit
+    if user
+        a(href="/test/edit")
+            div#edit
+                i.fa.fa-edit
     div#trash
         i.fa.fa-trash
