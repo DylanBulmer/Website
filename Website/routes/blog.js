@@ -35,7 +35,7 @@ app.get('/', function (req, res) {
 
 app.get('/sitemap', function (req, res) {
     var options = {
-        root: __dirname + '../public/sitemaps',
+        root: path.join(__dirname, '../public/sitemaps'),
         dotfiles: 'deny',
         index: false,
         headers: {
