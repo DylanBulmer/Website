@@ -10,6 +10,7 @@ product {
     background-size: calc(100% - 20px);
     background-repeat: no-repeat;
     background-position: 10px;
+    background-color: #fff;
 }
 
     product > p {
