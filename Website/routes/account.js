@@ -581,6 +581,49 @@ var signin = function (provider, profile, callback) {
     }
 };
 
+var signup = function (provider, profile, callback) {
+    if (DBisConnected) {
+        db.query("SELECT * FROM users", function (err, result) {
+            if (err) throw err;
+            console.log(provider + "_id");
+            for (let i = 0; i < result.length; i++) {
+                if (provider === "local") {
+                    if (result[i].username === profile.username) {
+                        return callback({
+                            err: "That username has been taken!"
+                        });
+                    }
+                    else if (result[i].email === profile.email) {
+                        return callback({
+                            err: "That email is already in use!"
+                        });
+                    } else {
+                        if (profile.password[0] === profile.password[1]) {
+                            bcrypt.hash(profile.password[1], 10, function (err, hash) {
+                                db.query("INSERT TO users ('name_first', 'name_last', 'name_full', 'username', 'email', 'password') values (" + profile.name.first + ", " + profile.name.last + ", " + profile.name.full + ", " + profile.username + ", " + profile.email + ", " + hash + " )");
+                            });
+                        }
+                    }
+                } else {
+                    console.log(result[i][provider + "_id"] === profile.id);
+                    if (result[i][provider + "_id"] === profile.id) {
+                        return callback({
+                            err: "That " + provider + " account is already in our database!"
+                        });
+                    }
+                }
+            }
+            return callback({
+                err: "Adding user to database is being developed!"
+            });
+        });
+    } else {
+        return callback({
+            "err": "No database connected!"
+        });
+    }
+};
+
 // Database Functions
 
 var DBisConnected = false;
