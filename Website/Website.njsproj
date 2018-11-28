@@ -80,6 +80,7 @@
     <Content Include="public\images\logo.png" />
     <Content Include="public\images\logo.svg" />
     <Content Include="public\images\the-docs-advert.svg" />
+    <Content Include="public\images\the-docs-logo.svg" />
     <Content Include="public\manifest\forums.json" />
     <Content Include="public\manifest\main.json" />
     <Content Include="public\sitemaps\account.xml" />
