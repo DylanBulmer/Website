@@ -35,7 +35,7 @@ var greenlock = require('greenlock-express').create({
     , communityMember: false
 
     // Debug mode
-    , debug: true
+    , debug: false
 
 });
 

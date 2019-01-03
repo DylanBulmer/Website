@@ -610,6 +610,9 @@ var signup = function (provider, profile, callback) {
                         return callback({
                             err: "That " + provider + " account is already in our database!"
                         });
+                    } else {
+                        console.log(profile);
+                        //db.query("INSERT TO users ('name_first', 'name_last', 'name_full', 'username', 'email', 'password') values (" + profile.name.first + ", " + profile.name.last + ", " + profile.name.full + ", " + profile.username + ", " + profile.email + ", " + hash + " )");
                     }
                 }
             }
