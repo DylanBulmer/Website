@@ -56,6 +56,7 @@ app.get('/', function (req, res, next) {
         if (err) throw err;
         else {
             let blogs = rows;
+            let user = tools.getUser(req);
 
             console.log(blogs[1], user);
 
