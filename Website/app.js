@@ -9,6 +9,9 @@ var bodyParser = require('body-parser');
 var subdomain = require('subdomain');
 var passport = require('passport');
 var compression = require('compression');
+var rfs = require('rotating-file-stream');
+var moment = require('moment');
+var fs = require('fs');
 
 var data = require('./config.json');
 
@@ -18,6 +21,34 @@ var account = require('./routes/account');
 var blog = require('./routes/blog');
 var gaming = require('./routes/gaming');
 var store = require('./routes/store');
+
+// setup access log storage
+var logDirectory = path.join(__dirname, 'log');
+
+logger.token('subdomain', function getId(req) {
+    let parts = req.baseUrl.split('/');
+
+    if (parts[parts.length - 1] !== '') {
+        return parts[parts.length - 1];
+    } else {
+        return 'www';
+    }
+});
+
+// ensure log directory exists
+fs.existsSync(logDirectory) || fs.mkdirSync(logDirectory);
+
+// create a rotating access write stream
+var accessLogStream = rfs(moment(new Date()).format("YYYY-MM-DD") + '.log', {
+    interval: '1d', // rotate daily
+    path: path.join(logDirectory, "access")
+});
+
+// create a rotating error write stream
+var errorLogStream = rfs(moment(new Date()).format("YYYY-MM-DD") + '.log', {
+    interval: '1d', // rotate daily
+    path: path.join(logDirectory, "error")
+});
 
 var app = express();
 
@@ -50,7 +81,22 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
 app.set('env', data.env);
 
-app.use(logger('dev'));
+/* loggers 
+ 
+   1. Access log to console
+   2. Access log to file
+   3. Error log to file
+ 
+ */
+
+app.use(logger(':remote-addr :method :subdomain :url :status :response-time ms'));
+app.use(logger(':remote-addr :method :subdomain :url :status :response-time ms', { stream: accessLogStream }));
+app.use(logger(':remote-addr :method :subdomain :url :status :response-time ms', {
+    stream: errorLogStream,
+    skip: function (req, res) { return res.statusCode < 400; }
+}));
+
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
@@ -101,6 +147,22 @@ app.get('/subdomain/*/images/:file', function (req, res) {
     };
     res.sendFile(req.params.file, options, function (err) { });
 });
+app.get('/subdomain/*/uploads/:file', function (req, res) {
+    var options = {
+        root: __dirname + '/uploads',
+        dotfiles: 'deny',
+        index: false,
+        headers: {
+            'x-timestamp': Date.now(),
+            'x-sent': true
+        }
+    };
+    if (req.params.file === "null") {
+        res.send(false);
+    } else {
+        res.sendFile(req.params.file, options, function (err) { });
+    }
+});
 app.get('/subdomain/*/manifest/:file', function (req, res) {
     var options = {
         root: __dirname + '/public/manifest',
@@ -147,16 +209,16 @@ app.get('/store', function (req, res) {
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
-    var err = new Error('Not Found');
+    let err = new Error('Not Found');
     err.status = 404;
     next(err);
 });
 
 // error handlers
 
-// development error handler
-// will print stacktrace
 if (app.get('env') === 'development') {
+    // development error handler
+    // will print stacktrace
     app.use(function (err, req, res, next) {
         res.status(err.status || 500);
         res.render('error', {
@@ -165,18 +227,18 @@ if (app.get('env') === 'development') {
             config: data
         });
     });
-}
-
-// production error handler
-// no stacktraces leaked to user
-app.use(function (err, req, res, next) {
-    res.status(err.status || 500);
-    res.render('error', {
-        message: err.message,
-        error: {},
-        config: data
+} else {
+    // production error handler
+    // no stacktraces leaked to user
+    app.use(function (err, req, res, next) {
+        res.status(err.status || 500);
+        res.render('error', {
+            message: err.message,
+            error: {},
+            config: data
+        });
     });
-});
+}
 
 
 if (data.https) {

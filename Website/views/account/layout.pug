@@ -15,7 +15,7 @@ html
   body
     bar
         - if (!http) { var http = (config.https) ? 'https://':'http://' }
-        a.title(href=http + config.url style="width: 250px; text-align: center; left: 0;") Bulmer Solutions
+        a.title(href="/" style="width: 250px; text-align: center; left: 0;") Bulmer Solutions
         span#nav-btn(onclick = "navOpen()")
             i.fa.fa-bars
     include ../modules/nav.pug

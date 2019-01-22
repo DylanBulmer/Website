@@ -33,7 +33,11 @@
   <ItemGroup>
     <Compile Include="app.js" />
     <Compile Include="https.js" />
+    <Compile Include="modules\database.js" />
+    <Compile Include="modules\store.js" />
     <Compile Include="public\js\barba.js" />
+    <Compile Include="public\js\blogForm.js" />
+    <Compile Include="public\js\calendar.js" />
     <Compile Include="public\js\forum.js" />
     <Compile Include="public\js\logo.js">
       <SubType>Code</SubType>
@@ -95,7 +99,7 @@
     <Content Include="views\blog\edit.pug" />
     <Content Include="views\blog\index.pug" />
     <Content Include="views\blog\layout.pug" />
-    <Content Include="views\blog\test.md" />
+    <Content Include="views\blog\new.pug" />
     <Content Include="views\gaming\forum.pug" />
     <Content Include="views\gaming\index.pug" />
     <Content Include="views\index.pug" />
@@ -109,6 +113,7 @@
     <Content Include="views\store\index.pug" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="modules\" />
     <Folder Include="public\" />
     <Folder Include="public\css\" />
     <Folder Include="files\" />
@@ -118,6 +123,7 @@
     <Folder Include="public\manifest\" />
     <Folder Include="public\sitemaps\" />
     <Folder Include="routes\" />
+    <Folder Include="uploads\" />
     <Folder Include="views\" />
     <Folder Include="views\account\" />
     <Folder Include="views\modules\" />

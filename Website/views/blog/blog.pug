@@ -4,9 +4,11 @@ block content
     link(rel='stylesheet', href='/css/markdown.css')
     div#blog
         !=body
-    if user
-        a(href="/test/edit")
+    if user && user.id == blog.author_id
+        a(href="/" + id + "/edit")
             div#edit
                 i.fa.fa-edit
-    div#trash
-        i.fa.fa-trash
+    if user && (user.id == blog.author_id || user.privilege >= 8)
+        a(href="/" + id + "/delete")
+            div#trash
+                i.fa.fa-trash

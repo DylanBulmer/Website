@@ -2,31 +2,31 @@ extends layout
 
 block content
     page
-        a(href="/test")
-            card
-                img(src="images/the-docs-advert.svg")
-                span
-                    title Test Blog 1
-                    date Dylan Bulmer | Mar 17, 2018
-                    summary This blog site is being developed. We are optemizing the site so you can read on every device!
-        a(href="/test")
-            card
-                img(src="images/logo.svg")
-                span
-                    title Test Blog 2
-                    date Dylan Bulmer | Mar 17, 2018
-                    summary This blog site is being developed. We are optemizing the site so you can read on every device!
-        a(href="/test")
-            card
-                img(src="images/logo.svg")
-                span
-                    title Test Blog 3
-                    date Dylan Bulmer | Mar 17, 2018
-                    summary This blog site is being developed. We are optemizing the site so you can read on every device!
-        a(href="/test")
-            card
-                img(src="images/logo.svg")
-                span
-                    title Test Blog 4
-                    date Dylan Bulmer | Mar 17, 2018
-                    summary This blog site is being developed. We are optemizing the site so you can read on every device!
+        if user && user.privilege > 1
+            div#newPost
+                div#desc Write a new blog post
+                a(href="/new")#newPostBtn New Post
+        
+        each blog in blogs
+            if blog.published === 0 && user.id === blog.author_id
+                card.small
+                    span
+                        title #{blog.title}
+                        summary #{blog.body}
+                    a(href="/" + blog.id + "/edit") Edit
+        
+        each blog in blogs
+            if blog.published === 1
+                a(href="/" + blog.id)
+                    card
+                        if blog.image_path
+                            img(src="uploads/" + blog.image_path)
+                            span
+                                title #{blog.title}
+                                date #{blog.subtitle}
+                                summary #{blog.body}
+                        else
+                            span(style="width: calc(100% - 20px)")
+                                title #{blog.title}
+                                date #{blog.subtitle}
+                                summary #{blog.body}

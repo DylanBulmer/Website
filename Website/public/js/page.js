@@ -1,7 +1,7 @@
 document.addEventListener("DOMContentLoaded", function () {
     try {
         Barba.Pjax.init();
-        Barba.Pjax.cacheEnabled = false;
+        //Barba.Pjax.cacheEnabled = false;
         Barba.Pjax.start();
 
         var HideShowTransition = Barba.BaseTransition.extend({
@@ -53,6 +53,28 @@ var addPageSources = function addPageSources() {
                     let tag = document.createElement("script");
                     tag.src = "/js/tabs.js";
                     document.getElementsByTagName("head")[0].appendChild(tag);
+                    break;
+            }
+            break;
+        case 'blog':
+            let pieces = window.location.pathname.split('/');
+            switch (pieces[pieces.length - 1]) {
+                case 'new':
+                case 'edit':
+                    let scripts = document.head.children;
+
+                    for (let i = 0; i < scripts.length; i++) {
+                        if (scripts.item(i).tagName === "SCRIPT" && scripts.item(i).getAttribute("src") === "/js/blogForm.js") {
+                            console.log("deleting script");
+                            document.head.removeChild(scripts.item(i));
+                        }
+                    }
+
+                    console.log("adding script");
+                    let tag = document.createElement("script");
+                    tag.src = "/js/blogForm.js";
+                    document.head.appendChild(tag);
+
                     break;
             }
             break;

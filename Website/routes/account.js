@@ -633,12 +633,7 @@ var DBisConnected = false;
 var db;
 
 function handleDisconnect() {
-    db = mysql.createConnection({
-        host: data.mysql.url,
-        user: data.mysql.user,
-        password: data.mysql.password,
-        database: data.mysql.database
-    });
+    db = mysql.createConnection(data.mysql);
 
     db.connect(function (err) {
         if (err) {
