@@ -9,7 +9,7 @@ block content
         
         if user && blogs
             each blog in blogs
-                if blog.published === 0 && user.id === blog.author_id
+                if blog.published === 0 && user.id == blog.author_id
                     card.small
                         span
                             title #{blog.title}
