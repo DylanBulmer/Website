@@ -7,26 +7,27 @@ block content
                 div#desc Write a new blog post
                 a(href="/new")#newPostBtn New Post
         
-        each blog in blogs
-            if blog.published === 0 && user.id === blog.author_id
-                card.small
-                    span
-                        title #{blog.title}
-                        summary #{blog.body}
-                    a(href="/" + blog.id + "/edit") Edit
+        if blogs
+            each blog in blogs
+                if blog.published === 0 && user.id === blog.author_id
+                    card.small
+                        span
+                            title #{blog.title}
+                            summary #{blog.body}
+                        a(href="/" + blog.id + "/edit") Edit
         
-        each blog in blogs
-            if blog.published === 1
-                a(href="/" + blog.id)
-                    card
-                        if blog.image_path
-                            img(src="uploads/" + blog.image_path)
-                            span
-                                title #{blog.title}
-                                date #{blog.subtitle}
-                                summary #{blog.body}
-                        else
-                            span(style="width: calc(100% - 20px)")
-                                title #{blog.title}
-                                date #{blog.subtitle}
-                                summary #{blog.body}
+            each blog in blogs
+                if blog.published === 1
+                    a(href="/" + blog.id)
+                        card
+                            if blog.image_path
+                                img(src="uploads/" + blog.image_path)
+                                span
+                                    title #{blog.title}
+                                    date #{blog.subtitle}
+                                    summary #{blog.body}
+                            else
+                                span(style="width: calc(100% - 20px)")
+                                    title #{blog.title}
+                                    date #{blog.subtitle}
+                                    summary #{blog.body}
