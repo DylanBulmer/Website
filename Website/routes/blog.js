@@ -3,7 +3,6 @@ var express = require('express');
 var app = express();
 var data = require('../config.json');
 var tools = require('../tools');
-var fs = require('fs');
 var path = require('path');
 var db = require('../modules/database');
 var moment = require('moment');
@@ -58,8 +57,6 @@ app.get('/', function (req, res, next) {
             let blogs = rows;
             let user = tools.getUser(req);
 
-            console.log(blogs[1], user);
-
             for (let i = 0; i < blogs.length; i++) {
                 let date = new Calendar(blogs[i].date).today;
                 blogs[i].subtitle = blogs[i].name_first + " " + blogs[i].name_last + " | " + date.getMonthShort() + " " + date.getDate() + ", " + date.getYear();
@@ -107,8 +104,6 @@ app.post('/new', upload.single('upload'), (req, res, next) => {
         let file = req.file;
         let body = req.body;
 
-        console.log(file);
-
         db.get().query(
             "INSERT INTO blogs SET ?",
             {
@@ -149,7 +144,7 @@ app.get('/:id', (req, res, next) => {
     try {
         db.get().query("SELECT blogs.*, users.name_first, users.name_last FROM blogs LEFT JOIN(SELECT name_first, name_last, id FROM users) as users on author_id = users.id WHERE blogs.id = ?", [req.params.id], (err, rows) => {
             if (err) {
-                console.log(err);
+                console.error(err);
                 let err = new Error('Not Found');
                 err.status = 404;
                 next(err);
@@ -200,7 +195,7 @@ app.get('/:id/edit', (req, res, next) => {
     try {
         db.get().query("SELECT blogs.*, users.name_first, users.name_last FROM blogs LEFT JOIN(SELECT name_first, name_last, id FROM users) as users on author_id = users.id WHERE blogs.id = ?", [req.params.id], (err, rows) => {
             if (err) {
-                console.log(err);
+                console.error(err);
                 let err = new Error('Not Found');
                 err.status = 404;
                 next(err);
@@ -271,7 +266,7 @@ app.post('/:id/edit', upload.single('upload'), (req, res, next) => {
                     console.error(err.message);
                     db.get().query("SELECT blogs.*, users.name_first, users.name_last FROM blogs LEFT JOIN(SELECT name_first, name_last, id FROM users) as users on author_id = users.id WHERE blogs.id = ?", [req.params.id], (err, rows) => {
                         if (err) {
-                            console.log(err);
+                            console.error(err);
                             let err = new Error('Not Found');
                             err.status = 404;
                             next(err);
@@ -321,7 +316,7 @@ app.get('/:id/delete', (req, res, next) => {
     if (user) {
         db.get().query("SELECT blogs.*, users.name_first, users.name_last FROM blogs LEFT JOIN(SELECT name_first, name_last, id FROM users) as users on author_id = users.id WHERE blogs.id = ?", [req.params.id], (err, rows) => {
             if (err) {
-                console.log(err);
+                console.error(err);
                 let err = new Error('Not Found');
                 err.status = 404;
                 next(err);

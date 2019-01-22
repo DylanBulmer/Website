@@ -12,7 +12,7 @@ block content
                 if blog.published === 0 && user.id === blog.author_id
                     card.small
                         span
-                            title #{blog.title}
+                            title Draft: #{blog.title}
                             summary #{blog.body}
                         a(href="/" + blog.id + "/edit") Edit
         if blogs
