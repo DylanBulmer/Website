@@ -23,17 +23,6 @@ page card {
     overflow: hidden;
     position: relative;
 }
-
-    page card::before {
-        width: calc(100% - 160px);
-        height: 30px;
-        position: absolute;
-        content: "";
-        bottom: 0;
-        right: 0;
-        background-image: linear-gradient(to bottom, transparent 0%, white 66.7%);
-    }
-
         page card img {
             height: 150px;
             width: 150px;
@@ -70,7 +59,18 @@ page card summary {
     min-height: 2.30em;
     line-height: 1.15em;
     padding: 10px;
+    position: relative;
 }
+
+    page card summary::before {
+        width: calc(100% - 20px);
+        height: 30px;
+        position: absolute;
+        content: "";
+        top: 73px;
+        right: 10px;
+        background-image: linear-gradient(to bottom, transparent 0%, white 66.7%);
+    }
 
 card.small {
     height: calc(20px + 4em);
