@@ -7,7 +7,7 @@ block content
                 div#desc Write a new blog post
                 a(href="/new")#newPostBtn New Post
         
-        if blogs
+        if user && blogs
             each blog in blogs
                 if blog.published === 0 && user.id === blog.author_id
                     card.small
@@ -15,7 +15,7 @@ block content
                             title #{blog.title}
                             summary #{blog.body}
                         a(href="/" + blog.id + "/edit") Edit
-        
+        if blogs
             each blog in blogs
                 if blog.published === 1
                     a(href="/" + blog.id)
