@@ -19,14 +19,15 @@ block content
             each blog in blogs
                 if blog.published === 1
                     a(href="/" + blog.id)
-                        card
-                            if blog.image_path
+                        if blog.image_path
+                            card
                                 img(src="uploads/" + blog.image_path)
                                 span
                                     title #{blog.title}
                                     date #{blog.subtitle}
                                     summary #{blog.body}
-                            else
+                        else
+                            card.full
                                 span(style="width: calc(100% - 20px)")
                                     title #{blog.title}
                                     date #{blog.subtitle}
