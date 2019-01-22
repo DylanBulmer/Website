@@ -49,13 +49,15 @@ var md = require('markdown-it')({
 });
 
 /* GET users listing. */
-app.get('/', function (req, res) {
+app.get('/', function (req, res, next) {
     let user = tools.getUser(req);
     let sql = "SELECT blogs.*, users.name_first, users.name_last FROM blogs LEFT JOIN(SELECT name_first, name_last, id FROM users) as users on author_id = users.id ORDER BY blogs.date DESC, blogs.id DESC LIMIT 10";
     db.get().query(sql, (err, rows, fields) => {
         if (err) throw err;
         else {
             let blogs = rows;
+
+            console.log(blogs[1], user);
 
             for (let i = 0; i < blogs.length; i++) {
                 let date = new Calendar(blogs[i].date).today;
@@ -67,7 +69,7 @@ app.get('/', function (req, res) {
     });
 });
 
-app.get('/sitemap', function (req, res) {
+app.get('/sitemap', function (req, res, next) {
     var options = {
         root: path.join(__dirname, '../public/sitemaps'),
         dotfiles: 'deny',
@@ -80,7 +82,7 @@ app.get('/sitemap', function (req, res) {
     res.sendFile("blog.xml", options, function (err) { });
 });
 
-app.get('/new', (req, res) => {
+app.get('/new', (req, res, next) => {
     let user = tools.getUser(req);
     let date = new Calendar().today;
 
@@ -96,7 +98,7 @@ app.get('/new', (req, res) => {
     }
 });
 
-app.post('/new', upload.single('upload'), (req, res) => {
+app.post('/new', upload.single('upload'), (req, res, next) => {
     let user = tools.getUser(req);
 
     if (user) {
@@ -140,7 +142,7 @@ app.post('/new', upload.single('upload'), (req, res) => {
     }
 });
 
-app.get('/:id', (req, res) => {
+app.get('/:id', (req, res, next) => {
     let user = tools.getUser(req);
 
     try {
@@ -242,7 +244,7 @@ app.get('/:id/edit', (req, res, next) => {
     }
 });
 
-app.post('/:id/edit', upload.single('upload'), (req, res) => {
+app.post('/:id/edit', upload.single('upload'), (req, res, next) => {
     let user = tools.getUser(req);
 
     if (user) {
