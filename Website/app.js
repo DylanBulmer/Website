@@ -107,37 +107,22 @@ app.use('/subdomain/blog/', blog);
 app.use('/subdomain/gaming/', gaming);
 app.use('/subdomain/account/', account);
 app.use('/subdomain/store/', store);
-
-// adding in reverse proxy
-for (let i = 0; i < data.routes.length; i++) {
-    let route = data.routes[i];
-
-    app.use(route.route,
-        proxy({
-            target: route.address,
-            changeOrigin: true,
-            ws: true,
-            pathRewrite: (path, req) => {
-                return path.split('/').slice(1).join('/'); // Could use replace, but take care of the leading '/'
-            }
-        })
-    );
-}
+app.use('/', www);
 
 // Set subdomain directories
 
-app.get('/subdomain/*/css/:file', function (req, res) {
-    var options = {
-        root: __dirname + '/public/css',
-        dotfiles: 'deny',
-        index: false,
-        headers: {
-            'x-timestamp': Date.now(),
-            'x-sent': true
-        }
-    };
-    res.sendFile(req.params.file, options, function (err) { });
-});
+//app.get('/subdomain/*/css/:file', function (req, res) {
+//    var options = {
+//        root: __dirname + '/public/css',
+//        dotfiles: 'deny',
+//        index: false,
+//        headers: {
+//            'x-timestamp': Date.now(),
+//            'x-sent': true
+//        }
+//    };
+//    res.sendFile(req.params.file, options, function (err) { });
+//});
 app.get('/subdomain/*/js/:file', function (req, res) {
     var options = {
         root: __dirname + '/public/js',
@@ -203,7 +188,22 @@ app.get('/subdomain/*/sitemap', function (req, res) {
     res.sendFile(req.subdomains[0] + ".xml", options, function (err) { });
 });
 
-app.use('/', www);
+// adding in reverse proxy
+for (let i = 0; i < data.routes.length; i++) {
+    let route = data.routes[i];
+
+    app.use(route.route,
+        proxy({
+            target: route.address,
+            changeOrigin: true,
+            ws: true,
+            pathRewrite: (path, req) => {
+                return path.split('/').slice(1).join('/'); // Could use replace, but take care of the leading '/'
+            }
+        })
+    );
+}
+
 
 // Create Redirects
 app.get('/blog', function (req, res) {
