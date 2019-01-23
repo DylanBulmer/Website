@@ -10,6 +10,7 @@ var compression = require('compression');
 var rfs = require('rotating-file-stream');
 var moment = require('moment');
 var fs = require('fs');
+var proxy = require('http-proxy-middleware');
 
 var data = require('./config.json');
 
@@ -107,6 +108,22 @@ app.use('/subdomain/gaming/', gaming);
 app.use('/subdomain/account/', account);
 app.use('/subdomain/store/', store);
 
+// adding in reverse proxy
+for (let i = 0; i < data.routes.length; i++) {
+    let route = data.routes[i];
+
+    app.use(route.route,
+        proxy({
+            target: route.address,
+            changeOrigin: true,
+            ws: true,
+            pathRewrite: (path, req) => {
+                return path.split('/').slice(1).join('/'); // Could use replace, but take care of the leading '/'
+            }
+        })
+    );
+}
+
 // Set subdomain directories
 
 app.get('/subdomain/*/css/:file', function (req, res) {
@@ -203,6 +220,10 @@ app.get('/gaming', function (req, res) {
 
 app.get('/store', function (req, res) {
     res.redirect('http://store.' + data.url);
+});
+
+app.get('/mapgame', function (req, res) {
+    res.redirect('http://mapgame.' + data.url);
 });
 
 // catch 404 and forward to error handler
