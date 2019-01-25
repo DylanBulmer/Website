@@ -84,9 +84,17 @@ function approveDomains(opts, certs, cb) {
 // My User / Domain Database
 //
 function checkDomain(opts, cb) {
-    // This is an oversimplified example of how we might implement a check in
-    // our database if we have different rules for different users and domains
-    let domains = ['piggahbrostudios.com', 'www.piggahbrostudios.com', 'blog.piggahbrostudios.com', 'account.piggahbrostudios.com', 'gaming.piggahbrostudios.com', 'store.piggahbrostudios.com', 'mapgame.piggahbrostudios.com', 'thedocs.piggahbrostudios.com'];
+    // All of my domains that need to be certified...
+    let domains = [
+        'piggahbrostudios.com',
+        'www.piggahbrostudios.com',
+        'blog.piggahbrostudios.com',
+        'account.piggahbrostudios.com',
+        'gaming.piggahbrostudios.com',
+        'store.piggahbrostudios.com',
+        'mapgame.piggahbrostudios.com',
+        'thedocs.piggahbrostudios.com'
+    ];
     let userEmail = 'dylanmbulmer@gmail.com';
     let userAgrees = true;
 

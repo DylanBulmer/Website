@@ -59,8 +59,7 @@ app.use(require('express-session')({
     saveUninitialized: true,
     cookie: {
         path: '/',
-        domain: data.url //,
-        // maxAge: 1000 * 60 * 24 // 24 hours
+        domain: data.url
     }
 }));
 
@@ -99,7 +98,6 @@ app.use(logger(':remote-addr :method :subdomain :url :status :response-time ms',
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
-//app.use(express.static(path.join(__dirname, 'public')));
 
 // Set Up Subdomains
 app.use(subdomain({ base: data.url, removeWWW: true }));
@@ -126,8 +124,7 @@ for (let i = 0; i < data.routes.length; i++) {
 
 // Set subdomain directories
 
-app.get('/subdomain/:subdomain/css/:file', function (req, res) {
-    console.log('Getting CSS file for ' + req.params.subdomain);
+app.get('/subdomain/*/css/:file', function (req, res) {
     var options = {
         root: __dirname + '/public/css',
         dotfiles: 'deny',
@@ -150,6 +147,30 @@ app.get('/subdomain/*/js/:file', function (req, res) {
         }
     };
     res.sendFile(req.params.file, options, function (err) { });
+});
+app.get('/subdomain/*/fonts/:file', function (req, res) {
+    var options = {
+        root: __dirname + '/public/fonts',
+        dotfiles: 'deny',
+        index: false,
+        headers: {
+            'x-timestamp': Date.now(),
+            'x-sent': true
+        }
+    };
+    res.sendFile(req.params.file, options, function (err) { });
+});
+app.get('/subdomain/*/favicon.ico', function (req, res) {
+    var options = {
+        root: __dirname + '/public',
+        dotfiles: 'deny',
+        index: false,
+        headers: {
+            'x-timestamp': Date.now(),
+            'x-sent': true
+        }
+    };
+    res.sendFile('favicon.ico', options, function (err) { });
 });
 app.get('/subdomain/*/images/:file', function (req, res) {
     var options = {
