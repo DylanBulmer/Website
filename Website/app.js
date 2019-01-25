@@ -27,8 +27,8 @@ var logDirectory = path.join(__dirname, 'log');
 logger.token('subdomain', function getId(req) {
     let parts = req.baseUrl.split('/');
 
-    if (parts[parts.length - 1] !== '') {
-        return parts[parts.length - 1];
+    if (parts[1] && parts[1] === 'subdomain') {
+        return parts[2];
     } else {
         return 'www';
     }
@@ -99,7 +99,7 @@ app.use(logger(':remote-addr :method :subdomain :url :status :response-time ms',
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
+//app.use(express.static(path.join(__dirname, 'public')));
 
 // Set Up Subdomains
 app.use(subdomain({ base: data.url, removeWWW: true }));
@@ -126,7 +126,8 @@ for (let i = 0; i < data.routes.length; i++) {
 
 // Set subdomain directories
 
-app.get('/subdomain/*/css/:file', function (req, res) {
+app.get('/subdomain/:subdomain/css/:file', function (req, res) {
+    console.log('Getting CSS file for ' + req.params.subdomain);
     var options = {
         root: __dirname + '/public/css',
         dotfiles: 'deny',

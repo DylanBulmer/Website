@@ -8,19 +8,21 @@ var md = require('markdown-it')({
     quotes: '“”‘’'
 });
 var express = require('express');
-var router = express.Router();
+var app = express();
 var config = require('../config.json');
 var tools = require('../tools');
 var fs = require('fs');
 var path = require('path');
 
+app.use(express.static(path.join(__dirname, '..', 'public')));
+
 /* GET home page. */
-router.get('/', function (req, res) {
+app.get('/', function (req, res) {
     let user = tools.getUser(req);
     res.render('index', { title: 'Home', config: config, user: user });
 });
 
-router.get('/sitemap', function (req, res) {
+app.get('/sitemap', function (req, res) {
     var options = {
         root: path.join(__dirname, '../public/sitemaps'),
         dotfiles: 'deny',
@@ -33,7 +35,7 @@ router.get('/sitemap', function (req, res) {
     res.sendFile("home.xml", options, function (err) { });
 });
 
-router.get('/policy/terms', (req, res) => {
+app.get('/policy/terms', (req, res) => {
     let user = tools.getUser(req);
     fs.readFile("./files/terms.md", 'utf8', (err, data) => {
         if (err) throw err;
@@ -42,7 +44,7 @@ router.get('/policy/terms', (req, res) => {
     });
 });
 
-router.get('/policy/privacy', (req, res) => {
+app.get('/policy/privacy', (req, res) => {
     let user = tools.getUser(req);
     fs.readFile("./files/privacy.md", 'utf8', (err, data) => {
         if (err) throw err;
@@ -51,7 +53,7 @@ router.get('/policy/privacy', (req, res) => {
     });
 });
 
-router.get('/policy/cookies', (req, res) => {
+app.get('/policy/cookies', (req, res) => {
     let user = tools.getUser(req);
     fs.readFile("./files/cookies.md", 'utf8', (err, data) => {
         if (err) throw err;
@@ -60,4 +62,4 @@ router.get('/policy/cookies', (req, res) => {
     });
 });
 
-module.exports = router;
+module.exports = app;
