@@ -6,6 +6,7 @@ var mysql = require('mysql');
 var passport = require('passport');
 var bcrypt = require('bcrypt');
 var tools = require('../tools');
+var db = require('../modules/database').get();
 
 /* Add headers */
 app.use(function (req, res, next) {
@@ -126,6 +127,24 @@ passport.use(new TwitterStrategy({
     function (token, tokenSecret, profile, done) {
         process.nextTick(function () {
             login("twitter", profile, function (data) {
+                if (data.err) {
+                    return done(data.err);
+                } else {
+                    return done(null, data.result);
+                }
+            });
+        });
+    }
+));
+
+passport.use('twitter-signup', new TwitterStrategy({
+    consumerKey: data.twitter.clientID,
+    consumerSecret: data.twitter.clientSecret,
+    callbackURL: "/signup/twitter/callback"
+},
+    function (token, tokenSecret, profile, done) {
+        process.nextTick(function () {
+            signup("twitter", profile, function (data) {
                 if (data.err) {
                     return done(data.err);
                 } else {
@@ -386,11 +405,11 @@ app.get('/signin/twitter/callback',
     });
 
 app.get('/signup/twitter',
-    passport.authenticate('twitter')
+    passport.authenticate('twitter-signup')
 );
 
 app.get('/signup/twitter/callback',
-    passport.authenticate('twitter', {
+    passport.authenticate('twitter-signup', {
         failureRedirect: '/signup'
     }),
     function (req, res) {
@@ -455,70 +474,63 @@ module.exports = app;
 
 // new login function.
 const login = (provider, profile, callback) => {
-    if (DBisConnected) {
-        if (provider === "local") {
-            let usernameOrEmail = isEmail(profile.username);
-            if (usernameOrEmail) {
-                // check for email
-                db.query("SELECT * FROM users WHERE email = '" + profile.username + "'", function (err, result) {
-                    if (err) throw err;
-                    if (result.length > 0) {
-                        if (bcrypt.compareSync(profile.password, result[0].password)) {
-                            callback({
-                                "result": result[0],
-                                "err": ''
-                            });
-                        } else {
-                            callback({
-                                "err": "Incorrect password"
-                            });
-                        }
-                    } else {
-                        callback({
-                            "err": "That email is not in our database."
-                        });
-                    }
-                });
-            } else {
-                // check for username
-                db.query("SELECT * FROM users WHERE username = '" + profile.username + "'", function (err, result) {
-                    if (err) throw err;
-                    if (result.length > 0) {
-                        if (bcrypt.compareSync(profile.password, result[0].password)) {
-                            callback({
-                                "result": result[0],
-                                "err": ''
-                            });
-                        }
-                    } else {
-                        callback({
-                            "err": "That username is not in our database."
-                        });
-                    }
-                });
-            }
-        } else {
-            // universal provider login
-            db.query("SELECT * FROM users WHERE " + provider + "_id = '" + profile.id + "'", function (err, result) {
+    if (provider === "local") {
+        if (isEmail(profile.username)) {
+            // check for email
+            db.query("SELECT * FROM users WHERE email = '" + profile.username + "'", function (err, result) {
                 if (err) throw err;
                 if (result.length > 0) {
-                    let user = result[0];
-                    if (user !== null) {
-                        return callback({
-                            "result": user,
-                            "err": ""
+                    if (bcrypt.compareSync(profile.password, result[0].password)) {
+                        callback({
+                            "result": result[0],
+                            "err": ''
+                        });
+                    } else {
+                        callback({
+                            "err": "Incorrect password"
                         });
                     }
-                } else if (i === result.length) {
-                    return callback({
-                        "err": "That " + provider + ' id is not in our system'
+                } else {
+                    callback({
+                        "err": "That email is not in our database."
+                    });
+                }
+            });
+        } else {
+            // check for username
+            db.query("SELECT * FROM users WHERE username = '" + profile.username + "'", function (err, result) {
+                if (err) throw err;
+                if (result.length > 0) {
+                    if (bcrypt.compareSync(profile.password, result[0].password)) {
+                        callback({
+                            "result": result[0],
+                            "err": ''
+                        });
+                    }
+                } else {
+                    callback({
+                        "err": "That username is not in our database."
                     });
                 }
             });
         }
     } else {
-        callback({
-            "err": "No database connected!"
+        // universal provider login
+        db.query("SELECT * FROM users WHERE " + provider + "_id = '" + profile.id + "'", function (err, result) {
+            if (err) throw err;
+            if (result.length > 0) {
+                let user = result[0];
+                if (user !== null) {
+                    return callback({
+                        "result": user,
+                        "err": ""
+                    });
+                }
+            } else if (i === result.length) {
+                return callback({
+                    "err": "That " + provider + ' id is not in our system'
+                });
+            }
         });
     }
 };
@@ -527,138 +539,85 @@ const isEmail = (username) => {
     return /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(username);
 };
 
-var signin = function (provider, profile, callback) {
-    if (DBisConnected) {
-        let user = null;
-        db.query("SELECT * FROM users", function (err, result) {
-            if (err) throw err;
-            for (let i = 0; i < result.length; i++) {
-                if (provider === "local") {
-                    if (result[i].username === profile.username || result[i].email === profile.username) {
-                        // Tests to see if passwords match
-                        bcrypt.compare(profile.password, result[i].password, function (err, pass) {
-                            if (pass) {
-                                user = result[i];
-                                if (user !== null) {
-                                    return callback({
-                                        "result": result[i],
-                                        "err": ''
-                                    });
-                                }
-                            } else {
-                                return callback({
-                                    "err": "Invalid password"
-                                });
-                            }
-                        });
-                    } else if (i === result.length) {
-                        return callback({
-                            "err": "Invaild Username/Email"
-                        });
-                    }
-                } else {
-                    // universal provider login
-                    if (result[i][provider + "_id"] === profile.id) {
-                        user = result[i];
-                        if (user !== null) {
-                            return callback({
-                                "result": user,
-                                "err": ""
-                            });
-                        }
-                    } else if (i === result.length) {
-                        return callback({
-                            "err": "That " + provider + ' id is not in our system'
-                        });
-                    }
-                }
-            }
-        });
-    } else {
-        return callback({
-            "err": "No database connected!"
-        });
-    }
-};
-
 var signup = function (provider, profile, callback) {
-    if (DBisConnected) {
-        db.query("SELECT * FROM users", function (err, result) {
-            if (err) throw err;
-            console.log(provider + "_id");
-            for (let i = 0; i < result.length; i++) {
-                if (provider === "local") {
-                    if (result[i].username === profile.username) {
-                        return callback({
-                            err: "That username has been taken!"
-                        });
-                    }
-                    else if (result[i].email === profile.email) {
-                        return callback({
-                            err: "That email is already in use!"
-                        });
-                    } else {
-                        if (profile.password[0] === profile.password[1]) {
-                            bcrypt.hash(profile.password[1], 10, function (err, hash) {
-                                db.query("INSERT TO users ('name_first', 'name_last', 'name_full', 'username', 'email', 'password') values (" + profile.name.first + ", " + profile.name.last + ", " + profile.name.full + ", " + profile.username + ", " + profile.email + ", " + hash + " )");
-                            });
-                        }
-                    }
+    db.query("SELECT * FROM users", function (err, result) {
+        if (err) throw err;
+        console.log(provider + "_id");
+        for (let i = 0; i < result.length; i++) {
+            if (provider === "local") {
+                if (result[i].username === profile.username) {
+                    return callback({
+                        err: "That username has been taken!"
+                    });
+                }
+                else if (result[i].email === profile.email) {
+                    return callback({
+                        err: "That email is already in use!"
+                    });
                 } else {
-                    console.log(result[i][provider + "_id"] === profile.id);
-                    if (result[i][provider + "_id"] === profile.id) {
-                        return callback({
-                            err: "That " + provider + " account is already in our database!"
+                    if (profile.password[0] === profile.password[1]) {
+                        bcrypt.hash(profile.password[1], 10, function (err, hash) {
+                            db.query("INSERT TO users ('name_first', 'name_last', 'name_full', 'username', 'email', 'password') values (" + profile.name.first + ", " + profile.name.last + ", " + profile.name.full + ", " + profile.username + ", " + profile.email + ", " + hash + " )");
                         });
-                    } else {
-                        console.log(profile);
-                        //db.query("INSERT TO users ('name_first', 'name_last', 'name_full', 'username', 'email', 'password') values (" + profile.name.first + ", " + profile.name.last + ", " + profile.name.full + ", " + profile.username + ", " + profile.email + ", " + hash + " )");
                     }
                 }
-            }
-            return callback({
-                err: "Adding user to database is being developed!"
-            });
-        });
-    } else {
-        return callback({
-            "err": "No database connected!"
-        });
-    }
-};
-
-// Database Functions
-
-var DBisConnected = false;
-var db;
-
-function handleDisconnect() {
-    db = mysql.createConnection(data.mysql);
-
-    db.connect(function (err) {
-        if (err) {
-            DBisConnected = false;
-            console.log("MySQL ERROR: " + err.code);
-            setTimeout(handleDisconnect, 2000);
-        } else {
-            if (data.mysql.database === "") {
-                console.log("Please enter a database in the config.json file!");
             } else {
-                console.log("MySQL Connection Established");
-                DBisConnected = true;
+                console.log(result[i][provider + "_id"] === profile.id);
+                if (result[i][provider + "_id"] === profile.id) {
+                    return callback({
+                        err: "That " + provider + " account is already in our database!"
+                    });
+                } else {
+                    // google's info
+                    let data = null;
+                    switch (provider) {
+                        case 'google':
+                            data = {
+                                'name_first': profile.name['givenName'],
+                                'name_last': profile.name['familyName'],
+                                'email': profile.email,
+                                'nickname': profile.displayName,
+                                'id': profile.id
+                            };
+                            data['name_full'] = data['name_first'] + " " + data['name_last'];
+                            break;
+                        case 'twitter':
+                            data = {
+                                'name_first': profile.displayName.split(" ")[0],
+                                'name_last': profile.displayName.split(" ")[profile.displayName.split(" ") - 1],
+                                'name_full': profile.displayName,
+                                'nickname': profile.displayName,
+                                'id': profile.id
+                            };
+                            break;
+                    }
+
+                    console.log(data, profile);
+
+                    if (data !== null) {
+                        // Insert new user into database
+
+                        //db.query("INSERT TO users SET ?", data, (err, rows) => {
+                        //    if (err) throw err;
+                        //    else {
+                        //        db.query("SELECT FROM users WHERE id = " + rows.insertId, (err, rows) => {
+                        //            if (err) throw err;
+                        //            else {
+                        //                return callback({
+                        //                    err: '',
+                        //                    result: rows[0]
+                        //                });
+                        //            };
+                        //        });
+                        //    }
+                        //});
+                    }
+                    
+                }
             }
         }
-
-        db.on('error', function (err) {
-            console.log('MySQL Error: ', err);
-            if (err.code === 'PROTOCOL_CONNECTION_LOST') {
-                DBisConnected = false;
-                handleDisconnect();
-            } else {
-                throw err;
-            }
+        return callback({
+            err: "Adding user to database is being developed!"
         });
     });
-}
-
-handleDisconnect();
+};
