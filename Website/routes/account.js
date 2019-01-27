@@ -647,6 +647,23 @@ var signup = function (provider, profile, callback) {
                                 'id': profile.id
                             };
                             break;
+                        case 'facebook':
+                            data = {
+                                'name_first': profile.displayName.split(" ")[0],
+                                'name_last': profile.displayName.split(" ")[profile.displayName.split(" ") - 1],
+                                'name_full': profile.displayName,
+                                'id': profile.id
+                            };
+                            break;
+                        case 'steam':
+                            data = {
+                                'name_first': profile['_json'].realname.split(" ")[0],
+                                'name_last': profile['_json'].realname.split(" ")[profile['_json'].realname.split(" ") - 1],
+                                'name_full': profile['_json'].realname,
+                                'nickname': profile.displayName,
+                                'id': profile.id
+                            };
+                            break;
                     }
 
                     console.log(data, profile);
