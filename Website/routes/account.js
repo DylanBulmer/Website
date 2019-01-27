@@ -123,7 +123,7 @@ passport.use('facebook-signup', new FacebookStrategy({
 },
     function (accessToken, refreshToken, profile, done) {
         process.nextTick(function () {
-            login("facebook", profile, function (data) {
+            signup("facebook", profile, function (data) {
                 if (data.err) {
                     return done(data.err);
                 } else {
@@ -205,7 +205,7 @@ passport.use('discord-signup', new DiscordStrategy({
     function (accessToken, refreshToken, profile, done) {
         process.nextTick(function () {
             console.log(profile);
-            login("discord", profile, function (data) {
+            signup("discord", profile, function (data) {
                 if (data.err) {
                     return done(data.err);
                 } else {
@@ -221,10 +221,10 @@ passport.use('discord-signup', new DiscordStrategy({
 var SteamStrategy = require('passport-steam').Strategy;
 
 passport.use(new SteamStrategy({
-        returnURL: 'http://account.' + data.url + '/signin/steam/callback',
-        realm: 'http://account.' + data.url + '/',
-        apiKey: data.steam.key
-    },
+    returnURL: 'http://account.' + data.url + '/signin/steam/callback',
+    realm: 'http://account.' + data.url + '/',
+    apiKey: data.steam.key
+},
     function (identifier, profile, done) {
         process.nextTick(function () {
             login("steam", profile, function (data) {
@@ -235,7 +235,26 @@ passport.use(new SteamStrategy({
                 }
             });
         });
-    }));
+    }
+));
+
+passport.use('steam-signup', new SteamStrategy({
+    returnURL: 'http://account.' + data.url + '/signup/steam/callback',
+    realm: 'http://account.' + data.url + '/',
+    apiKey: data.steam.key
+},
+    function (identifier, profile, done) {
+        process.nextTick(function () {
+            signup("steam", profile, function (data) {
+                if (data.err) {
+                    return done(data.err);
+                } else {
+                    return done(null, data.result);
+                }
+            });
+        });
+    }
+));
 
 // Basic Web Routes
 app.get('/', function (req, res) {
@@ -417,11 +436,11 @@ app.get('/signin/facebook/callback',
     });
 
 app.get('/signup/facebook',
-    passport.authenticate('facebook', { scope: ['public_profile', 'email'] })
+    passport.authenticate('facebook-signup', { scope: ['public_profile', 'email'] })
 );
 
 app.get('/signup/facebook/callback',
-    passport.authenticate('facebook', {
+    passport.authenticate('facebook-signup', {
         failureRedirect: '/signup'
     }),
     function (req, res) {
@@ -469,11 +488,11 @@ app.get('/signin/discord/callback',
     });
 
 app.get('/signup/discord',
-    passport.authenticate('discord')
+    passport.authenticate('discord-signup')
 );
 
 app.get('/signup/discord/callback',
-    passport.authenticate('discord', {
+    passport.authenticate('discord-signup', {
         failureRedirect: '/signup'
     }),
     function (req, res) {
@@ -495,11 +514,11 @@ app.get('/signin/steam/callback',
     });
 
 app.get('/signup/steam',
-    passport.authenticate('steam')
+    passport.authenticate('steam-signup')
 );
 
 app.get('/signup/steam/callback',
-    passport.authenticate('steam', {
+    passport.authenticate('steam-signup', {
         failureRedirect: '/signup'
     }),
     function (req, res) {
