@@ -103,17 +103,36 @@ passport.use(new FacebookStrategy({
     clientSecret: data.facebook.clientSecret,
     callbackURL: "/signin/facebook/callback"
 },
-function (accessToken, refreshToken, profile, done) {
-    process.nextTick(function () {
-        login("facebook", profile, function (data) {
-            if (data.err) {
-                return done(data.err);
-            } else {
-                return done(null, data.result);
-            }
+    function (accessToken, refreshToken, profile, done) {
+        process.nextTick(function () {
+            login("facebook", profile, function (data) {
+                if (data.err) {
+                    return done(data.err);
+                } else {
+                    return done(null, data.result);
+                }
+            });
         });
-    });
-    }));
+    }
+));
+
+passport.use('facebook-signup', new FacebookStrategy({
+    clientID: data.facebook.clientID,
+    clientSecret: data.facebook.clientSecret,
+    callbackURL: "/signup/facebook/callback"
+},
+    function (accessToken, refreshToken, profile, done) {
+        process.nextTick(function () {
+            login("facebook", profile, function (data) {
+                if (data.err) {
+                    return done(data.err);
+                } else {
+                    return done(null, data.result);
+                }
+            });
+        });
+    }
+));
 
 // Setup Twitter
 
@@ -163,6 +182,25 @@ passport.use(new DiscordStrategy({
     clientID: data.discord.clientID,
     clientSecret: data.discord.clientSecret,
     callbackURL: "/signin/discord/callback"
+},
+    function (accessToken, refreshToken, profile, done) {
+        process.nextTick(function () {
+            console.log(profile);
+            login("discord", profile, function (data) {
+                if (data.err) {
+                    return done(data.err);
+                } else {
+                    return done(null, data.result);
+                }
+            });
+        });
+    }
+));
+
+passport.use('discord-signup', new DiscordStrategy({
+    clientID: data.discord.clientID,
+    clientSecret: data.discord.clientSecret,
+    callbackURL: "/signup/discord/callback"
 },
     function (accessToken, refreshToken, profile, done) {
         process.nextTick(function () {
