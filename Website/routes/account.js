@@ -279,7 +279,7 @@ app.post('/', function (req, res) {
     tools.userTest(req, function (test) {
         if (test) {
             let user = tools.getUser(req);
-            db.query('SELECT * FROM users WHERE id = ' + req.user.id, (err, rows, fields) => {
+            db.query('SELECT * FROM users WHERE id = ' + user.id, (err, rows, fields) => {
                 let profile = rows[0];
 
                 let socialLogins = {
@@ -291,12 +291,12 @@ app.post('/', function (req, res) {
                 };
 
                 switch (req.body.form) {
-                    case 'man_pass': // Change Password
-                        if (profile.password === req.body['password_current']) {
+                    case 'man_pass':        // Change Password
+                        if (bcrypt.compareSync(req.body['password_current'], profile.password)) {
                             if (req.body.password === req.body.password_confirm) {
                                 bcrypt.hash(req.body.password, 10, function (err, hash) {
                                     // Store hash in database
-                                    db.query('UPDATE users SET password="' + hash + '" where id=' + req.user.id);
+                                    db.query('UPDATE users SET password="' + hash + '" where id=' + user.id);
                                 });
                                 res.render('account/index', { title: 'Account', config: data, pass: "Password Reset!", user: user, logins: socialLogins });
                             } else {
@@ -307,16 +307,16 @@ app.post('/', function (req, res) {
                         }
                         break;
                     case 'deact-google':    // Deactivate Google
-                        db.query('UPDATE users SET google_id ="" where id=' + req.user.id);
+                        db.query('UPDATE users SET google_id ="" where id=' + user.id);
                         break;
                     case 'deact-twitter':   // Deactivate Twitter
-                        db.query('UPDATE users SET twitter_id ="" where id=' + req.user.id);
+                        db.query('UPDATE users SET twitter_id ="" where id=' + user.id);
                         break;
                     case 'deact-facebook':  // Deactivate Facebook
-                        db.query('UPDATE users SET facebook_id ="" where id=' + req.user.id);
+                        db.query('UPDATE users SET facebook_id ="" where id=' + user.id);
                         break;
                     case 'deact-steam':     // Deactivate Steam
-                        db.query('UPDATE users SET steam_id ="" where id=' + req.user.id);
+                        db.query('UPDATE users SET steam_id ="" where id=' + user.id);
                         break;
                     default:
                         res.render('account/index', { title: 'Account', config: data, user: user });
@@ -381,13 +381,16 @@ app.post('/signup', function (req, res, next) {
         if (!test) {
             passport.authenticate('local-signup', function (err, user, info) {
                 if (err) {
-                    res.render('signup', { title: 'Sign Up', error: err, config: data });
+                    return res.render('signup', { title: 'Sign Up', error: err, config: data });
                 } else {
-                    return res.redirect('/');
+                    req.login(user, function (err) {
+                        if (err) { return next(err); }
+                        return res.redirect('/');
+                    });
                 }
             })(req, res, next);
         } else {
-            res.redirect('/');
+            return res.redirect('/');
         }
     });
 });
@@ -419,7 +422,12 @@ app.get('/signin/:provider/callback', function (req, res, next) {
     passport.authenticate(provider, (err, user, info) => {
         if (err) return res.render('signin', { title: 'Sign In', error: err, config: data });
         else if (!user) return res.redirect('/signin');
-        else return res.redirect('/');
+        else {
+            req.login(user, function (err) {
+                if (err) { return next(err); }
+                return res.redirect('/');
+            });
+        }
     })(req, res, next);
 });
 
@@ -450,7 +458,12 @@ app.get('/signup/:provider/callback', function (req, res, next) {
     passport.authenticate(provider + '-signup', (err, user, info) => {
         if (err) return res.render('signup', { title: 'Sign Up', error: err, config: data });
         else if (!user) return res.redirect('/signup');
-        else return res.redirect('/');
+        else {
+            req.login(user, function (err) {
+                if (err) { return next(err); }
+                return res.redirect('/');
+            });
+        }
     })(req, res, next);
 });
 
@@ -524,27 +537,49 @@ const isEmail = (username) => {
 
 var signup = function (provider, profile, callback) {
     if (provider === "local") {
-        db.query("SELECT * FROM users", function (err, result) {
-            if (err) throw err;
-            else {
-                for (let i = 0; i < result.length; i++) {
-                    if (result[i].username === profile.username) {
-                        return callback({
-                            err: "That username has been taken!"
-                        });
-                    }
-                    else if (result[i].email === profile.email) {
-                        return callback({
-                            err: "That email is already in use!"
-                        });
-                    } else {
+        isAvailable('username', profile.username, (result) => {
+            if (result) {
+                isAvailable('email', profile.email, (result) => {
+                    if (result) {
                         if (profile.password[0] === profile.password[1]) {
                             bcrypt.hash(profile.password[1], 10, function (err, hash) {
-                                db.query("INSERT TO users ('name_first', 'name_last', 'name_full', 'username', 'email', 'password') values (" + profile.name.first + ", " + profile.name.last + ", " + profile.name.full + ", " + profile.username + ", " + profile.email + ", " + hash + " )");
+                                let data = {
+                                    'name_first': profile.name.first,
+                                    'name_last': profile.name.last,
+                                    'username': profile.username,
+                                    'email': profile.email,
+                                    'password': hash
+                                };
+                                db.query("INSERT INTO users SET ?", data, (err, rows) => {
+                                    if (err) throw err;
+                                    else {
+                                        db.query("SELECT * FROM users WHERE id = " + rows.insertId, (err, rows) => {
+                                            if (err) throw err;
+                                            else {
+                                                return callback({
+                                                    err: '',
+                                                    result: rows[0]
+                                                });
+                                            }
+                                        });
+                                    }
+                                });
+                            });
+                        } else {
+                            return callback({
+                                err: "The passwords do not match!"
                             });
                         }
+                    } else {
+                        return callback({
+                            err: "That email has been taken!"
+                        });
                     }
-                }
+                });
+            } else {
+                return callback({
+                    err: "That username has been taken!"
+                });
             }
         });
     } else {
@@ -600,7 +635,7 @@ var signup = function (provider, profile, callback) {
             db.query("SELECT * FROM users WHERE " + provider + "_id = " + profile.id, (err, result) => {
                 if (err) throw err;
                 else {
-                    if (result[0] && result[0][provider + "_id"] === profile.id) {
+                    if (result[0]) {
                         return callback({
                             err: "That " + provider + " account is already in our database!",
                             result: null
@@ -629,6 +664,13 @@ var signup = function (provider, profile, callback) {
             }); 
         }
     }
+};
+
+const isAvailable = (type, value, callback) => {
+    db.query("SELECT * FROM users WHERE " + type + " = " + value, (err, result) => {
+        if (err || !result) return callback(true);
+        else if (result[0]) return callback(false);
+    });
 };
 
 module.exports = app;

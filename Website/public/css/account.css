@@ -100,14 +100,20 @@ content > cards {
 }
 
 content > cards > card {
-    display: inline-grid;
-    width: calc(100% - 60px);
+    width: calc(100% - 40px);
     max-width: 200px;
-    padding: 10px 20px;
+    padding: 10px;
     margin: 10px;
     box-shadow: 0 2px 4px 0 rgba(0,0,0,.25) !important;
     border-radius: 3px;
 }
+
+    content > cards > card > span {
+        display: inline-block;
+        vertical-align: middle;
+        text-align: center;
+        width: calc(100% - 28px);
+    }
 
 form {
     width: 400px;
