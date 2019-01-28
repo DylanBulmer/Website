@@ -394,10 +394,30 @@ app.post('/signup', function (req, res, next) {
 
 // All signin provider callbacks
 
+app.get('/signin/:provider/', function (req, res, next) {
+    let provider = req.params.provider;
+
+    switch (provider) {
+        case 'google':
+            passport.authenticate(provider, { scope: ['profile', 'email'] })(req, res, next);
+            break;
+        case 'discord':
+            passport.authenticate(provider, { scope: ['identity', 'email'] })(req, res, next);
+            break;
+        case 'facebook':
+            passport.authenticate(provider, { scope: ['public_profile', 'email'] })(req, res, next);
+            break;
+        case 'twitter':
+        case 'steam':
+            passport.authenticate(provider)(req, res, next);
+            break;
+    }
+});
+
 app.get('/signin/:provider/callback', function (req, res, next) {
     let provider = req.params.provider;
     passport.authenticate(provider, (err, user, info) => {
-        if (err) return next(new Error(err));
+        if (err) return res.render('signin', { title: 'Sign In', error: err, config: data });
         else if (!user) return res.redirect('/signin');
         else return res.redirect('/');
     })(req, res, next);
@@ -405,70 +425,37 @@ app.get('/signin/:provider/callback', function (req, res, next) {
 
 // All signup provider callbacks
 
+app.get('/signup/:provider/', function (req, res, next) {
+    let provider = req.params.provider;
+
+    switch (provider) {
+        case 'google':
+            passport.authenticate(provider + '-signup', { scope: ['profile', 'email'] })(req, res, next);
+            break;
+        case 'discord':
+            passport.authenticate(provider + '-signup', { scope: ['identity', 'email'] })(req, res, next);
+            break;
+        case 'facebook':
+            passport.authenticate(provider + '-signup', { scope: ['public_profile', 'email'] })(req, res, next);
+            break;
+        case 'twitter':
+        case 'steam':
+            passport.authenticate(provider + '-signup')(req, res, next);
+            break;
+    }
+});
+
 app.get('/signup/:provider/callback', function (req, res, next) {
     let provider = req.params.provider;
     passport.authenticate(provider + '-signup', (err, user, info) => {
-        if (err) return next(new Error(err));
+        if (err) return res.render('signup', { title: 'Sign Up', error: err, config: data });
         else if (!user) return res.redirect('/signup');
         else return res.redirect('/');
     })(req, res, next);
 });
 
-// Google Routes
-
-app.get('/signin/google',
-    passport.authenticate('google', { scope: ['profile', 'email'] })
-);
-
-app.get('/signup/google',
-    passport.authenticate('google-signup', { scope: ['profile', 'email'] })
-);
-
-// Facebook Routes
-
-app.get('/signin/facebook',
-    passport.authenticate('facebook', { scope: ['public_profile', 'email'] })
-);
-
-app.get('/signup/facebook',
-    passport.authenticate('facebook-signup', { scope: ['public_profile', 'email'] })
-);
-
-// Twitter Routes
-
-app.get('/signin/twitter',
-    passport.authenticate('twitter')
-);
-
-app.get('/signup/twitter',
-    passport.authenticate('twitter-signup')
-);
-
-// Discord Routes
-
-app.get('/signin/discord',
-    passport.authenticate('discord', { scope: ['identity', 'email'] })
-);
-
-app.get('/signup/discord',
-    passport.authenticate('discord-signup', { scope: ['identity', 'email'] })
-);
-
-// Steam Routes
-
-app.get('/signin/steam',
-    passport.authenticate('steam')
-);
-
-app.get('/signup/steam',
-    passport.authenticate('steam-signup')
-);
-
-module.exports = app;
-
 // Data Base signin Requests
 
-// new login function.
 const login = (provider, profile, callback) => {
     if (provider === "local") {
         if (isEmail(profile.username)) {
@@ -524,7 +511,7 @@ const login = (provider, profile, callback) => {
                 }
             } else {
                 return callback({
-                    "err": "That " + provider + ' id is not in our system'
+                    "err": "That " + provider + ' account is not in our system'
                 });
             }
         });
@@ -643,3 +630,5 @@ var signup = function (provider, profile, callback) {
         }
     }
 };
+
+module.exports = app;
