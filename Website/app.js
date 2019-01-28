@@ -25,12 +25,16 @@ var store = require('./routes/store');
 var logDirectory = path.join(__dirname, 'log');
 
 logger.token('subdomain', function getId(req) {
-    let parts = req.baseUrl.split('/');
+    if (req.baseUrl !== undefined) {
+        let parts = req.baseUrl.split('/');
 
-    if (parts[1] && parts[1] === 'subdomain') {
-        return parts[2];
+        if (parts[1] && parts[1] === 'subdomain') {
+            return parts[2];
+        } else {
+            return 'www';
+        }
     } else {
-        return 'www';
+        return null;
     }
 });
 

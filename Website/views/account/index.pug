@@ -68,7 +68,8 @@ block content
             content(style="text-align: center;")#_social_logins
                 h2(style="display: block;") Manage Social Logins
                 cards
-                    card= (logins['google']) ? "Google: Connected" : "Google: Disconnected"
-                    card= (logins['facebook']) ? "Facebook: Connected" : "Facebook: Disconnected"
-                    card= (logins['twitter']) ? "Twitter: Connected" : "Twitter: Disconnected"
-                    card= (logins['steam']) ? "Steam: Connected" : "Steam: Disconnected"
+                    card= (logins['google'])    ? "Google: Connected"   : "Google: Disconnected"
+                    card= (logins['facebook'])  ? "Facebook: Connected" : "Facebook: Disconnected"
+                    card= (logins['twitter'])   ? "Twitter: Connected"  : "Twitter: Disconnected"
+                    card= (logins['steam'])     ? "Steam: Connected"    : "Steam: Disconnected"
+                    card= (logins['discord'])   ? "Discord: Connected"  : "Discord: Disconnected"

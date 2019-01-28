@@ -85,7 +85,7 @@ passport.use('google-signup', new GoogleStrategy({
         process.nextTick(function () {
             signup("google", profile, function (data) {
                 if (data.err) {
-                    return done(data.err);
+                    return done(data.err, null);
                 } else {
                     return done(null, data.result);
                 }
@@ -185,7 +185,6 @@ passport.use(new DiscordStrategy({
 },
     function (accessToken, refreshToken, profile, done) {
         process.nextTick(function () {
-            console.log(profile);
             login("discord", profile, function (data) {
                 if (data.err) {
                     return done(data.err);
@@ -204,7 +203,6 @@ passport.use('discord-signup', new DiscordStrategy({
 },
     function (accessToken, refreshToken, profile, done) {
         process.nextTick(function () {
-            console.log(profile);
             signup("discord", profile, function (data) {
                 if (data.err) {
                     return done(data.err);
@@ -221,8 +219,8 @@ passport.use('discord-signup', new DiscordStrategy({
 var SteamStrategy = require('passport-steam').Strategy;
 
 passport.use(new SteamStrategy({
-    returnURL: 'http://account.' + data.url + '/signin/steam/callback',
-    realm: 'http://account.' + data.url + '/',
+    returnURL: (data.https ? 'https://' : 'http://') + 'account.' + data.url + '/signin/steam/callback',
+    realm: (data.https ? 'https://' : 'http://') + 'account.' + data.url + '/',
     apiKey: data.steam.key
 },
     function (identifier, profile, done) {
@@ -239,8 +237,8 @@ passport.use(new SteamStrategy({
 ));
 
 passport.use('steam-signup', new SteamStrategy({
-    returnURL: 'http://account.' + data.url + '/signup/steam/callback',
-    realm: 'http://account.' + data.url + '/',
+    returnURL: (data.https ? 'https://' : 'http://') + 'account.' + data.url + '/signup/steam/callback',
+    realm: (data.https ? 'https://' : 'http://') + 'account.' + data.url + '/',
     apiKey: data.steam.key
 },
     function (identifier, profile, done) {
@@ -258,7 +256,7 @@ passport.use('steam-signup', new SteamStrategy({
 
 // Basic Web Routes
 app.get('/', function (req, res) {
-    tools.userTest(req, function ( test ) {
+    tools.userTest(req, function (test) {
         if (test) {
             let user = tools.getUser(req);
 
@@ -278,7 +276,7 @@ app.get('/', function (req, res) {
 });
 
 app.post('/', function (req, res) {
-    tools.userTest( req, function ( test ) {
+    tools.userTest(req, function (test) {
         if (test) {
             let user = tools.getUser(req);
             db.query('SELECT * FROM users WHERE id = ' + req.user.id, (err, rows, fields) => {
@@ -333,7 +331,6 @@ app.post('/', function (req, res) {
 
 // Local Routes
 
-// I FORGOT A LOGOUT!!!! AHHHH.... I have this extensive signin/sign up system... but no logout... Time to fix that!
 app.get('/logout', (req, res) => {
     tools.logoutUser(req, () => {
         res.redirect('/signin');
@@ -395,31 +392,37 @@ app.post('/signup', function (req, res, next) {
     });
 });
 
+// All signin provider callbacks
+
+app.get('/signin/:provider/callback', function (req, res, next) {
+    let provider = req.params.provider;
+    passport.authenticate(provider, (err, user, info) => {
+        if (err) return next(new Error(err));
+        else if (!user) return res.redirect('/signin');
+        else return res.redirect('/');
+    })(req, res, next);
+});
+
+// All signup provider callbacks
+
+app.get('/signup/:provider/callback', function (req, res, next) {
+    let provider = req.params.provider;
+    passport.authenticate(provider + '-signup', (err, user, info) => {
+        if (err) return next(new Error(err));
+        else if (!user) return res.redirect('/signup');
+        else return res.redirect('/');
+    })(req, res, next);
+});
+
 // Google Routes
 
 app.get('/signin/google',
     passport.authenticate('google', { scope: ['profile', 'email'] })
 );
 
-app.get('/signin/google/callback',
-    passport.authenticate('google', {
-        failureRedirect: '/signin'
-    }),
-    function (req, res) {
-        res.redirect('/');
-    });
-
 app.get('/signup/google',
     passport.authenticate('google-signup', { scope: ['profile', 'email'] })
 );
-
-app.get('/signup/google/callback',
-    passport.authenticate('google-signup', {
-        failureRedirect: '/signup'
-    }),
-    function (req, res) {
-        res.redirect('/');
-    });
 
 // Facebook Routes
 
@@ -427,25 +430,9 @@ app.get('/signin/facebook',
     passport.authenticate('facebook', { scope: ['public_profile', 'email'] })
 );
 
-app.get('/signin/facebook/callback',
-    passport.authenticate('facebook', {
-        failureRedirect: '/signin'
-    }),
-    function (req, res) {
-        res.redirect('/');
-    });
-
 app.get('/signup/facebook',
     passport.authenticate('facebook-signup', { scope: ['public_profile', 'email'] })
 );
-
-app.get('/signup/facebook/callback',
-    passport.authenticate('facebook-signup', {
-        failureRedirect: '/signup'
-    }),
-    function (req, res) {
-        res.redirect('/');
-    });
 
 // Twitter Routes
 
@@ -453,51 +440,19 @@ app.get('/signin/twitter',
     passport.authenticate('twitter')
 );
 
-app.get('/signin/twitter/callback',
-    passport.authenticate('twitter', {
-        failureRedirect: '/signin'
-    }),
-    function (req, res) {
-        res.redirect('/');
-    });
-
 app.get('/signup/twitter',
     passport.authenticate('twitter-signup')
 );
 
-app.get('/signup/twitter/callback',
-    passport.authenticate('twitter-signup', {
-        failureRedirect: '/signup'
-    }),
-    function (req, res) {
-        res.redirect('/');
-    });
-
 // Discord Routes
 
 app.get('/signin/discord',
-    passport.authenticate('discord')
+    passport.authenticate('discord', { scope: ['identity', 'email'] })
 );
-
-app.get('/signin/discord/callback',
-    passport.authenticate('discord', {
-        failureRedirect: '/signin'
-    }),
-    function (req, res) {
-        res.redirect('/');
-    });
 
 app.get('/signup/discord',
-    passport.authenticate('discord-signup')
+    passport.authenticate('discord-signup', { scope: ['identity', 'email'] })
 );
-
-app.get('/signup/discord/callback',
-    passport.authenticate('discord-signup', {
-        failureRedirect: '/signup'
-    }),
-    function (req, res) {
-        res.redirect('/');
-    });
 
 // Steam Routes
 
@@ -505,25 +460,9 @@ app.get('/signin/steam',
     passport.authenticate('steam')
 );
 
-app.get('/signin/steam/callback',
-    passport.authenticate('steam', {
-        failureRedirect: '/signin'
-    }),
-    function (req, res) {
-        res.redirect('/');
-    });
-
 app.get('/signup/steam',
     passport.authenticate('steam-signup')
 );
-
-app.get('/signup/steam/callback',
-    passport.authenticate('steam-signup', {
-        failureRedirect: '/signup'
-    }),
-    function (req, res) {
-        res.redirect('/');
-    });
 
 module.exports = app;
 
@@ -583,7 +522,7 @@ const login = (provider, profile, callback) => {
                         "err": ""
                     });
                 }
-            } else if (i === result.length) {
+            } else {
                 return callback({
                     "err": "That " + provider + ' id is not in our system'
                 });
@@ -597,101 +536,110 @@ const isEmail = (username) => {
 };
 
 var signup = function (provider, profile, callback) {
-    db.query("SELECT * FROM users", function (err, result) {
-        if (err) throw err;
-        console.log(provider + "_id");
-        for (let i = 0; i < result.length; i++) {
-            if (provider === "local") {
-                if (result[i].username === profile.username) {
-                    return callback({
-                        err: "That username has been taken!"
-                    });
+    if (provider === "local") {
+        db.query("SELECT * FROM users", function (err, result) {
+            if (err) throw err;
+            else {
+                for (let i = 0; i < result.length; i++) {
+                    if (result[i].username === profile.username) {
+                        return callback({
+                            err: "That username has been taken!"
+                        });
+                    }
+                    else if (result[i].email === profile.email) {
+                        return callback({
+                            err: "That email is already in use!"
+                        });
+                    } else {
+                        if (profile.password[0] === profile.password[1]) {
+                            bcrypt.hash(profile.password[1], 10, function (err, hash) {
+                                db.query("INSERT TO users ('name_first', 'name_last', 'name_full', 'username', 'email', 'password') values (" + profile.name.first + ", " + profile.name.last + ", " + profile.name.full + ", " + profile.username + ", " + profile.email + ", " + hash + " )");
+                            });
+                        }
+                    }
                 }
-                else if (result[i].email === profile.email) {
-                    return callback({
-                        err: "That email is already in use!"
-                    });
-                } else {
-                    if (profile.password[0] === profile.password[1]) {
-                        bcrypt.hash(profile.password[1], 10, function (err, hash) {
-                            db.query("INSERT TO users ('name_first', 'name_last', 'name_full', 'username', 'email', 'password') values (" + profile.name.first + ", " + profile.name.last + ", " + profile.name.full + ", " + profile.username + ", " + profile.email + ", " + hash + " )");
+            }
+        });
+    } else {
+        // Setting up data to enter
+
+        let data = null;
+
+        switch (provider) {
+            case 'google':
+                data = {
+                    'name_first': profile.name['givenName'],
+                    'name_last': profile.name['familyName'],
+                    'email': profile.email,
+                    'nickname': profile.displayName,
+                    'google_id': profile.id
+                };
+                break;
+            case 'twitter':
+                data = {
+                    'name_first': profile.displayName.split(" ")[0],
+                    'name_last': profile.displayName.split(" ")[profile.displayName.split(" ") - 1],
+                    'nickname': profile.displayName,
+                    'twitter_id': profile.id
+                };
+                break;
+            case 'facebook':
+                data = {
+                    'name_first': profile.displayName.split(" ")[0],
+                    'name_last': profile.displayName.split(" ")[profile.displayName.split(" ") - 1],
+                    'facebook_id': profile.id
+                };
+                break;
+            case 'steam':
+                data = {
+                    'name_first': profile['_json'].realname.split(" ")[0],
+                    'name_last': profile['_json'].realname.split(" ")[profile['_json'].realname.split(" ") - 1],
+                    'nickname': profile.displayName,
+                    'steam_id': profile.id
+                };
+                break;
+            case 'discord':
+                data = {
+                    'nickname': profile.username,
+                    'email': profile.email,
+                    'discord_id': profile.id
+                };
+                break;
+        }
+
+        if (data !== null) {
+            // Insert new user into database
+
+            db.query("SELECT * FROM users WHERE " + provider + "_id = " + profile.id, (err, result) => {
+                if (err) throw err;
+                else {
+                    if (result[0] && result[0][provider + "_id"] === profile.id) {
+                        return callback({
+                            err: "That " + provider + " account is already in our database!",
+                            result: null
+                        });
+                    } else {
+                        db.query("INSERT INTO users SET ?", data, (err, rows) => {
+                            if (err) throw err;
+                            else {
+                                db.query("SELECT * FROM users WHERE id = " + rows.insertId, (err, rows) => {
+                                    if (err) throw err;
+                                    else {
+                                        return callback({
+                                            err: '',
+                                            result: rows[0]
+                                        });
+                                    }
+                                });
+                            }
                         });
                     }
                 }
-            } else {
-                console.log(result[i][provider + "_id"] === profile.id);
-                if (result[i][provider + "_id"] === profile.id) {
-                    return callback({
-                        err: "That " + provider + " account is already in our database!"
-                    });
-                } else {
-                    // google's info
-                    let data = null;
-                    switch (provider) {
-                        case 'google':
-                            data = {
-                                'name_first': profile.name['givenName'],
-                                'name_last': profile.name['familyName'],
-                                'email': profile.email,
-                                'nickname': profile.displayName,
-                                'id': profile.id
-                            };
-                            data['name_full'] = data['name_first'] + " " + data['name_last'];
-                            break;
-                        case 'twitter':
-                            data = {
-                                'name_first': profile.displayName.split(" ")[0],
-                                'name_last': profile.displayName.split(" ")[profile.displayName.split(" ") - 1],
-                                'name_full': profile.displayName,
-                                'nickname': profile.displayName,
-                                'id': profile.id
-                            };
-                            break;
-                        case 'facebook':
-                            data = {
-                                'name_first': profile.displayName.split(" ")[0],
-                                'name_last': profile.displayName.split(" ")[profile.displayName.split(" ") - 1],
-                                'name_full': profile.displayName,
-                                'id': profile.id
-                            };
-                            break;
-                        case 'steam':
-                            data = {
-                                'name_first': profile['_json'].realname.split(" ")[0],
-                                'name_last': profile['_json'].realname.split(" ")[profile['_json'].realname.split(" ") - 1],
-                                'name_full': profile['_json'].realname,
-                                'nickname': profile.displayName,
-                                'id': profile.id
-                            };
-                            break;
-                    }
-
-                    console.log(data, profile);
-
-                    if (data !== null) {
-                        // Insert new user into database
-
-                        //db.query("INSERT TO users SET ?", data, (err, rows) => {
-                        //    if (err) throw err;
-                        //    else {
-                        //        db.query("SELECT FROM users WHERE id = " + rows.insertId, (err, rows) => {
-                        //            if (err) throw err;
-                        //            else {
-                        //                return callback({
-                        //                    err: '',
-                        //                    result: rows[0]
-                        //                });
-                        //            };
-                        //        });
-                        //    }
-                        //});
-                    }
-                    
-                }
-            }
+            });
+        } else {
+            return callback({
+                err: 'Something weird happened!'
+            }); 
         }
-        return callback({
-            err: "Adding user to database is being developed!"
-        });
-    });
+    }
 };
