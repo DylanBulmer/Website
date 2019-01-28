@@ -483,12 +483,12 @@ const login = (provider, profile, callback) => {
                         });
                     } else {
                         callback({
-                            "err": "Incorrect password"
+                            "err": "Incorrect Username or Password"
                         });
                     }
                 } else {
                     callback({
-                        "err": "That email is not in our database."
+                        "err": "Incorrect Username or Password"
                     });
                 }
             });
@@ -502,10 +502,14 @@ const login = (provider, profile, callback) => {
                             "result": result[0],
                             "err": ''
                         });
+                    } else {
+                        return callback({
+                            "err": "Incorrect Username or Password"
+                        });
                     }
                 } else {
                     callback({
-                        "err": "That username is not in our database."
+                        "err": "Incorrect Username or Password"
                     });
                 }
             });
