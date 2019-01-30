@@ -781,8 +781,6 @@ const addConnection = (provider, user, profile, callback) => {
                 let data = {};
                 data[provider + "_id"] = profile.id;
 
-                console.log(user);
-
                 db.query("UPDATE users SET ? WHERE id = " + user.id, data, (err, rows) => {
                     if (err) throw err;
                     else {
