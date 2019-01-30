@@ -94,6 +94,18 @@ passport.use('google-signup', new GoogleStrategy({
     }
 ));
 
+passport.use('google-connect', new GoogleStrategy({
+    clientID: data.google.clientID,
+    clientSecret: data.google.clientSecret,
+    callbackURL: "/connect/google/callback"
+},
+    function (accessToken, refreshToken, profile, done) {
+        process.nextTick(function () {
+            return done(null, profile);
+        });
+    }
+));
+
 // Setup Facebook
 
 var FacebookStrategy = require('passport-facebook').Strategy;
@@ -130,6 +142,18 @@ passport.use('facebook-signup', new FacebookStrategy({
                     return done(null, data.result);
                 }
             });
+        });
+    }
+));
+
+passport.use('facebook-connect', new FacebookStrategy({
+    clientID: data.facebook.clientID,
+    clientSecret: data.facebook.clientSecret,
+    callbackURL: "/connect/facebook/callback"
+},
+    function (accessToken, refreshToken, profile, done) {
+        process.nextTick(function () {
+            return done(null, profile);
         });
     }
 ));
@@ -174,6 +198,18 @@ passport.use('twitter-signup', new TwitterStrategy({
     }
 ));
 
+passport.use('twitter-connect', new TwitterStrategy({
+    consumerKey: data.twitter.clientID,
+    consumerSecret: data.twitter.clientSecret,
+    callbackURL: "/connect/twitter/callback"
+},
+    function (token, tokenSecret, profile, done) {
+        process.nextTick(function () {
+            return done(null, profile);
+        });
+    }
+));
+
 // Setup Discord
 
 var DiscordStrategy = require('passport-discord').Strategy;
@@ -214,6 +250,18 @@ passport.use('discord-signup', new DiscordStrategy({
     }
 ));
 
+passport.use('discord-connect', new DiscordStrategy({
+    clientID: data.discord.clientID,
+    clientSecret: data.discord.clientSecret,
+    callbackURL: "/connect/discord/callback"
+},
+    function (accessToken, refreshToken, profile, done) {
+        process.nextTick(function () {
+            return done(null, profile);
+        });
+    }
+));
+
 // Setup Steam
 
 var SteamStrategy = require('passport-steam').Strategy;
@@ -250,6 +298,18 @@ passport.use('steam-signup', new SteamStrategy({
                     return done(null, data.result);
                 }
             });
+        });
+    }
+));
+
+passport.use('steam-connect', new SteamStrategy({
+    returnURL: (data.https ? 'https://' : 'http://') + 'account.' + data.url + '/connect/steam/callback',
+    realm: (data.https ? 'https://' : 'http://') + 'account.' + data.url + '/',
+    apiKey: data.steam.key
+},
+    function (identifier, profile, done) {
+        process.nextTick(function () {
+            return done(null, profile);
         });
     }
 ));
@@ -395,76 +455,114 @@ app.post('/signup', function (req, res, next) {
     });
 });
 
-// All signin provider callbacks
+// All provider callbacks
 
-app.get('/signin/:provider/', function (req, res, next) {
+app.get('/:type/:provider/', function (req, res, next) {
     let provider = req.params.provider;
+    let type = req.params.type;
 
-    switch (provider) {
-        case 'google':
-            passport.authenticate(provider, { scope: ['profile', 'email'] })(req, res, next);
+    switch (type) {
+        case "signin":
+        case "signup":
+            switch (provider) {
+                case 'google':
+                    passport.authenticate(provider + (type === "signup" ? "-signup" : ""), { scope: ['profile', 'email'] })(req, res, next);
+                    break;
+                case 'discord':
+                    passport.authenticate(provider + (type === "signup" ? "-signup" : ""), { scope: ['identify', 'email'] })(req, res, next);
+                    break;
+                case 'facebook':
+                    passport.authenticate(provider + (type === "signup" ? "-signup" : ""), { scope: ['public_profile', 'email'] })(req, res, next);
+                    break;
+                case 'twitter':
+                case 'steam':
+                    passport.authenticate(provider + (type === "signup" ? "-signup" : ""))(req, res, next);
+                    break;
+                default:
+                    next();
+            }
             break;
-        case 'discord':
-            passport.authenticate(provider, { scope: ['identity', 'email'] })(req, res, next);
+        case "connect":
+            tools.userTest(req, function (test) {
+                if (test) {
+                    switch (provider) {
+                        case 'google':
+                            passport.authenticate(provider + "-connect", { scope: ['profile', 'email'] })(req, res, next);
+                            break;
+                        case 'discord':
+                            passport.authenticate(provider + "-connect", { scope: ['identify', 'email'] })(req, res, next);
+                            break;
+                        case 'facebook':
+                            passport.authenticate(provider + "-connect", { scope: ['public_profile', 'email'] })(req, res, next);
+                            break;
+                        case 'twitter':
+                        case 'steam':
+                            passport.authenticate(provider + "-connect")(req, res, next);
+                            break;
+                        default:
+                            next();
+                    }
+                } else {
+                    res.redirect('/signin');
+                }
+            });
             break;
-        case 'facebook':
-            passport.authenticate(provider, { scope: ['public_profile', 'email'] })(req, res, next);
-            break;
-        case 'twitter':
-        case 'steam':
-            passport.authenticate(provider)(req, res, next);
-            break;
+        default:
+            next();
+
     }
 });
 
-app.get('/signin/:provider/callback', function (req, res, next) {
+app.get('/:type/:provider/callback', function (req, res, next) {
     let provider = req.params.provider;
-    passport.authenticate(provider, (err, user, info) => {
-        if (err) return res.render('signin', { title: 'Sign In', error: err, config: data });
-        else if (!user) return res.redirect('/signin');
-        else {
-            req.login(user, function (err) {
-                if (err) { return next(err); }
-                return res.redirect('/');
-            });
-        }
-    })(req, res, next);
-});
+    let type = req.params.type;
 
-// All signup provider callbacks
-
-app.get('/signup/:provider/', function (req, res, next) {
-    let provider = req.params.provider;
-
-    switch (provider) {
-        case 'google':
-            passport.authenticate(provider + '-signup', { scope: ['profile', 'email'] })(req, res, next);
+    switch (type) {
+        case "signin":
+            passport.authenticate(provider, (err, user, info) => {
+                if (err) return res.render('signin', { title: 'Sign In', error: err, config: data });
+                else if (!user) return res.redirect('/signin');
+                else {
+                    req.login(user, function (err) {
+                        if (err) { return next(err); }
+                        return res.redirect('/');
+                    });
+                }
+            })(req, res, next);
             break;
-        case 'discord':
-            passport.authenticate(provider + '-signup', { scope: ['identity', 'email'] })(req, res, next);
+        case "signup":
+            passport.authenticate(provider + "-signup", (err, user, info) => {
+                if (err) return res.render('signup', { title: 'Sign Up', error: err, config: data });
+                else if (!user) return res.redirect('/signup');
+                else {
+                    req.login(user, function (err) {
+                        if (err) { return next(err); }
+                        return res.redirect('/');
+                    });
+                }
+            })(req, res, next);
             break;
-        case 'facebook':
-            passport.authenticate(provider + '-signup', { scope: ['public_profile', 'email'] })(req, res, next);
+        case "connect":
+            passport.authenticate(provider + "-connect", (err, profile, info) => {
+                if (err) return res.render('acconut/index', { title: 'Account', error: err, config: data });
+                else if (!profile) return res.redirect('/signup');
+                else {
+                    addConnection(provider, tools.getUser(req), profile, (data) => {
+                        if (data.err) {
+                            return next(new Error(data.err));
+                        } else {
+                            req.login(data.result, (err) => {
+                                if (err) next(new Error(err));
+                                else return res.redirect('/');
+                            });
+                        }
+                    });
+                }
+            })(req, res, next);
             break;
-        case 'twitter':
-        case 'steam':
-            passport.authenticate(provider + '-signup')(req, res, next);
-            break;
+        default:
+            next();
     }
-});
-
-app.get('/signup/:provider/callback', function (req, res, next) {
-    let provider = req.params.provider;
-    passport.authenticate(provider + '-signup', (err, user, info) => {
-        if (err) return res.render('signup', { title: 'Sign Up', error: err, config: data });
-        else if (!user) return res.redirect('/signup');
-        else {
-            req.login(user, function (err) {
-                if (err) { return next(err); }
-                return res.redirect('/');
-            });
-        }
-    })(req, res, next);
 });
 
 // Data Base signin Requests
@@ -668,6 +766,36 @@ var signup = function (provider, profile, callback) {
             }); 
         }
     }
+};
+
+const addConnection = (provider, user, profile, callback) => {
+    db.query("SELECT * FROM users WHERE " + provider + "_id = " + profile.id, (err, result) => {
+        if (err) throw err;
+        else {
+            if (result[0]) {
+                return callback({
+                    err: "That " + provider + " account is already in our database!",
+                    result: null
+                });
+            } else {
+                let data = {};
+                data[provider + "_id"] = profile.id;
+
+                console.log(user);
+
+                db.query("UPDATE users SET ? WHERE id = " + user.id, data, (err, rows) => {
+                    if (err) throw err;
+                    else {
+                        user[provider + "_id"] = profile.id;
+                        return callback({
+                            err: '',
+                            result: user
+                        });
+                    }
+                });
+            }
+        }
+    });
 };
 
 const isAvailable = (type, value, callback) => {
