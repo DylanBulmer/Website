@@ -54,6 +54,7 @@ function approveDomains(opts, certs, cb) {
     // Certs being renewed are listed in certs.altnames
     if (certs) {
         opts.domains = certs.altnames;
+        opts.agreeTos = false;
         cb(null, { options: opts, certs: certs });
         return;
     }
@@ -61,7 +62,7 @@ function approveDomains(opts, certs, cb) {
     // Only one domain is listed with *automatic* registration via SNI
     // (it's an array because managed registration allows for multiple domains,
     //                                which was the case in the simple example)
-    console.log(opts.domains);
+    //console.log(opts.domains);
 
     checkDomain(opts, function (err, agree, email) {
         if (err) { cb(err); return; }
