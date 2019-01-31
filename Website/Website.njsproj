@@ -93,8 +93,10 @@
     <Content Include="public\sitemaps\home.xml" />
     <Content Include="public\sitemaps\store.xml" />
     <Content Include="README.md" />
+    <Content Include="views\account\emailSent.pug" />
     <Content Include="views\account\index.pug" />
     <Content Include="views\account\layout.pug" />
+    <Content Include="views\account\emailRequest.pug" />
     <Content Include="views\blog\blog.pug" />
     <Content Include="views\blog\edit.pug" />
     <Content Include="views\blog\index.pug" />

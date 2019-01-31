@@ -6,6 +6,7 @@ var mysql = require('mysql');
 var passport = require('passport');
 var bcrypt = require('bcrypt');
 var tools = require('../tools');
+var nodemailer = require('nodemailer');
 var db = require('../modules/database').get();
 
 /* Add headers */
@@ -367,16 +368,19 @@ app.post('/', function (req, res) {
                         }
                         break;
                     case 'deact-google':    // Deactivate Google
-                        db.query('UPDATE users SET google_id ="" where id=' + user.id);
+                        db.query('UPDATE users SET google_id = null where id=' + user.id);
                         break;
                     case 'deact-twitter':   // Deactivate Twitter
-                        db.query('UPDATE users SET twitter_id ="" where id=' + user.id);
+                        db.query('UPDATE users SET twitter_id = null where id=' + user.id);
                         break;
                     case 'deact-facebook':  // Deactivate Facebook
-                        db.query('UPDATE users SET facebook_id ="" where id=' + user.id);
+                        db.query('UPDATE users SET facebook_id = null where id=' + user.id);
                         break;
                     case 'deact-steam':     // Deactivate Steam
-                        db.query('UPDATE users SET steam_id ="" where id=' + user.id);
+                        db.query('UPDATE users SET steam_id = null where id=' + user.id);
+                        break;
+                    case 'deact-discord':     // Deactivate Steam
+                        db.query('UPDATE users SET discord_id = null where id=' + user.id);
                         break;
                     default:
                         res.render('account/index', { title: 'Account', config: data, user: user });
@@ -453,6 +457,83 @@ app.post('/signup', function (req, res, next) {
             return res.redirect('/');
         }
     });
+});
+
+// Forgot Password Routes
+
+// Gives form for forgot password
+app.get('/forgot-password', function (req, res, next) {
+    tools.userTest(req, (test) => {
+        if (test) {
+            res.redirect('/');
+        } else {
+            res.render('account/emailRequest', { title: 'Forgot Password', config: data });
+        }
+    });
+});
+
+// Tests for username/email and generates code
+app.post('/forgot-password', function (req, res, next) {
+    tools.userTest(req, (test) => {
+        if (test) {
+            res.redirect('/');
+        } else {
+            // do database query for email
+            db.query("SELECT * FROM users WHERE email = '" + req.body.email + "'", (err, results, fields) => {
+                if (err) return next(new Error(err.message));
+                else {
+                    let user = results[0];
+
+                    if (user) {
+
+                        // generate code and save it
+                        let code = [...Array(10)].map(i => (~~(Math.random() * 36)).toString(36)).join('');
+
+                        db.query('UPDATE users SET ? WHERE id = ' + user.id, { resetcode: code }, (err, result) => {
+                            if (err) return next(new Error("Database Error"));
+                            else {
+                                // send email with verification code
+                                console.log(data.email);
+                                let transporter = nodemailer.createTransport({
+                                    service: 'gmail',
+                                    auth: data.email
+                                });
+                                transporter.sendMail({
+                                    'to': user.email,
+                                    'from': 'support@piggahbrostudios.com',
+                                    'subject': 'Password Reset | Bulmer Solutions',
+                                    'text': 'Click the following link to reset your password: \n\n https://piggahbrostudios.com/forgot-password/verify/' + code
+                                }, (err, info) => {
+                                    if (err) res.render('account/emailRequest', { title: 'Forgot Password', config: data, error: err });
+                                    else {
+                                        res.render('emailSent', { title: 'Forgot Password', config: data });
+                                    }
+                                });
+                            }
+                        });
+
+                    } else {
+                        res.render('account/emailRequest', { title: 'Forgot Password', config: data, error: 'We could not find that email!' });
+                    }
+                }
+            });
+        }
+    });
+});
+
+// Open form to submit code
+app.get('/forgot-password/verify', (req, res, next) => {
+    next();
+});
+
+// Test code and render reset form / handle reset
+app.post('/forgot-password/verify', (req, res, next) => {
+    next();
+});
+
+// automatic verification, render form / handle reset
+app.get('/forgot-password/verify/:code', (req, res, next) => {
+    next();
 });
 
 // All provider callbacks

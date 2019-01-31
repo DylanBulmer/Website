@@ -119,9 +119,10 @@ form {
     width: 400px;
     padding: 1em;
     margin: auto;
+    position: relative;
 }
 
-    form > input {
+    form input {
         width: calc(80% - 1em - 12px);
         padding: 0.5em;
         margin: 5px 10% 5px 10%;

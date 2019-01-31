@@ -11,8 +11,10 @@ block content
             br
             input(placeholder="Username" name="username" required)
             input(type="password" name="password" placeholder="Password" required)
-            input(type="submit" value="Sign In" style="background-color: #555555; color: #ffffff; width: 25%; min-width: 100px; margin-right: calc(10% + 10px); float: right;")
-            span#btns Or sign in with
+            span
+                a(href="/forgot-password" style="line-height: 43px; margin: 5px 10%;") Forgot Password
+                input(type="submit" value="Sign In" style="display: inline-block; background-color: #555555; color: #ffffff; width: 25%; min-width: 100px; margin: 5px; margin-right: calc(10% + 10px); float: right;")
+            span(style="margin-top: 10px;")#btns Or sign in with
                 br
                 a(href="/signin/google" style="background-color: #ffffff; padding-top: 4px; height: 32px;")
                     svg(version="1.1" xmlns="http://www.w3.org/2000/svg" width="28px" height="28px" viewBox="0 0 48 48" class="abcRioButtonSvg")
