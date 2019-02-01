@@ -97,6 +97,7 @@
     <Content Include="views\account\index.pug" />
     <Content Include="views\account\layout.pug" />
     <Content Include="views\account\emailRequest.pug" />
+    <Content Include="views\account\resetPassword.pug" />
     <Content Include="views\blog\blog.pug" />
     <Content Include="views\blog\edit.pug" />
     <Content Include="views\blog\index.pug" />

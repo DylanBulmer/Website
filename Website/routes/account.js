@@ -57,7 +57,7 @@ passport.use('local-signup', new LocalStrategy(
 
 // Setup Google
 
-var GoogleStrategy = require('passport-google-oauth2').Strategy;
+var GoogleStrategy = require('passport-google-oauth20').Strategy;
 
 passport.use(new GoogleStrategy({
     clientID: data.google.clientID,
@@ -493,7 +493,6 @@ app.post('/forgot-password', function (req, res, next) {
                             if (err) return next(new Error("Database Error"));
                             else {
                                 // send email with verification code
-                                console.log(data.email);
                                 let transporter = nodemailer.createTransport({
                                     service: 'gmail',
                                     auth: data.email
@@ -506,7 +505,7 @@ app.post('/forgot-password', function (req, res, next) {
                                 }, (err, info) => {
                                     if (err) res.render('account/emailRequest', { title: 'Forgot Password', config: data, error: err });
                                     else {
-                                        res.render('emailSent', { title: 'Forgot Password', config: data });
+                                        res.render('account/emailSent', { title: 'Forgot Password', config: data });
                                     }
                                 });
                             }
@@ -521,19 +520,62 @@ app.post('/forgot-password', function (req, res, next) {
     });
 });
 
-// Open form to submit code
-app.get('/forgot-password/verify', (req, res, next) => {
-    next();
-});
-
-// Test code and render reset form / handle reset
-app.post('/forgot-password/verify', (req, res, next) => {
-    next();
-});
-
 // automatic verification, render form / handle reset
 app.get('/forgot-password/verify/:code', (req, res, next) => {
-    next();
+    tools.userTest(req, (test) => {
+        if (test) {
+            res.redirect('/');
+        } else {
+            // render reset password view
+            let code = req.params.code;
+            db.query('SELECT * FROM users WHERE resetcode = "' + code + '"', (err, result) => {
+                if (err) throw err;
+                else {
+                    //let user = result[0];
+                    res.render('account/resetPassword', {title: 'Reset Password', config: data});
+                }
+            });
+        }
+    });
+});
+
+app.post('/forgot-password/verify/:code', (req, res, next) => {
+    tools.userTest(req, (test) => {
+        if (test) {
+            res.redirect('/');
+        } else {
+            if (req.body && req.body.password) {
+                if (req.body.password === req.body.password_confirm) {
+                    // reset password and set reset code to null
+                    let code = req.params.code;
+                    db.query('SELECT * FROM users WHERE resetcode = "' + code + '"', (err, result) => {
+                        if (err) throw err;
+                        else {
+                            bcrypt.hash(req.body.password, 10, (err, hash) => {
+                                let user = result[0],
+                                    data = {
+                                        'resetcode': null,
+                                        'password': hash
+                                    };
+
+                                db.query('UPDATE users SET ? WHERE id = ' + user.id, data, (err, result) => {
+                                    if (err) throw err;
+                                    else {
+                                        req.login(user, (err) => {
+                                            if (err) return next(new Error('User was updated, but could not login.'));
+                                            else return res.redirect('/');
+                                        });
+                                    }
+                                });
+                            });
+                        }
+                    });
+                } else {
+                    res.render('account/resetPassword', { title: 'Reset Password', config: data, error: 'Passwords do not match!' });
+                }
+            }
+        }
+    });
 });
 
 // All provider callbacks
