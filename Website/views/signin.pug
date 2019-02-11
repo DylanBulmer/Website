@@ -11,7 +11,10 @@ block content
             br
             input(placeholder="Username" name="username" required)
             input(type="password" name="password" placeholder="Password" required)
-            span
+            span(style="display: block;")
+                if captcha 
+                    span(style="display: inline-block;")!= captcha
+                    br
                 a(href="/forgot-password" style="line-height: 43px; margin: 5px 10%;") Forgot Password
                 input(type="submit" value="Sign In" style="display: inline-block; background-color: #555555; color: #ffffff; width: 25%; min-width: 100px; margin: 5px; margin-right: calc(10% + 10px); float: right;")
             span(style="margin-top: 10px;")#btns Or sign in with

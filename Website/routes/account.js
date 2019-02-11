@@ -6,6 +6,7 @@ var mysql = require('mysql');
 var passport = require('passport');
 var bcrypt = require('bcrypt');
 var tools = require('../tools');
+var Recaptcha = require("express-recaptcha").Recaptcha;
 var nodemailer = require('nodemailer');
 var db = require('../modules/database').get();
 
@@ -17,6 +18,8 @@ app.use(function (req, res, next) {
     res.header('Access-Control-Allow-Headers', 'X-Requested-With, X-HTTP-Method-Override, Content-Type, Accept');
     next();
 });
+
+var recaptcha = new Recaptcha(data.reCAPTCHA["sitekey"], data.reCAPTCHA["secretkey"]);
 
 // Setup Passport
 
@@ -62,7 +65,8 @@ var GoogleStrategy = require('passport-google-oauth20').Strategy;
 passport.use(new GoogleStrategy({
     clientID: data.google.clientID,
     clientSecret: data.google.clientSecret,
-    callbackURL: "/signin/google/callback"
+    callbackURL: "/signin/google/callback",
+    accessType: 'offline'
 },
     function (accessToken, refreshToken, profile, done) {
         process.nextTick(function () {
@@ -80,7 +84,8 @@ passport.use(new GoogleStrategy({
 passport.use('google-signup', new GoogleStrategy({
     clientID: data.google.clientID,
     clientSecret: data.google.clientSecret,
-    callbackURL: "/signup/google/callback"
+    callbackURL: "/signup/google/callback",
+    accessType: 'offline'
 },
     function (accessToken, refreshToken, profile, done) {
         process.nextTick(function () {
@@ -98,7 +103,8 @@ passport.use('google-signup', new GoogleStrategy({
 passport.use('google-connect', new GoogleStrategy({
     clientID: data.google.clientID,
     clientSecret: data.google.clientSecret,
-    callbackURL: "/connect/google/callback"
+    callbackURL: "/connect/google/callback",
+    accessType: 'offline'
 },
     function (accessToken, refreshToken, profile, done) {
         process.nextTick(function () {
@@ -404,7 +410,11 @@ app.get('/logout', (req, res) => {
 app.get('/signin', function (req, res) {
     tools.userTest(req, function (test) {
         if (!test) {
-            res.render('signin', { title: 'Sign In', error: '', config: data });
+            if (req.session["loginTries"] >= 5) {
+                res.render('signin', { title: 'Sign In', error: '', config: data, captcha: recaptcha.render() });
+            } else {
+                res.render('signin', { title: 'Sign In', error: '', config: data });
+            }
         } else {
             res.redirect('/');
         }
@@ -414,16 +424,63 @@ app.get('/signin', function (req, res) {
 app.post('/signin', function (req, res, next) {
     tools.userTest(req, function (test) {
         if (!test) {
-            login('local', {
-                "username": req.body.username,
-                "password": req.body.password
-            }, function (result) {
-                if (result.err) { res.render('signin', { title: 'Sign In', error: result.err, config: data }); }
-                else {
-                    req.session.user = result.result;
-                    return res.redirect('/');
-                }
-            });
+            if (req.session["loginTries"]) req.session["loginTries"] += 1;
+            else req.session["loginTries"] = 1;
+
+            if (req.session["loginTries"] > 5) {
+                // do captcha check
+                recaptcha.verify(req, function (error, info) {
+                    if (!error) {
+                        login('local', {
+                            "username": req.body.username,
+                            "password": req.body.password
+                        }, function (result) {
+                            if (result.err) {
+                                if (req.session["loginTries"] >= 5) {
+                                    res.render('signin', { title: 'Sign In', error: result.err, config: data, captcha: recaptcha.render() });
+                                } else {
+                                    res.render('signin', { title: 'Sign In', error: result.err, config: data });
+                                }
+                            }
+                            else {
+                                req.login(result.result, (err) => {
+                                    if (err) {
+                                        return next(new Error(err));
+                                    } else {
+                                        req.session["loginTries"] = 0;
+                                        return res.redirect('/');
+                                    }
+                                });
+                            }
+                        });
+                    } else {
+                        res.render('signin', { title: 'Sign In', error: "Please click the reCAPTCHA box.", config: data, captcha: recaptcha.render() });
+                    }
+                });
+            } else {
+                login('local', {
+                    "username": req.body.username,
+                    "password": req.body.password
+                }, function (result) {
+                    if (result.err) {
+                        if (req.session["loginTries"] >= 5) {
+                            res.render('signin', { title: 'Sign In', error: result.err, config: data, captcha: recaptcha.render() });
+                        } else {
+                            res.render('signin', { title: 'Sign In', error: result.err, config: data });
+                        }
+                    }
+                    else {
+                        req.login(result.result, (err) => {
+                            if (err) {
+                                return next(new Error(err));
+                            } else {
+                                req.session["loginTries"] = 0;
+                                return res.redirect('/');
+                            }
+                        });
+                    }
+                });
+            }
         } else {
             res.redirect('/');
         }

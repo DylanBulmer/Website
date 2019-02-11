@@ -120,12 +120,13 @@ form {
     padding: 1em;
     margin: auto;
     position: relative;
+    text-align: center;
 }
 
     form input {
         width: calc(80% - 1em - 12px);
         padding: 0.5em;
-        margin: 5px 10% 5px 10%;
+        margin: 5px;
         border: 1px solid #818181;
         border-radius: 5px;
     }
