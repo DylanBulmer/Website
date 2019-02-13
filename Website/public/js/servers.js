@@ -7,20 +7,15 @@ let search = (server, callback) => {
             let ajax = new XMLHttpRequest();
             ajax.onreadystatechange = function () {
                 if (this.readyState === 4 && this.status === 200) {
-                    let body = JSON.parse(this.response);
-                    if (body.response.servers.length > 0) server.status = "Online";
-                    servs.push(server);
+                    let body = this.response;
+                    if (body === "true") server.status = "Online";
+                    callback(server);
                 }
-                console.log(this.getAllResponseHeaders());
             };
             ajax.onerror = function (err) {
                 callback(server);
             };
-            ajax.open("GET", "https://api.steampowered.com/ISteamApps/GetServersAtAddress/v0001?addr=" + server.host + ":" + server.port + "&format=json", true);
-            ajax.setRequestHeader('Access-Control-Allow-Credentials', true);
-            ajax.setRequestHeader('Access-Control-Allow-Origin', '*');
-            ajax.setRequestHeader('Access-Control-Allow-Methods', 'GET, POST, PATCH, PUT, DELETE, OPTIONS');
-            ajax.setRequestHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, X-HTTP-Method-Override, Content-Type, Accept');
+            ajax.open("GET", (config.https ? "https://" : "http://") + "gaming." + config.url + "/api/check/steam/" + server.host + "/" + server.port, true);
             ajax.send();
 
             break;

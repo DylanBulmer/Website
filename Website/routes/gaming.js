@@ -21,6 +21,48 @@ app.get('/', function (req, res) {
     });
 });
 
+app.get('/api/check/:provider/:address/:port', (req, res, next) => {
+    let provider = req.params.provider;
+    let address = req.params.address;
+    let port = req.params.port;
+
+
+    switch (provider) {
+        case "steam":
+            http.get({
+                hostname: "api.steampowered.com",
+                port: 80,
+                path: "/ISteamApps/GetServersAtAddress/v0001?addr=" + address + ":" + port + "&format=json"
+            }, (resp) => {
+                let rawData = "";
+
+                resp.resume();
+                resp.on('data', (chunk) => {
+                    rawData += chunk;
+                });
+                resp.on('error', (err) => {
+                    console.log(err.message);
+                    return res.send(false);
+                });
+                resp.on('end', () => {
+                    try {
+                        let parsedData = JSON.parse(rawData);
+                        if (parsedData.response.servers.length > 0) return res.send(true);
+                        else return res.send(false);
+                    } catch (e) {
+                        console.log(e.message);
+                        return res.send(false);
+                    }
+                });
+            }).on("error", (err) => {
+                console.log(err.message);
+                return res.send(false);
+            });
+            break;
+    }
+
+});
+
 app.get('/forums', function (req, res) {
     let user = tools.getUser(req);
     getThreads((err, forums) => {
@@ -129,45 +171,10 @@ let getServers = (callback) => {
 let checkStatus = (server, callback) => {
     switch (server.game) {
         case "Minecraft":
-            /*
             getServerStatus(server, (status) => {
                 callback(status);
             });
-            */
             callback(server);
-            break;
-        case "Garry's Mod":
-        case "Unturned":
-            http.get({
-                hostname: "api.steampowered.com",
-                port: 80,
-                path: "/ISteamApps/GetServersAtAddress/v0001?addr=" + server.host + ":" + server.port + "&format=json",
-                timeout: 200
-            }, (res) => {
-                let rawData = "";
-
-                res.resume();
-                res.on('data', (chunk) => {
-                    rawData += chunk;
-                });
-                res.on('error', (err) => {
-                    console.log(err.message);
-                    callback(server);
-                });
-                res.on('end', () => {
-                    try {
-                        let parsedData = JSON.parse(rawData);
-                        if (parsedData.response.servers.length > 0) server.status = "Online";
-                        callback(server);
-                    } catch (e) {
-                        console.log(e.message);
-                        callback(server);
-                    }
-                });
-            }).on("error", (err) => {
-                console.log(err.message);
-                callback(server);
-            });
             break;
         default:
             callback(server);
