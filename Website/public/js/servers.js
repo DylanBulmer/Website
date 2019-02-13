@@ -16,7 +16,7 @@ let search = (server, callback) => {
             ajax.onerror = function (err) {
                 callback(server);
             };
-            ajax.open("GET", "http://api.steampowered.com/ISteamApps/GetServersAtAddress/v0001?addr=" + server.host + ":" + server.port + "&format=json", true);
+            ajax.open("GET", "https://api.steampowered.com/ISteamApps/GetServersAtAddress/v0001?addr=" + server.host + ":" + server.port + "&format=json", true);
             ajax.setRequestHeader('Access-Control-Allow-Credentials', true);
             ajax.setRequestHeader('Access-Control-Allow-Origin', '*');
             ajax.setRequestHeader('Access-Control-Allow-Methods', 'GET, POST, PATCH, PUT, DELETE, OPTIONS');
