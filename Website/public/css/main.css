@@ -42,7 +42,7 @@ body {
     padding: 0;
     margin: 0;
     color: #555555;
-    background-color: #ffffff;
+    background-color: #fafafa;
     font-weight: lighter;
 }
 
@@ -142,7 +142,7 @@ page {
     display: block;
     width: calc(100% - 4em);
     min-height: calc(100vh - 50px - 4em);
-    background-color: #fff;
+    background-color: #fafafa;
     padding: 2em;
     position: relative;
 }

@@ -28,4 +28,8 @@ html
                 columns#servers
         script.
             var servers = !{servers};
+            var config = {
+                'url': '!{config.url}',
+                'https': !{config.https}
+            };
         script(src="/js/servers.js")

@@ -6,6 +6,7 @@ var mysql = require('mysql');
 var tools = require('../tools');
 var dateformat = require('dateformat');
 var net = require('net');
+var http = require('http');
 
 /* GET users listing. */
 app.get('/', function (req, res) {
@@ -113,13 +114,12 @@ let getServers = (callback) => {
                     server.url = rows[i].url + ":" + rows[i].port;
                     break;
             }
+            
+            data.push(server);
 
-            checkStatus(server, (serv) => {
-                data.push(serv);
-                if (i >= rows.length || i === 0) {
-                    callback(data);
-                }
-            });
+            if (i === rows.length - 1) {
+                callback(data);
+            }
 
         }
 
@@ -129,8 +129,44 @@ let getServers = (callback) => {
 let checkStatus = (server, callback) => {
     switch (server.game) {
         case "Minecraft":
+            /*
             getServerStatus(server, (status) => {
                 callback(status);
+            });
+            */
+            callback(server);
+            break;
+        case "Garry's Mod":
+        case "Unturned":
+            http.get({
+                hostname: "api.steampowered.com",
+                port: 80,
+                path: "/ISteamApps/GetServersAtAddress/v0001?addr=" + server.host + ":" + server.port + "&format=json",
+                timeout: 200
+            }, (res) => {
+                let rawData = "";
+
+                res.resume();
+                res.on('data', (chunk) => {
+                    rawData += chunk;
+                });
+                res.on('error', (err) => {
+                    console.log(err.message);
+                    callback(server);
+                });
+                res.on('end', () => {
+                    try {
+                        let parsedData = JSON.parse(rawData);
+                        if (parsedData.response.servers.length > 0) server.status = "Online";
+                        callback(server);
+                    } catch (e) {
+                        console.log(e.message);
+                        callback(server);
+                    }
+                });
+            }).on("error", (err) => {
+                console.log(err.message);
+                callback(server);
             });
             break;
         default:
@@ -146,7 +182,7 @@ let getServerStatus = (server, callback) => {
         client.write(buff);
     });
     // set timeout with callback
-    client.setTimeout(500, (data) => {
+    client.setTimeout(100, (data) => {
         server.status = "Offline";
         callback(server);
     });
