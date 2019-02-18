@@ -86,24 +86,29 @@ function approveDomains(opts, certs, cb) {
 //
 // My User / Domain Database
 //
+/**
+ * 
+ * @param {{domains: string[]}} opts Options
+ * @param {any} cb Callback
+ */
 function checkDomain(opts, cb) {
     // All of my subdomains that need to be certified...
     let domains = [
-        '',
-        'www.',
-        'blog.',
-        'account.',
-        'gaming.',
-        'store.',
-        'mapgame.',
-        'thedocs.'
+        data.url,
+        'www.' + data.url,
+        'blog.' + data.url,
+        'account.' + data.url,
+        'gaming.' + data.url,
+        'store.' + data.url,
+        'mapgame.' + data.url,
+        'thedocs.' + data.url
     ];
     let userEmail = 'dylanmbulmer@gmail.com';
     let userAgrees = true;
 
     let passCheck = opts.domains.every(function (domain) {
         // use subdomain + url in config from easy domain transitioning
-        return -1 !== domains.indexOf(domain + config.url);
+        return -1 !== domains.indexOf(domain);
     });
 
     if (!passCheck) {
