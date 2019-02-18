@@ -5,7 +5,9 @@
 //
 // My Secure Server
 //
-//var greenlock = require('greenlock-express')
+
+const config = require('./config.json');
+
 var greenlock = require('greenlock-express').create({
 
     // Let's Encrypt v2 is ACME draft 11
@@ -85,22 +87,23 @@ function approveDomains(opts, certs, cb) {
 // My User / Domain Database
 //
 function checkDomain(opts, cb) {
-    // All of my domains that need to be certified...
+    // All of my subdomains that need to be certified...
     let domains = [
-        'piggahbrostudios.com',
-        'www.piggahbrostudios.com',
-        'blog.piggahbrostudios.com',
-        'account.piggahbrostudios.com',
-        'gaming.piggahbrostudios.com',
-        'store.piggahbrostudios.com',
-        'mapgame.piggahbrostudios.com',
-        'thedocs.piggahbrostudios.com'
+        '',
+        'www.',
+        'blog.',
+        'account.',
+        'gaming.',
+        'store.',
+        'mapgame.',
+        'thedocs.'
     ];
     let userEmail = 'dylanmbulmer@gmail.com';
     let userAgrees = true;
 
     let passCheck = opts.domains.every(function (domain) {
-        return -1 !== domains.indexOf(domain);
+        // use subdomain + url in config from easy domain transitioning
+        return -1 !== domains.indexOf(domain + config.url);
     });
 
     if (!passCheck) {

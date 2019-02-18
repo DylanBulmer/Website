@@ -556,9 +556,9 @@ app.post('/forgot-password', function (req, res, next) {
                                 });
                                 transporter.sendMail({
                                     'to': user.email,
-                                    'from': 'support@piggahbrostudios.com',
+                                    'from': 'support@' + data.url,
                                     'subject': 'Password Reset | Bulmer Solutions',
-                                    'text': 'Click the following link to reset your password: \n\n https://piggahbrostudios.com/forgot-password/verify/' + code
+                                    'text': 'Click the following link to reset your password: \n\n https://' + data.url + 'forgot-password/verify/' + code
                                 }, (err, info) => {
                                     if (err) res.render('account/emailRequest', { title: 'Forgot Password', config: data, error: err });
                                     else {
