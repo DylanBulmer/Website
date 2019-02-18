@@ -94,14 +94,14 @@ function approveDomains(opts, certs, cb) {
 function checkDomain(opts, cb) {
     // All of my subdomains that need to be certified...
     let domains = [
-        data.url,
-        'www.' + data.url,
-        'blog.' + data.url,
-        'account.' + data.url,
-        'gaming.' + data.url,
-        'store.' + data.url,
-        'mapgame.' + data.url,
-        'thedocs.' + data.url
+        config.url,
+        'www.' + config.url,
+        'blog.' + config.url,
+        'account.' + config.url,
+        'gaming.' + config.url,
+        'store.' + config.url,
+        'mapgame.' + config.url,
+        'thedocs.' + config.url
     ];
     let userEmail = 'dylanmbulmer@gmail.com';
     let userAgrees = true;
