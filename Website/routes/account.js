@@ -328,11 +328,11 @@ app.get('/', function (req, res) {
             let user = tools.getUser(req);
 
             let socialLogins = {
-                'google': user['google_id'] && user['google_id'] !== '' ? true : false,
-                'facebook': user['facebook_id'] && user['facebook_id'] !== '' ? true : false,
-                'twitter': user['twitter_id'] && user['twitter_id'] !== '' ? true : false,
-                'steam': user['steam_id'] && user['steam_id'] !== '' ? true : false,
-                'discord': user['discord_id'] && user['discord_id'] !== '' ? true : false
+                'google':   user['google_id']   && user['google_id']    !== '' ? true : false,
+                'facebook': user['facebook_id'] && user['facebook_id']  !== '' ? true : false,
+                'twitter':  user['twitter_id']  && user['twitter_id']   !== '' ? true : false,
+                'steam':    user['steam_id']    && user['steam_id']     !== '' ? true : false,
+                'discord':  user['discord_id']  && user['discord_id']   !== '' ? true : false
             };
 
             res.render('account/index', { title: 'Account', config: data, user: user, logins: socialLogins });
@@ -350,11 +350,11 @@ app.post('/', function (req, res) {
                 let profile = rows[0];
 
                 let socialLogins = {
-                    'google': user['google_id'] && user['google_id'] !== '' ? true : false,
-                    'facebook': user['facebook_id'] && user['facebook_id'] !== '' ? true : false,
-                    'twitter': user['twitter_id'] && user['twitter_id'] !== '' ? true : false,
-                    'steam': user['steam_id'] && user['steam_id'] !== '' ? true : false,
-                    'discord': user['discord_id'] && user['discord_id'] !== '' ? true : false
+                    'google':   user['google_id']   && user['google_id']    !== '' ? true : false,
+                    'facebook': user['facebook_id'] && user['facebook_id']  !== '' ? true : false,
+                    'twitter':  user['twitter_id']  && user['twitter_id']   !== '' ? true : false,
+                    'steam':    user['steam_id']    && user['steam_id']     !== '' ? true : false,
+                    'discord':  user['discord_id']  && user['discord_id']   !== '' ? true : false
                 };
 
                 switch (req.body.form) {
