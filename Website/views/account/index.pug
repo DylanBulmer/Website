@@ -9,7 +9,7 @@ block content
         else if pass
             pass(style="color:#1b1;") #{pass}
             br
-        page(style = "width: calc(80% - 4em); margin: auto").grid
+        page.grid
             content
                 form
                     h2(style="text-align: center;display: block;") Welcome #{user.name_first}!
@@ -17,8 +17,8 @@ block content
                     span(style="text-align: center;display: block;")
                         p Edit Your Account Information
                         br
-                    input(name="name[first]" style="display: inline-block; width: calc(40% - 1em - 13px); margin-right: 6px;" placeholder="First Name" value=user.name_first)
-                    input(name="name[last]" style="display: inline-block; width: calc(40% - 1em - 13px); margin-left: 6px;" placeholder="Last Name" value=user.name_last)
+                    input(name="name[first]" style="display: inline-block; width: calc(40% - 1em - 13px); margin-right: 6px;" placeholder="First Name" value=user.name_first).half
+                    input(name="name[last]" style="display: inline-block; width: calc(40% - 1em - 13px); margin-left: 6px;" placeholder="Last Name" value=user.name_last).half
                     input(name="name[user]" placeholder="Username" value=user.username)
                     input(name="email" placeholder="Email" value=user.email)
                     input(name="nickname" placeholder="Nickname" value=user.nickname)
@@ -49,7 +49,7 @@ block content
                         br
                         br
                         input(type="submit" class="submit" value="Create!" style="width: calc(80% - 12px);")
-            content(style="text-align: center; padding: 1em;").wide
+            content.wide
                 h2(style="display: block;") Manage Social Logins
                 cards
                     card
