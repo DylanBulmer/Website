@@ -347,6 +347,8 @@ app.post('/', function (req, res) {
         if (test) {
             let user = tools.getUser(req);
             db.query('SELECT * FROM users WHERE id = ' + user.id, (err, rows, fields) => {
+                if (err) return console.error(err);
+
                 let profile = rows[0];
 
                 let socialLogins = {

@@ -29,6 +29,7 @@ logo {
         z-index: -1;
     }
 
+/*
 hr {
     background: linear-gradient( to left, transparent 10%, #fff, transparent 90% ) left bottom no-repeat;
     display: block;
@@ -37,6 +38,7 @@ hr {
     border: 0;
     background-size: 100% 1px;
 }
+*/
 
 body {
     padding: 0;

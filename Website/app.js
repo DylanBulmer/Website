@@ -20,6 +20,8 @@ var account = require('./routes/account');
 var blog = require('./routes/blog');
 var gaming = require('./routes/gaming');
 var store = require('./routes/store');
+var admin = require('./routes/admin');
+var api = require('./routes/api');
 
 // setup access log storage
 var logDirectory = path.join(__dirname, 'log');
@@ -109,6 +111,8 @@ app.use('/subdomain/blog/', blog);
 app.use('/subdomain/gaming/', gaming);
 app.use('/subdomain/account/', account);
 app.use('/subdomain/store/', store);
+app.use('/subdomain/admin/', admin);
+app.use('/subdomain/api/', api);
 
 // adding in reverse proxy
 for (let i = 0; i < data.routes.length; i++) {

@@ -44,6 +44,16 @@ class database {
                     throw err;
                 }
             });
+
+            self.db.on('end', function (err) {
+                console.log('MySQL Error: ', err.message);
+                if (err.code === 'PROTOCOL_CONNECTION_LOST') {
+                    self.isConnected = false;
+                    self.connect();
+                } else {
+                    throw err;
+                }
+            });
         });
     }
 

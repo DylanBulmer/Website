@@ -45,9 +45,10 @@
     <Compile Include="public\js\p5.min.js" />
     <Compile Include="public\js\page.js" />
     <Compile Include="public\js\servers.js" />
-    <Compile Include="public\js\tabs.js" />
     <Compile Include="public\js\touch.js" />
     <Compile Include="routes\account.js" />
+    <Compile Include="routes\admin.js" />
+    <Compile Include="routes\api.js" />
     <Compile Include="routes\gaming.js" />
     <Compile Include="routes\index.js" />
     <Compile Include="routes\blog.js" />
@@ -93,6 +94,8 @@
     <Content Include="public\sitemaps\home.xml" />
     <Content Include="public\sitemaps\store.xml" />
     <Content Include="README.md" />
+    <Content Include="views\admin\layout.pug" />
+    <Content Include="views\admin\users.pug" />
     <Content Include="views\account\emailSent.pug" />
     <Content Include="views\account\index.pug" />
     <Content Include="views\account\layout.pug" />
@@ -132,6 +135,7 @@
     <Folder Include="views\modules\" />
     <Folder Include="views\blog\" />
     <Folder Include="views\gaming\" />
+    <Folder Include="views\admin\" />
     <Folder Include="views\store\" />
   </ItemGroup>
   <!-- Do not delete the following Import Project.  While this appears to do nothing it is a marker for setting TypeScript properties before our import that depends on them. -->

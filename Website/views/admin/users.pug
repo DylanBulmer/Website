@@ -1,0 +1,13 @@
+extends layout
+
+block content
+    #barba-wrapper
+      .barba-container
+        link(rel="stylesheet" href="/css/account.css")
+        page
+            div#query
+                input(onclick="" placeholder="Search")
+                span#query-btns Search by: 
+                    button Name
+                    button User ID
+            div#output
