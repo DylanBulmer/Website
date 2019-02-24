@@ -58,6 +58,7 @@
     <Content Include="files\cookies.md" />
     <Content Include="package.json" />
     <Content Include="public\css\account.css" />
+    <Content Include="public\css\admin.css" />
     <Content Include="public\css\blog.css" />
     <Content Include="public\css\font-awesome.css" />
     <Content Include="public\css\font-awesome.min.css" />

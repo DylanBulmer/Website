@@ -95,8 +95,10 @@ function checkDomain(opts, cb) {
     // All of my subdomains that need to be certified...
     let domains = [
         config.url,
+        'api.' + config.url,
         'www.' + config.url,
         'blog.' + config.url,
+        'admin.' + config.url,
         'account.' + config.url,
         'gaming.' + config.url,
         'store.' + config.url,

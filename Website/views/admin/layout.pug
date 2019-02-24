@@ -7,6 +7,7 @@ html
     link(rel="icon" type="image/x-icon" href="favicon.ico")
 
     link(rel='stylesheet', href='/css/main.css')
+    link(rel="stylesheet" href='/css/admin.css')
     link(rel='stylesheet', href='/css/font-awesome.min.css')
     link(rel='stylesheet', href='/css/ionicons.min.css')
     link(rel='stylesheet' href="https://fonts.googleapis.com/css?family=Open+Sans:300,400")
@@ -16,7 +17,9 @@ html
   body
     include ../modules/bar.pug
     include ../modules/nav.pug
-    block content
+    #barba-wrapper
+        .barba-container
+            block content
 
     block scripts
     script(src="/js/page.js" type="text/javascript")
