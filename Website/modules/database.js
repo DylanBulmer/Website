@@ -85,6 +85,7 @@ class database {
     }
 
     get() {
+        if (this.isConnected === false) this.connect();
         return this.db;
     }
 

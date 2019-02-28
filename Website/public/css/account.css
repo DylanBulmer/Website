@@ -1,19 +1,13 @@
 content {
-    width: calc(90% - 2em);
-    display: inline-block;
     padding: 1em;
-    margin: 0 5%;
     background-color: #fff;
     border-radius: 3px;
     box-shadow: 0px 1px 4px 0 rgba(0,0,0,0.16), 0px 1px 10px 0 rgba(0,0,0,0.12);
 }
 
-    content.wide {
-        grid-column: 1 / 3;
-        width: calc(90% + 1em);
-        margin: auto;
-        text-align: center;
-    }
+.wide {
+    grid-column: 1 / 3;
+}
 
         content.wide > cards {
             grid-template-columns: auto auto auto;
@@ -46,30 +40,37 @@ content {
             }
 
 form {
-    width: calc(100% - 2em);
-    padding: 1em;
+    width: 80%;
+    max-width: 300px;
     margin: auto;
     position: relative;
-    text-align: center;
 }
 
-form.non-grid {
-    width: 400px;
-    margin: auto;
-    position: relative;
-    text-align: center;
-    background-color: #fff;
-    border-radius: 3px;
-    box-shadow: 0px 1px 4px 0 rgba(0,0,0,0.16), 0px 1px 10px 0 rgba(0,0,0,0.12);
-}
+    form.non-grid {
+        width: calc(400px - 3em);
+        margin: auto;
+        position: relative;
+        max-width: initial;
+        text-align: center;
+        background-color: #fff;
+        padding: 1em 3em;
+        border-radius: 3px;
+        box-shadow: 0px 1px 4px 0 rgba(0,0,0,0.16), 0px 1px 10px 0 rgba(0,0,0,0.12);
+    }
 
     form input {
-        width: calc(80% - 1em - 12px);
+        width: calc(100% - 1em - 12px);
         padding: 0.5em;
         margin: 5px;
         border: 1px solid #818181;
         border-radius: 5px;
     }
+
+        form input.half {
+            display: inline-block;
+            width: calc(50% - 1em - 13px);
+            margin-right: 6px;
+        }
 
     form > h1, form > h3 {
         text-align: center;
@@ -77,8 +78,9 @@ form.non-grid {
 
     form > #btns {
         display: block;
-        width: calc(80%);
-        margin: 50px 10% 10px 10%;
+        width: calc(100% - 10px);
+        text-align: left;
+        padding: 5px;
     }
 
         form > #btns > a {
@@ -106,8 +108,8 @@ page {
     page.grid {
         display: grid;
         grid-template-columns: auto auto;
-        column-gap: 1em;
-        row-gap: 1em;
+        column-gap: 2em;
+        row-gap: 2em;
         margin: auto;
     }
 
@@ -116,7 +118,7 @@ err, pass {
     font-size: 0.9em;
     padding: 1em;
     position: fixed;
-    bottom: 1em;
+    top: calc(1em + 50px);
     right: 1em;
     z-index: 100;
     background-color: #fff;
@@ -126,6 +128,11 @@ err, pass {
 
 /* Smartphone adjustment */
 @media only screen and (max-width: 992px) {
+
+    page {
+        width: calc(100% - 4em);
+    }
+
     page.grid {
         display: grid;
         grid-template-columns: auto;
@@ -151,6 +158,7 @@ err, pass {
 @media only screen and (max-width: 600px) {
     form.non-grid, form {
         width: calc(100% - 2em);
+        padding: 1em;
     }
 
     page.grid {

@@ -1,9 +1,27 @@
+var privileges = require("./config.json")["privileges"];
+
 module.exports = {
-    userTest: function userTest(req, callback) {
-        if (req.user || req.session.user) {
-            callback(true);
+    userTest: function userTest() {
+
+        let req = arguments[0];
+        let privilege = null;
+        if (arguments.length > 2) privilege = arguments[1];
+        let callback = arguments[arguments.length - 1];
+
+        let user = req.user || req.session.user;
+
+        if (privilege) {
+            if (user && user.privilege >= Math.pow(2, privilege)) {
+                callback(true);
+            } else {
+                callback(false);
+            }
         } else {
-            callback(false);
+            if (user) {
+                callback(true);
+            } else {
+                callback(false);
+            }
         }
     },
     getUser: function getUser(req) {
@@ -21,5 +39,20 @@ module.exports = {
         } else {
             callback();
         }
+    },
+    getPrivileges: function getPrivileges(user) {
+
+        let priv = user.privilege;
+        let allowed = [];
+
+        for (i = privileges.length - 1; i >= 0; i--) {
+            let num = Math.pow(2, privileges[i].level);
+            if (num <= priv) {
+                priv = priv - num;
+                allowed[allowed.length] = privileges[i];
+            }
+        }
+
+        return allowed;
     }
 };

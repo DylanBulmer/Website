@@ -1,0 +1,45 @@
+extends layout
+
+block content
+    page.grid
+        content
+            form
+                p(style="text-align: left; padding: 5px;")
+                    b Edit #{user.name_first}'s Account Information
+                br
+                input(name="name[first]" placeholder="First Name" value=user.name_first).half
+                input(name="name[last]" placeholder="Last Name" value=user.name_last).half
+                input(name="name[user]" placeholder="Username" value=user.username)
+                input(name="email" placeholder="Email" value=user.email)
+        content
+            p(style="text-align: left;")
+                b Manage Account
+            br
+            table(style="width: 100%;")
+                tr
+                    td Forgot Password:
+                    td(style="text-align: right;")
+                        button Send Link
+                tr
+                    td Ban Account:
+                    td(style="text-align: right;")
+                        button Ban
+                
+        content.wide
+            form(style="width: calc(100% - 2em); max-width: initial;")
+                p
+                    b Manage Permissions
+                br
+                div.perm-grid
+
+                    each privilege in privileges
+                        if privilege.level == 0
+                            span(style="display: block" id="perm-" + privilege.short)
+                                input(type="checkbox" style="width: auto;" value=privilege.level disabled=true checked=(user.privilege >= 1))
+                                | #{privilege.label}
+                        else
+                            span(style="display: block" id="perm-" + privilege.short)
+                                input(type="checkbox" style="width: auto;" value=privilege.level checked=privilege.checked)
+                                | #{privilege.label}
+        div#options.wide
+            button Save

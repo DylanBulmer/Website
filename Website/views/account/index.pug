@@ -17,8 +17,8 @@ block content
                     span(style="text-align: center;display: block;")
                         p Edit Your Account Information
                         br
-                    input(name="name[first]" style="display: inline-block; width: calc(40% - 1em - 13px); margin-right: 6px;" placeholder="First Name" value=user.name_first).half
-                    input(name="name[last]" style="display: inline-block; width: calc(40% - 1em - 13px); margin-left: 6px;" placeholder="Last Name" value=user.name_last).half
+                    input(name="name[first]" placeholder="First Name" value=user.name_first).half
+                    input(name="name[last]" placeholder="Last Name" value=user.name_last).half
                     input(name="name[user]" placeholder="Username" value=user.username)
                     input(name="email" placeholder="Email" value=user.email)
                     input(name="nickname" placeholder="Nickname" value=user.nickname)
@@ -35,7 +35,7 @@ block content
                         input(placeholder="Confirm Password" type="password" name="password_confirm" required)
                         br
                         br
-                        input(type="submit" class="submit" value="Change" style="width: calc(80% - 12px);")
+                        input(type="submit" class="submit" value="Change" style="width: calc(100% - 12px);")
             else
                 content
                     form(action="" method="post")

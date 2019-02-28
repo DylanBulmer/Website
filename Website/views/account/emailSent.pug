@@ -1,13 +1,15 @@
 extends layout
 
 block content
-    link(rel="stylesheet" href="/css/account.css")
-    page
-        form(action="" method="POST")
-            h1 Forgot Password
-            h3(style="font-variant-caps: small-caps;") Bulmer Solutions
-            if error
-                br
-                err(style="color: #f00; font-size: 0.9em; text-align: center; display: block;") #{error}
-            br
-            span An verification link has been sent to your email account!
+    #barba-wrapper
+        .barba-container
+            link(rel="stylesheet" href="/css/account.css")
+            page
+                form(action="" method="POST").non-grid
+                    h1 Forgot Password
+                    h3(style="font-variant-caps: small-caps;") Bulmer Solutions
+                    if error
+                        br
+                        err(style="color: #f00; font-size: 0.9em; text-align: center; display: block;") #{error}
+                    br
+                    span An verification link has been sent to your email account!

@@ -44,6 +44,7 @@
     </Compile>
     <Compile Include="public\js\p5.min.js" />
     <Compile Include="public\js\page.js" />
+    <Compile Include="public\js\select.js" />
     <Compile Include="public\js\servers.js" />
     <Compile Include="public\js\touch.js" />
     <Compile Include="routes\account.js" />
@@ -95,6 +96,8 @@
     <Content Include="public\sitemaps\home.xml" />
     <Content Include="public\sitemaps\store.xml" />
     <Content Include="README.md" />
+    <Content Include="views\admin\edituser.pug" />
+    <Content Include="views\admin\index.pug" />
     <Content Include="views\admin\layout.pug" />
     <Content Include="views\admin\users.pug" />
     <Content Include="views\account\emailSent.pug" />
@@ -112,6 +115,7 @@
     <Content Include="views\index.pug" />
     <Content Include="views\layout.pug" />
     <Content Include="views\error.pug" />
+    <Content Include="views\modules\bar-no-logo.pug" />
     <Content Include="views\modules\bar.pug" />
     <Content Include="views\modules\nav.pug" />
     <Content Include="views\policy.pug" />

@@ -365,14 +365,37 @@ app.post('/', function (req, res) {
                             if (req.body.password === req.body.password_confirm) {
                                 bcrypt.hash(req.body.password, 10, function (err, hash) {
                                     // Store hash in database
-                                    db.query('UPDATE users SET password="' + hash + '" where id=' + user.id);
+                                    db.query('UPDATE users SET password="' + hash + '" where id=' + user.id, (err, results, fields) => {
+                                        if (err) return next(new Error(err.message));
+                                        user.password = true;
+                                        req.login(user, (err) => {
+                                            if (err) return next(new Error('Password was updated, but could not re-login.'));
+                                            else return res.render('account/index', { title: 'Account', config: data, pass: "Password Reset!", user: user, logins: socialLogins });
+                                        });
+                                    });
                                 });
-                                res.render('account/index', { title: 'Account', config: data, pass: "Password Reset!", user: user, logins: socialLogins });
                             } else {
                                 res.render('account/index', { title: 'Account', config: data, err: "Passwords do not match!", user: user, logins: socialLogins });
                             }
                         } else {
                             res.render('account/index', { title: 'Account', config: data, err: "Current password is incorrect!", user: user, logins: socialLogins });
+                        }
+                        break;
+                    case 'create_pass':        // Create Password
+                        if (req.body.password === req.body.password_confirm) {
+                            bcrypt.hash(req.body.password, 10, function (err, hash) {
+                                // Store hash in database
+                                db.query('UPDATE users SET password="' + hash + '" where id=' + user.id, (err, results, fields) => {
+                                    if (err) return res.render('account/index', { title: 'Account', config: data, err: "Couldn't reset password!", user: user, logins: socialLogins });
+                                    user.password = true;
+                                    req.login(user, (err) => {
+                                        if (err) return next(new Error('Password was updated, but could not re-login.'));
+                                        else return res.render('account/index', { title: 'Account', config: data, pass: "Password Reset!", user: user, logins: socialLogins });
+                                    });
+                                });
+                            });
+                        } else {
+                            res.render('account/index', { title: 'Account', config: data, err: "Passwords do not match!", user: user, logins: socialLogins });
                         }
                         break;
                     case 'deact-google':    // Deactivate Google
@@ -391,7 +414,7 @@ app.post('/', function (req, res) {
                         db.query('UPDATE users SET discord_id = null where id=' + user.id);
                         break;
                     default:
-                        res.render('account/index', { title: 'Account', config: data, user: user });
+                        res.render('account/index', { title: 'Account', config: data, user: user, logins: socialLogins });
                 }
             });
         } else {
@@ -560,7 +583,7 @@ app.post('/forgot-password', function (req, res, next) {
                                     'to': user.email,
                                     'from': 'support@' + data.url,
                                     'subject': 'Password Reset | Bulmer Solutions',
-                                    'text': 'Click the following link to reset your password: \n\n https://' + data.url + 'forgot-password/verify/' + code
+                                    'text': 'Click the following link to reset your password: \n\n https://account.' + data.url + '/forgot-password/verify/' + code
                                 }, (err, info) => {
                                     if (err) res.render('account/emailRequest', { title: 'Forgot Password', config: data, error: err });
                                     else {
@@ -756,7 +779,7 @@ const login = (provider, profile, callback) => {
             db.query("SELECT * FROM users WHERE email = '" + profile.username + "'", function (err, result) {
                 if (err) throw err;
                 if (result.length > 0) {
-                    if (bcrypt.compareSync(profile.password, result[0].password)) {
+                    if (result[0].password && bcrypt.compareSync(profile.password, result[0].password)) {
                         callback({
                             "result": result[0],
                             "err": ''
