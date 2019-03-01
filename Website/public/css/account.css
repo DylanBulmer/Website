@@ -148,11 +148,12 @@ err, pass {
         content.wide {
             max-width: 400px;
             grid-column: initial;
+            width: calc(364px - 4em);
         }
 
-        content.wide > cards {
-            grid-template-columns: auto auto;
-        }
+            content.wide > cards {
+                grid-template-columns: auto;
+            }
 }
 
 @media only screen and (max-width: 600px) {
@@ -166,26 +167,18 @@ err, pass {
     }
 
     content.wide {
-        width: calc(90% - 2em);
+        width: calc(364px - 2em);
     }
-
-        content.wide > cards {
-            grid-template-columns: auto;
-        }
 
     form > #btns {
         margin-top: 40px !important;
     }
 
     form input {
-        width: calc(90% - 1em - 12px);
-    }
-    
-    form input.submit {
-        width: calc(90% - 12px) !important;
+        width: calc(100% - 1em - 12px);
     }
 
-        form input.half {
-            width: calc(45% - 1em - 13px) !important;
+        form input.submit {
+            width: calc(100% - 12px) !important;
         }
 }

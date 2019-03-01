@@ -581,7 +581,7 @@ app.post('/forgot-password', function (req, res, next) {
                                 });
                                 transporter.sendMail({
                                     'to': user.email,
-                                    'from': 'support@' + data.url,
+                                    'from': 'support@bulmersolutions.com',
                                     'subject': 'Password Reset | Bulmer Solutions',
                                     'text': 'Click the following link to reset your password: \n\n https://account.' + data.url + '/forgot-password/verify/' + code
                                 }, (err, info) => {

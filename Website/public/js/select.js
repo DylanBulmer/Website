@@ -10,29 +10,34 @@ const select = (id) => {
     }
 };
 
-const edit = () => {
-    let selected = document.getElementsByClassName('selected');
+const edit = (id) => {
 
-    if (selected.length > 0) {
-        let dest = "/users/" + selected[0].getAttribute("id") + "/edit";
+    if (id) {
+        window.location.assign("/users/" + id + "/edit");
+    } else {
+        let selected = document.getElementsByClassName('selected');
 
-        if (selected.length > 1) {
-            let url = "?next=";
+        if (selected.length > 0) {
+            let dest = "/users/" + selected[0].getAttribute("id") + "/edit";
 
-            // offset by one
-            for (let i = 1; i < selected.length; i++) {
-                if (i === selected.length - 1) {
-                    url += selected[i].getAttribute("id");
-                } else {
-                    url += selected[i].getAttribute("id") + ",";
+            if (selected.length > 1) {
+                let url = "?next=";
+
+                // offset by one
+                for (let i = 1; i < selected.length; i++) {
+                    if (i === selected.length - 1) {
+                        url += selected[i].getAttribute("id");
+                    } else {
+                        url += selected[i].getAttribute("id") + ",";
+                    }
                 }
+
+                dest += url;
             }
 
-            dest += url;
+            window.location.assign(dest);
+        } else {
+            return false;
         }
-        
-        window.location.assign(dest);
-    } else {
-        return false;
     }
 };

@@ -17,13 +17,18 @@ block content
             br
             table(style="width: 100%;")
                 tr
-                    td Forgot Password:
-                    td(style="text-align: right;")
-                        button Send Link
+                    td Forgot password
+                    td(style="text-align: right; width: 100px;")
+                        button(style="width: 100%") Send Link
+                if !user.resetcode
+                    tr
+                        td Revoke password reset code
+                        td(style="text-align: right;")
+                            button(style="width: 100%") Revoke
                 tr
-                    td Ban Account:
+                    td Ban account
                     td(style="text-align: right;")
-                        button Ban
+                        button(style="width: 100%") Ban
                 
         content.wide
             form(style="width: calc(100% - 2em); max-width: initial;")

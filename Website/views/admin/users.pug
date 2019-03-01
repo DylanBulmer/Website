@@ -21,7 +21,7 @@ block content
                         th Privilege
                 tbody
                     for user in data
-                        tr(id=user.id onclick="select(" + user.id + ")")
+                        tr(id=user.id onclick="select(" + user.id + ")" ondblclick="edit(" + user.id + ")")
                             td(style="text-align: center;")
                                 input(type="checkbox")
                             td= user.id

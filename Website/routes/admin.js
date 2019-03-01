@@ -40,7 +40,7 @@ app.get('/users/:id/edit', (req, res, next) => {
             let next = [];
             if (req.query.next) next = req.query.next.split(",");
 
-            db.query("SELECT id, name_first, name_last, username, email, privilege FROM users WHERE id = '" + id + "'", (err, rows) => {
+            db.query("SELECT id, name_first, name_last, username, email, privilege, resetcode FROM users WHERE id = '" + id + "'", (err, rows) => {
                 if (err) throw err;
                 res.render('admin/edituser.pug', { 'title': 'Admin Edit User', config: config, user: rows[0], next: next, privileges: checkPrivileges(rows[0]) });
             });
