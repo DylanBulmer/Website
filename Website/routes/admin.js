@@ -6,7 +6,7 @@ var tools = require('../tools');
 var db = require("../modules/database").get();
 
 app.get('/', (req, res, next) => {
-    tools.userTest(req, 4, (result) => {
+    tools.userTest(req, 10, (result) => {
         if (result) {
             res.render('admin/index.pug', { 'title': 'Admin', config: config });
         } else {
@@ -17,7 +17,7 @@ app.get('/', (req, res, next) => {
 });
 
 app.get('/users', (req, res, next) => {
-    tools.userTest(req, 4, (result) => {
+    tools.userTest(req, 10, (result) => {
         if (result) {
             db.query("SELECT id, name_first, name_last, username, email, privilege FROM users", (err, rows) => {
                 if (err) throw err;
@@ -32,12 +32,12 @@ app.get('/users', (req, res, next) => {
 });
 
 app.get('/users/:id/edit', (req, res, next) => {
-    tools.userTest(req, 4, (result) => {
+    tools.userTest(req, 10, (result) => {
         if (result) {
 
             let id = req.params.id;
 
-            let next = [];
+            let next = null;
             if (req.query.next) next = req.query.next.split(",");
 
             db.query("SELECT id, name_first, name_last, username, email, privilege, resetcode FROM users WHERE id = '" + id + "'", (err, rows) => {

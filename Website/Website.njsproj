@@ -105,6 +105,8 @@
     <Content Include="views\account\layout.pug" />
     <Content Include="views\account\emailRequest.pug" />
     <Content Include="views\account\resetPassword.pug" />
+    <Content Include="views\api\layout.pug" />
+    <Content Include="views\api\signin.pug" />
     <Content Include="views\blog\blog.pug" />
     <Content Include="views\blog\edit.pug" />
     <Content Include="views\blog\index.pug" />
@@ -137,6 +139,7 @@
     <Folder Include="uploads\" />
     <Folder Include="views\" />
     <Folder Include="views\account\" />
+    <Folder Include="views\api\" />
     <Folder Include="views\modules\" />
     <Folder Include="views\blog\" />
     <Folder Include="views\gaming\" />

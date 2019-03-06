@@ -2,7 +2,6 @@
 var express = require('express');
 var app = express();
 var data = require('../config.json');
-var mysql = require('mysql');
 var passport = require('passport');
 var bcrypt = require('bcrypt');
 var tools = require('../tools');

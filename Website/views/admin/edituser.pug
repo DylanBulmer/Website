@@ -20,15 +20,21 @@ block content
                     td Forgot password
                     td(style="text-align: right; width: 100px;")
                         button(style="width: 100%") Send Link
-                if !user.resetcode
+                if user.resetcode
                     tr
                         td Revoke password reset code
                         td(style="text-align: right;")
                             button(style="width: 100%") Revoke
-                tr
-                    td Ban account
-                    td(style="text-align: right;")
-                        button(style="width: 100%") Ban
+                if user.privilege != 0
+                    tr
+                        td Ban account
+                        td(style="text-align: right;")
+                            button(style="width: 100%") Ban
+                else
+                    tr
+                        td Unban account
+                        td(style="text-align: right;")
+                            button(style="width: 100%") Unban
                 
         content.wide
             form(style="width: calc(100% - 2em); max-width: initial;")
@@ -48,3 +54,8 @@ block content
                                 | #{privilege.label}
         div#options.wide
             button Save
+            if next
+                button(style="position: absolute; right: 0;" onclick="next([" + next + "])") Next
+
+block scripts
+    script(src="/js/select.js")

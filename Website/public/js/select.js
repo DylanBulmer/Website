@@ -10,10 +10,31 @@ const select = (id) => {
     }
 };
 
-const edit = (id) => {
-
+/**
+ * @description Redirects to a different URL to edit a user
+ * @param {number} id User to edit first
+ * @param {number[]} next User(s) to edit after
+ * @returns {boolean} Returns false if event is canceled
+ */
+const edit = (id, next) => {
     if (id) {
-        window.location.assign("/users/" + id + "/edit");
+        let dest = "/users/" + id + "/edit";
+
+        if (next && next.length !== 0) {
+            let url = "?next=";
+            
+            for (let i = 0; i < next.length; i++) {
+                if (i === next.length - 1) {
+                    url += next[i];
+                } else {
+                    url += next[i] + ",";
+                }
+            }
+
+            dest += url;
+        }
+
+        window.location.assign(dest);
     } else {
         let selected = document.getElementsByClassName('selected');
 
@@ -40,4 +61,12 @@ const edit = (id) => {
             return false;
         }
     }
+};
+
+/**
+ * 
+ * @param {number[]} ids An array of next users to query
+ */
+const next = (ids) => {
+    edit(ids.shift(), ids);
 };

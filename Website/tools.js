@@ -2,7 +2,6 @@ var privileges = require("./config.json")["privileges"];
 
 module.exports = {
     userTest: function userTest() {
-
         let req = arguments[0];
         let privilege = null;
         if (arguments.length > 2) privilege = arguments[1];
@@ -12,13 +11,13 @@ module.exports = {
 
         if (privilege) {
             if (user && user.privilege >= Math.pow(2, privilege)) {
-                callback(true);
+                callback(user);
             } else {
                 callback(false);
             }
         } else {
             if (user) {
-                callback(true);
+                callback(user);
             } else {
                 callback(false);
             }
