@@ -491,7 +491,7 @@ let getThreads = (callback) => {
 
 function handleDisconnect() {
     db = mysql.createConnection({
-        host: data.mysql.url,
+        host: data.mysql.host,
         user: data.mysql.user,
         password: data.mysql.password,
         database: data.mysql.database

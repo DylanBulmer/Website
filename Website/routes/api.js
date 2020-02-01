@@ -10,7 +10,7 @@ var url = require('url');
 
 /* Add headers */
 app.use(function (req, res, next) {
-    res.header('Access-Control-Allow-Credentials', true);
+    res.header('Access-Control-Allow-Credentials', 'true');
     res.header('Access-Control-Allow-Origin', req.headers.origin);
     res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
     res.header('Access-Control-Allow-Headers', 'X-Requested-With, X-HTTP-Method-Override, Content-Type, Accept');
@@ -50,6 +50,9 @@ app.get('/auth/', function (req, res, next) {
     let scopes = [];
     if (req.query.scopes) scopes = req.query.scopes.split(",");
 
+    /**
+     * @type {String}
+     */
     let redirectUri = null;
     if (req.query["redirect-uri"]) redirectUri = req.query["redirect-uri"];
 
@@ -148,7 +151,6 @@ app.post('/auth/', function (req, res, next) {
  * @description Checks to see if the client key is in the system and if the client secret matches
  * @param {String} client Client key
  * @param {String} secret Client secret
- * @param {Function} callback Returns true or false with error string
  * @returns {Promise} Returns the async promise
  */
 const checkKeys = function (client, secret) {
@@ -351,7 +353,7 @@ const login = (profile, callback) => {
 };
 
 const isEmail = (username) => {
-    return /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(username);
+    return /^[a-zA-Z0-9.!#$%&ï¿½*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(username);
 };
 
 module.exports = app;

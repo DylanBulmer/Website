@@ -3,7 +3,7 @@ var express = require('express');
 var app = express();
 var data = require('../config.json');
 var passport = require('passport');
-var bcrypt = require('bcrypt');
+var bcrypt = require('bcryptjs');
 var tools = require('../tools');
 var Recaptcha = require("express-recaptcha").Recaptcha;
 var nodemailer = require('nodemailer');
@@ -11,7 +11,7 @@ var db = require('../modules/database').get();
 
 /* Add headers */
 app.use(function (req, res, next) {
-    res.header('Access-Control-Allow-Credentials', true);
+    res.header('Access-Control-Allow-Credentials', 'true');
     res.header('Access-Control-Allow-Origin', req.headers.origin);
     res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
     res.header('Access-Control-Allow-Headers', 'X-Requested-With, X-HTTP-Method-Override, Content-Type, Accept');
@@ -64,8 +64,7 @@ var GoogleStrategy = require('passport-google-oauth20').Strategy;
 passport.use(new GoogleStrategy({
     clientID: data.google.clientID,
     clientSecret: data.google.clientSecret,
-    callbackURL: "/signin/google/callback",
-    accessType: 'offline'
+    callbackURL: "/signin/google/callback"
 },
     function (accessToken, refreshToken, profile, done) {
         process.nextTick(function () {
@@ -83,8 +82,7 @@ passport.use(new GoogleStrategy({
 passport.use('google-signup', new GoogleStrategy({
     clientID: data.google.clientID,
     clientSecret: data.google.clientSecret,
-    callbackURL: "/signup/google/callback",
-    accessType: 'offline'
+    callbackURL: "/signup/google/callback"
 },
     function (accessToken, refreshToken, profile, done) {
         process.nextTick(function () {
@@ -102,8 +100,7 @@ passport.use('google-signup', new GoogleStrategy({
 passport.use('google-connect', new GoogleStrategy({
     clientID: data.google.clientID,
     clientSecret: data.google.clientSecret,
-    callbackURL: "/connect/google/callback",
-    accessType: 'offline'
+    callbackURL: "/connect/google/callback"
 },
     function (accessToken, refreshToken, profile, done) {
         process.nextTick(function () {
@@ -341,7 +338,7 @@ app.get('/', function (req, res) {
     });
 });
 
-app.post('/', function (req, res) {
+app.post('/', function (req, res, next) {
     tools.userTest(req, function (test) {
         if (test) {
             let user = tools.getUser(req);
@@ -838,7 +835,7 @@ const login = (provider, profile, callback) => {
 };
 
 const isEmail = (username) => {
-    return /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(username);
+    return /^[a-zA-Z0-9.!#$%&ï¿½*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(username);
 };
 
 var signup = function (provider, profile, callback) {
