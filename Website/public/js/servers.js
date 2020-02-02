@@ -1,14 +1,15 @@
 
 let search = (server, callback) => {
+    let ajax;
+
     switch (server.game) {
         case "Garry's Mod":
         case "Unturned":
-
-            let ajax = new XMLHttpRequest();
+            ajax = new XMLHttpRequest();
             ajax.onreadystatechange = function () {
                 if (this.readyState === 4 && this.status === 200) {
                     let body = this.response;
-                    if (body === "true") server.status = "Online";
+                    if (body == true) server.status = "Online";
                     callback(server);
                 }
             };
@@ -20,7 +21,19 @@ let search = (server, callback) => {
 
             break;
         case "Minecraft":
-            callback(server);
+            ajax = new XMLHttpRequest();
+            ajax.onreadystatechange = function () {
+                if (this.readyState === 4 && this.status === 200) {
+                    let body = this.response;
+                    if (body == true) server.status = "Online";
+                    callback(server);
+                }
+            };
+            ajax.onerror = function (err) {
+                callback(server);
+            };
+            ajax.open("GET", (config.https ? "https://" : "http://") + "gaming." + config.url + "/api/check/minecraft/" + server.host + "/" + server.port, true);
+            ajax.send();
             break;
     }
 };

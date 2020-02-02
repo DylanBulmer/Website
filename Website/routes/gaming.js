@@ -59,6 +59,15 @@ app.get('/api/check/:provider/:address/:port', (req, res, next) => {
                 return res.send(false);
             });
             break;
+        case "minecraft":
+            getServerStatus({
+                host: address, port
+            }).then((server) => {
+                return res.send(server.online);
+            }).catch((server) => {
+                return res.send(server.online);
+            });
+            break;
     }
 
 });
@@ -139,12 +148,8 @@ let getServers = (callback) => {
                 version: rows[i].version,
                 port: rows[i].port,
                 host: rows[i].url,
-                status: rows[i].status === 0 ? "Offline" : "Online"
+                status: "Offline"
             };
-
-            checkStatus(server, (update) => {
-                server = update;
-            });
 
             switch (rows[i].service) {
                 case "steam":
@@ -166,21 +171,6 @@ let getServers = (callback) => {
         }
 
     });
-};
-
-let checkStatus = (server, callback) => {
-    switch (server.game) {
-        case "Minecraft":
-            getServerStatus(server).then((server) => {
-                callback(server);
-            }).catch((server) => {
-                callback(server);
-            });
-            break;
-        default:
-            callback(server);
-            break;
-    }
 };
 
 let getServerStatus = (serv) => {
@@ -218,10 +208,10 @@ let getServerStatus = (serv) => {
             resolve(server);
       
 		}).on('error', function(e) {
-      server.online = false;
-      server.error = e.message;
+            server.online = false;
+            server.error = e.message;
 
-      client.end();
+            client.end();
 
 			reject(server);
 		});
