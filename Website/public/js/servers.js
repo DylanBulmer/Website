@@ -9,8 +9,8 @@ let search = (server, callback) => {
             ajax.onreadystatechange = function () {
                 if (this.readyState === 4 && this.status === 200) {
                     let body = this.response;
-                    console.log(typeof body, body);
-                    if (body == true) server.status = "Online";
+                    //console.log(typeof body, body); // Returns true/false as a String
+                    if (body === "true") server.status = "Online";
                     callback(server);
                 }
             };
@@ -27,8 +27,9 @@ let search = (server, callback) => {
             ajax.onreadystatechange = function () {
                 if (this.readyState === 4 && this.status === 200) {
                     let body = this.response;
-                    console.log(typeof body, body);
-                    if (body == true) server.status = "Online";
+                    //console.log(typeof body, body); // Returns true/false as a String
+                    if (body === "true") server.status = "Online";
+                    console.log(server);
                     callback(server);
                 }
             };
