@@ -9,11 +9,13 @@ let search = (server, callback) => {
             ajax.onreadystatechange = function () {
                 if (this.readyState === 4 && this.status === 200) {
                     let body = this.response;
+                    console.log(typeof body, body);
                     if (body == true) server.status = "Online";
                     callback(server);
                 }
             };
             ajax.onerror = function (err) {
+                console.log(err);
                 callback(server);
             };
             ajax.open("GET", (config.https ? "https://" : "http://") + "gaming." + config.url + "/api/check/steam/" + server.host + "/" + server.port, true);
@@ -25,11 +27,13 @@ let search = (server, callback) => {
             ajax.onreadystatechange = function () {
                 if (this.readyState === 4 && this.status === 200) {
                     let body = this.response;
+                    console.log(typeof body, body);
                     if (body == true) server.status = "Online";
                     callback(server);
                 }
             };
             ajax.onerror = function (err) {
+                console.log(err);
                 callback(server);
             };
             ajax.open("GET", (config.https ? "https://" : "http://") + "gaming." + config.url + "/api/check/minecraft/" + server.host + "/" + server.port, true);
