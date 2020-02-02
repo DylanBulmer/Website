@@ -71,7 +71,7 @@
      inkscape:label="Text">
     <text
        xml:space="preserve"
-       style="font-style:normal;font-variant:small-caps;font-weight:900;font-stretch:normal;font-size:26.13607597px;line-height:1.25;font-family:'Open Sans';-inkscape-font-specification:'Segoe UI, Heavy';font-variant-ligatures:normal;font-variant-caps:small-caps;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.27225077"
+       style="font-style:normal;font-variant:small-caps;font-weight:900;font-stretch:normal;font-size:26.13607597px;line-height:1.25;font-family:'Open Sans',Arial;-inkscape-font-specification:'Segoe UI, Heavy';font-variant-ligatures:normal;font-variant-caps:small-caps;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.27225077"
        x="66.0756"
        y="59.294495"
        id="text952"><tspan
@@ -79,11 +79,11 @@
          id="tspan950"
          x="66.0756"
          y="59.294495"
-         style="font-style:normal;font-variant:small-caps;font-weight:300;font-stretch:normal;font-size:26.13607597px;font-family:'Open Sans';-inkscape-font-specification:'Open Sans, Light';font-variant-ligatures:normal;font-variant-caps:small-caps;font-variant-numeric:normal;font-feature-settings:normal;text-align:center;writing-mode:lr-tb;text-anchor:middle;stroke-width:0.27225077">Bulmer</tspan><tspan
+         style="font-style:normal;font-variant:small-caps;font-weight:300;font-stretch:normal;font-size:26.13607597px;font-family:'Open Sans';-inkscape-font-specification:'Open Sans, Light',Arial;font-variant-ligatures:normal;font-variant-caps:small-caps;font-variant-numeric:normal;font-feature-settings:normal;text-align:center;writing-mode:lr-tb;text-anchor:middle;stroke-width:0.27225077">Bulmer</tspan><tspan
          sodipodi:role="line"
          x="66.0756"
          y="92.34893"
-         style="font-style:normal;font-variant:small-caps;font-weight:300;font-stretch:normal;font-size:26.13607597px;font-family:'Open Sans';-inkscape-font-specification:'Open Sans, Light';font-variant-ligatures:normal;font-variant-caps:small-caps;font-variant-numeric:normal;font-feature-settings:normal;text-align:center;writing-mode:lr-tb;text-anchor:middle;stroke-width:0.27225077"
+         style="font-style:normal;font-variant:small-caps;font-weight:300;font-stretch:normal;font-size:26.13607597px;font-family:'Open Sans';-inkscape-font-specification:'Open Sans, Light',Arial;font-variant-ligatures:normal;font-variant-caps:small-caps;font-variant-numeric:normal;font-feature-settings:normal;text-align:center;writing-mode:lr-tb;text-anchor:middle;stroke-width:0.27225077"
          id="tspan954">Solutions</tspan></text>
   </g>
 </svg>

@@ -2,7 +2,7 @@
 Last updated: Mar 12, 2018
 Effective: April 12, 2018
 
-Please read these Terms of Service carefully before using our website (https://piggahbrostudios.com), any application, and any services developed or operated by Bulmer Solutions.
+Please read these Terms of Service carefully before using our website (https://bulmersolutions.com), any application, and any services developed or operated by Bulmer Solutions.
 
 Your access to and use of the Service is conditioned on your acceptance of and compliance with these Terms. These Terms apply to all visitors, users and others who access or use the Service.<br>
 
