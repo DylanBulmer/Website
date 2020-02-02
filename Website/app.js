@@ -27,17 +27,17 @@ var api = require('./routes/api');
 var logDirectory = path.join(__dirname, 'log');
 
 logger.token('subdomain', function getId(req) {
-    if (req.baseUrl !== undefined) {
-        let parts = req.baseUrl.split('/');
+  if (req.baseUrl !== undefined) {
+    let parts = req.baseUrl.split('/');
 
-        if (parts[1] && parts[1] === 'subdomain') {
-            return parts[2];
-        } else {
-            return 'www';
-        }
+    if (parts[1] && parts[1] === 'subdomain') {
+      return parts[2];
     } else {
-        return null;
+      return 'www';
     }
+  } else {
+    return null;
+  }
 });
 
 // ensure log directory exists
@@ -45,14 +45,14 @@ fs.existsSync(logDirectory) || fs.mkdirSync(logDirectory);
 
 // create a rotating access write stream
 var accessLogStream = rfs(moment(new Date()).format("YYYY-MM-DD") + '.log', {
-    interval: '1d', // rotate daily
-    path: path.join(logDirectory, "access")
+  interval: '1d', // rotate daily
+  path: path.join(logDirectory, "access")
 });
 
 // create a rotating error write stream
 var errorLogStream = rfs(moment(new Date()).format("YYYY-MM-DD") + '.log', {
-    interval: '1d', // rotate daily
-    path: path.join(logDirectory, "error")
+  interval: '1d', // rotate daily
+  path: path.join(logDirectory, "error")
 });
 
 var app = express();
@@ -86,12 +86,12 @@ app.set('view engine', 'pug');
 app.set('env', data.env);
 app.set('db', require('./modules/database'));
 
-/* loggers 
- 
+/* loggers
+
    1. Access log to console
    2. Access log to file
    3. Error log to file
- 
+
  */
 
 app.use(logger(':remote-addr :method :subdomain :url :status :response-time ms'));
