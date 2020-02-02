@@ -9,7 +9,28 @@ class database {
     constructor() {
         this.data = store.get("mysql");
         this.isConnected = false;
-        this.db;
+        this.db = mysql.createConnection(this.data);
+
+
+        this.db.on('error', function (err) {
+            console.log('MySQL Error: ', err.message);
+//            if (err.code === 'PROTOCOL_CONNECTION_LOST') {
+                this.isConnected = false;
+                this.connect();
+//            } else {
+//                throw err;
+//            }
+        });
+
+        this.db.on('end', function (err) {
+            console.log('MySQL Error: ', err.message);
+//                if (err.code === 'PROTOCOL_CONNECTION_LOST') {
+                this.isConnected = false;
+                this.connect();
+//                } else {
+//                    throw err;
+//                }
+        });
 
         this.connect();
     }
@@ -17,7 +38,7 @@ class database {
     // Connect to database
     connect() {
         let self = this;
-        this.db = mysql.createConnection(this.data);
+        //this.db = mysql.createConnection(this.data);
 
         this.db.connect(function (err) {
             if (err) {
@@ -34,26 +55,6 @@ class database {
                     //self.verifyDataBase();
                 }
             }
-
-            self.db.on('error', function (err) {
-                console.log('MySQL Error: ', err.message);
-                if (err.code === 'PROTOCOL_CONNECTION_LOST') {
-                    self.isConnected = false;
-                    self.connect();
-                } else {
-                    throw err;
-                }
-            });
-
-            self.db.on('end', function (err) {
-                console.log('MySQL Error: ', err.message);
-                if (err.code === 'PROTOCOL_CONNECTION_LOST') {
-                    self.isConnected = false;
-                    self.connect();
-                } else {
-                    throw err;
-                }
-            });
         });
     }
 
@@ -85,7 +86,8 @@ class database {
     }
 
     get() {
-        if (this.isConnected === false) this.connect();
+        if (this.isConnected === false) 
+            this.connect();
         return this.db;
     }
 
