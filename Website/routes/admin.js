@@ -3,7 +3,7 @@ var express = require('express');
 var app = express();
 var config = require('../config.json');
 var tools = require('../tools');
-var db = require("../modules/database").get();
+var db = require('../modules/database').get();
 
 app.get('/', (req, res, next) => {
     tools.userTest(req, 10, (result) => {

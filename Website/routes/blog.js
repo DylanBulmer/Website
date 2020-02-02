@@ -4,7 +4,7 @@ var app = express();
 var data = require('../config.json');
 var tools = require('../tools');
 var path = require('path');
-var db = require('../modules/database');
+var db = require('../modules/database').get();
 var moment = require('moment');
 
 // setup to upload images

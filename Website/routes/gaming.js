@@ -2,11 +2,11 @@
 var express = require('express');
 var app = express();
 var data = require('../config.json');
-var mysql = require('mysql');
 var tools = require('../tools');
 var dateformat = require('dateformat');
 var net = require('net');
 var http = require('http');
+var db = require('../modules/database').get();
 
 /* GET users listing. */
 app.get('/', function (req, res) {
@@ -126,11 +126,6 @@ app.get('/forums/:subtopic/:thread_id', function (req, res) {
         });
     }
 });
-
-// Database Functions
-
-var DBisConnected = false;
-var db;
 
 let getServers = (callback) => {
     db.query("SELECT * FROM servers", (err, rows, fields) => {
@@ -488,41 +483,5 @@ let getThreads = (callback) => {
         }
     });
 };
-
-function handleDisconnect() {
-    db = mysql.createConnection({
-        host: data.mysql.host,
-        user: data.mysql.user,
-        password: data.mysql.password,
-        database: data.mysql.database
-    });
-
-    db.connect(function (err) {
-        if (err) {
-            DBisConnected = false;
-            console.log("MySQL ERROR: " + err.code);
-            setTimeout(handleDisconnect, 2000);
-        } else {
-            if (data.mysql.database === "") {
-                console.log("Please enter a database in the config.json file!");
-            } else {
-                console.log("MySQL Connection Established");
-                DBisConnected = true;
-            }
-        }
-
-        db.on('error', function (err) {
-            console.log('MySQL Error: ', err);
-            if (err.code === 'PROTOCOL_CONNECTION_LOST') {
-                DBisConnected = false;
-                handleDisconnect();
-            } else {
-                throw err;
-            }
-        });
-    });
-}
-
-handleDisconnect();
 
 module.exports = app;
