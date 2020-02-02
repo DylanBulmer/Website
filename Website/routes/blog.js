@@ -51,7 +51,7 @@ var md = require('markdown-it')({
 app.get('/', function (req, res, next) {
     let user = tools.getUser(req);
     let sql = "SELECT blogs.*, users.name_first, users.name_last FROM blogs LEFT JOIN(SELECT name_first, name_last, id FROM users) as users on author_id = users.id ORDER BY blogs.date DESC, blogs.id DESC LIMIT 10";
-    db.get().query(sql, (err, rows, fields) => {
+    db.query(sql, (err, rows, fields) => {
         if (err) throw err;
         else {
             let blogs = rows;
@@ -104,7 +104,7 @@ app.post('/new', upload.single('upload'), (req, res, next) => {
         let file = req.file;
         let body = req.body;
 
-        db.get().query(
+        db.query(
             "INSERT INTO blogs SET ?",
             {
                 'title': body.title,
@@ -142,7 +142,7 @@ app.get('/:id', (req, res, next) => {
     let user = tools.getUser(req);
 
     try {
-        db.get().query("SELECT blogs.*, users.name_first, users.name_last FROM blogs LEFT JOIN(SELECT name_first, name_last, id FROM users) as users on author_id = users.id WHERE blogs.id = ?", [req.params.id], (err, rows) => {
+        db.query("SELECT blogs.*, users.name_first, users.name_last FROM blogs LEFT JOIN(SELECT name_first, name_last, id FROM users) as users on author_id = users.id WHERE blogs.id = ?", [req.params.id], (err, rows) => {
             if (err) {
                 console.error(err);
                 let err = new Error('Not Found');
@@ -193,7 +193,7 @@ app.get('/:id/edit', (req, res, next) => {
     let user = tools.getUser(req);
 
     try {
-        db.get().query("SELECT blogs.*, users.name_first, users.name_last FROM blogs LEFT JOIN(SELECT name_first, name_last, id FROM users) as users on author_id = users.id WHERE blogs.id = ?", [req.params.id], (err, rows) => {
+        db.query("SELECT blogs.*, users.name_first, users.name_last FROM blogs LEFT JOIN(SELECT name_first, name_last, id FROM users) as users on author_id = users.id WHERE blogs.id = ?", [req.params.id], (err, rows) => {
             if (err) {
                 console.error(err);
                 let err = new Error('Not Found');
@@ -259,12 +259,12 @@ app.post('/:id/edit', upload.single('upload'), (req, res, next) => {
         if (file) data["image_path"] = file.filename;
         if (body.type === "draft") data["date"] = moment(today.date).format('YYYY-MM-DD HH:mm:ss');
 
-        db.get().query(
+        db.query(
             "UPDATE blogs SET ? WHERE id = " + req.params.id, data,
             (err, rows) => {
                 if (err) {
                     console.error(err.message);
-                    db.get().query("SELECT blogs.*, users.name_first, users.name_last FROM blogs LEFT JOIN(SELECT name_first, name_last, id FROM users) as users on author_id = users.id WHERE blogs.id = ?", [req.params.id], (err, rows) => {
+                    db.query("SELECT blogs.*, users.name_first, users.name_last FROM blogs LEFT JOIN(SELECT name_first, name_last, id FROM users) as users on author_id = users.id WHERE blogs.id = ?", [req.params.id], (err, rows) => {
                         if (err) {
                             console.error(err);
                             let err = new Error('Not Found');
@@ -314,7 +314,7 @@ app.get('/:id/delete', (req, res, next) => {
     let user = tools.getUser(req);
 
     if (user) {
-        db.get().query("SELECT blogs.*, users.name_first, users.name_last FROM blogs LEFT JOIN(SELECT name_first, name_last, id FROM users) as users on author_id = users.id WHERE blogs.id = ?", [req.params.id], (err, rows) => {
+        db.query("SELECT blogs.*, users.name_first, users.name_last FROM blogs LEFT JOIN(SELECT name_first, name_last, id FROM users) as users on author_id = users.id WHERE blogs.id = ?", [req.params.id], (err, rows) => {
             if (err) {
                 console.error(err);
                 let err = new Error('Not Found');
@@ -324,7 +324,7 @@ app.get('/:id/delete', (req, res, next) => {
                 let blog = rows[0];
                 if (user.id === blog.author_id || user.privilege >= 8) {
                     // delete blog post
-                    db.get().query("DELETE FROM blogs WHERE id = " + req.params.id, (err, rows, fields) => {
+                    db.query("DELETE FROM blogs WHERE id = " + req.params.id, (err, rows, fields) => {
                         if (err) {
                             let err = new Error('Could not delete blog #' + req.params.id);
                             err.status = 500;
