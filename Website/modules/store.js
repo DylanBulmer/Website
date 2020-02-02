@@ -62,7 +62,7 @@ class Store {
      */
     parseDataFile(filePath, defaults) {
         try {
-            return JSON.parse(fs.readFileSync(filePath));
+            return JSON.parse(fs.readFileSync(filePath).toString());
         } catch (error) {
             fs.writeFileSync(filePath, JSON.stringify(defaults));
             return defaults;

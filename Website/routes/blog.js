@@ -145,9 +145,9 @@ app.get('/:id', (req, res, next) => {
         db.query("SELECT blogs.*, users.name_first, users.name_last FROM blogs LEFT JOIN(SELECT name_first, name_last, id FROM users) as users on author_id = users.id WHERE blogs.id = ?", [req.params.id], (err, rows) => {
             if (err) {
                 console.error(err);
-                let err = new Error('Not Found');
-                err.status = 404;
-                next(err);
+                let error = new Error('Not Found');
+                error['status'] = 404;
+                next(error);
             } else {
                 if (rows[0]) {
                     let blog = rows[0];
@@ -172,19 +172,19 @@ app.get('/:id', (req, res, next) => {
                         });
                     } else {
                         let err = new Error('Not Found');
-                        err.status = 404;
+                        err['status'] = 404;
                         next(err);
                     }
                 } else {
                     let err = new Error('Not Found');
-                    err.status = 404;
+                    err['status'] = 404;
                     next(err);
                 }
             }
         });
     } catch (e) {
         let err = new Error('Not Found');
-        err.status = 404;
+        err['status'] = 404;
         next(err);
     }
 });
@@ -196,9 +196,9 @@ app.get('/:id/edit', (req, res, next) => {
         db.query("SELECT blogs.*, users.name_first, users.name_last FROM blogs LEFT JOIN(SELECT name_first, name_last, id FROM users) as users on author_id = users.id WHERE blogs.id = ?", [req.params.id], (err, rows) => {
             if (err) {
                 console.error(err);
-                let err = new Error('Not Found');
-                err.status = 404;
-                next(err);
+                let error = new Error('Not Found');
+                error['status'] = 404;
+                next(error);
             } else {
                 if (rows[0] && user.id === rows[0].author_id) {
                     let blog = rows[0];
@@ -228,14 +228,14 @@ app.get('/:id/edit', (req, res, next) => {
                     }
                 } else {
                     let err = new Error('Not Found');
-                    err.status = 404;
+                    err['status'] = 404;
                     next(err);
                 }
             }
         });
     } catch (e) {
         let err = new Error('Not Found');
-        err.status = 404;
+        err['status'] = 404;
         next(err);
     }
 });
@@ -267,9 +267,9 @@ app.post('/:id/edit', upload.single('upload'), (req, res, next) => {
                     db.query("SELECT blogs.*, users.name_first, users.name_last FROM blogs LEFT JOIN(SELECT name_first, name_last, id FROM users) as users on author_id = users.id WHERE blogs.id = ?", [req.params.id], (err, rows) => {
                         if (err) {
                             console.error(err);
-                            let err = new Error('Not Found');
-                            err.status = 404;
-                            next(err);
+                            let error = new Error('Not Found');
+                            error['status'] = 404;
+                            next(error);
                         } else {
                             if (rows[0]) {
                                 let blog = rows[0];
@@ -292,7 +292,7 @@ app.post('/:id/edit', upload.single('upload'), (req, res, next) => {
                                 }
                             } else {
                                 let err = new Error('Not Found');
-                                err.status = 404;
+                                err['status'] = 404;
                                 next(err);
                             }
                         }
@@ -317,9 +317,9 @@ app.get('/:id/delete', (req, res, next) => {
         db.query("SELECT blogs.*, users.name_first, users.name_last FROM blogs LEFT JOIN(SELECT name_first, name_last, id FROM users) as users on author_id = users.id WHERE blogs.id = ?", [req.params.id], (err, rows) => {
             if (err) {
                 console.error(err);
-                let err = new Error('Not Found');
-                err.status = 404;
-                next(err);
+                let error = new Error('Not Found');
+                error['status'] = 404;
+                next(error);
             } else {
                 let blog = rows[0];
                 if (user.id === blog.author_id || user.privilege >= 8) {
@@ -327,7 +327,7 @@ app.get('/:id/delete', (req, res, next) => {
                     db.query("DELETE FROM blogs WHERE id = " + req.params.id, (err, rows, fields) => {
                         if (err) {
                             let err = new Error('Could not delete blog #' + req.params.id);
-                            err.status = 500;
+                            err['status'] = 500;
                             next(err);
                         } else {
                             res.redirect('/');
@@ -335,14 +335,14 @@ app.get('/:id/delete', (req, res, next) => {
                     });
                 } else {
                     let err = new Error('Unauthorized');
-                    err.status = 401;
+                    err['status'] = 401;
                     next(err);
                 }
             }
         });
     } else {
         let err = new Error('Not Found');
-        err.status = 404;
+        err['status'] = 404;
         next(err);
     }
 });

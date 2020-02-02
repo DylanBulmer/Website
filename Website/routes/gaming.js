@@ -111,6 +111,7 @@ app.get('/forums/:subtopic/:thread_id', function (req, res) {
     if (req.params.thread_id === "new") {
         res.send('New');
     } else {
+        // @ts-ignore
         getThread(req.params.thread_id, (err, forums) => {
 
             /*if (user && user.joined) {
@@ -141,6 +142,10 @@ let getServers = (callback) => {
                 status: rows[i].status === 0 ? "Offline" : "Online"
             };
 
+            checkStatus(server, (update) => {
+                server = update;
+            });
+
             switch (rows[i].service) {
                 case "steam":
                     server.target = "_self";
@@ -166,10 +171,11 @@ let getServers = (callback) => {
 let checkStatus = (server, callback) => {
     switch (server.game) {
         case "Minecraft":
-            getServerStatus(server, (status) => {
-                callback(status);
+            getServerStatus(server).then((server) => {
+                callback(server);
+            }).catch((server) => {
+                callback(server);
             });
-            callback(server);
             break;
         default:
             callback(server);
@@ -177,48 +183,49 @@ let checkStatus = (server, callback) => {
     }
 };
 
-let getServerStatus = (server, callback) => {
-    // Create Network call
-    let client = net.connect(server.port, server.host, function (data) {
-        let buff = new Buffer([0xFE, 0x01]);
-        client.write(buff);
-    });
-    // set timeout with callback
-    client.setTimeout(100, (data) => {
-        server.status = "Offline";
-        callback(server);
-    });
-    // on data
-    client.on('data', function (data) {
-        if (data !== null && data !== '') {
-            // convert data to strings
-            let server_info = data.toString().split("\x00\x00\x00");
-            if (server_info !== null && server_info.length) {
-                server.status = "Online";
-                server.version = server_info[2].replace(/\u0000/g, '');
-                server.motd = server_info[3].replace(/\u0000/g, '');
-                server.current_players = server_info[4].replace(/\u0000/g, '');
-                server.max_players = server_info[5].replace(/\u0000/g, '');
+let getServerStatus = (serv) => {
 
-                // send back updated data
-                callback(server);
-            }
-            else {
-                server.status = "Offline";
+    return new Promise((resolve, reject) => {
+		let server = {};
 
-                // send back data
-                callback(server);
-            }
-        }
-        client.end();
-    });
-    // on error
-    client.on('error', (data) => {
-        console.error(data.message);
+		// connect to the server using NET.
+		let client = net.connect(serv.port, serv.host, function() {
+			// Send buffer packet to grab status information.
+			let buff = new Buffer([ 0xFE, 0x01 ]);
+			client.write(buff);
+		}).on('data', function(raw) {
+			// Receive the status info from `data` packet
+			if(raw != null) {
+				// Split the data to read status info
+				let server_info = raw.toString().split("\x00\x00\x00");
 
-        server.status = "Offline";
-        callback(server);
-    });
+				// Determine if server is online
+				if(server_info != null && server_info.length)	{
+					server.online = true;
+					server.version = server_info[2].replace(/\u0000/g,'');
+					server.motd = server_info[3].replace(/\u0000/g,'');
+					server.current_players = server_info[4].replace(/\u0000/g,'');
+					server.max_players = server_info[5].replace(/\u0000/g,'');
+				} else {
+					server.online = false;
+				}
+			};
+      
+            // Close connection first...
+			client.end();
+			
+			// Then return JSON
+            resolve(server);
+      
+		}).on('error', function(e) {
+      server.online = false;
+      server.error = e.message;
+
+      client.end();
+
+			reject(server);
+		});
+	});
 };
 
 /**

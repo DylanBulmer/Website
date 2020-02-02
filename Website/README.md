@@ -1,3 +1,3 @@
-﻿# Website With Node JS
+﻿# Website
 
-This website will be made 100% out of Javascript with NodeJS. All the user data from the old site is still present, we developed a code to convert the old accounts to the new ones so your login will still work.
+This is my website where I write my blogs and promote the services I provide. This site is developed with NodeJS using the express library and PUG for the page renderer.

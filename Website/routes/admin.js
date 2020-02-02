@@ -56,7 +56,7 @@ app.get('/users/:id/edit', (req, res, next) => {
 /**
  * @description Adds the "checked" paramater for checkboxes if user has the right privileges
  * @param {any} user The logged in user.
- * @returns {[{"level": string, "label": string, "short": string, "checked": boolean}]} Array of privileges
+ * @returns {{"level": string, "label": string, "short": string, "checked": boolean}[]} Array of privileges
  */
 const checkPrivileges = (user) => {
 
@@ -69,14 +69,15 @@ const checkPrivileges = (user) => {
         if (num <= priv) {
             priv = priv - num;
             allowed[allowed.length] = privileges[i];
-            allowed[allowed.length - 1].checked = true;
+            allowed[allowed.length - 1]['checked'] = true;
         } else {
             allowed[allowed.length] = privileges[i];
-            allowed[allowed.length - 1].checked = false;
+            allowed[allowed.length - 1]['checked'] = false;
         }
     }
 
     allowed.reverse();
+    // @ts-ignore
     return allowed;
 };
 

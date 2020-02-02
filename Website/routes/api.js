@@ -70,7 +70,7 @@ app.get('/auth/', function (req, res, next) {
                     runScopes(scopes, result).then(data => {
                         data["backend"] = (Date.now() - start) / 1000;
 
-                        res.redirect(url.parse(redirectUri));
+                        res.redirect(url.parse(redirectUri).href);
                     }).catch(reason => {
                         res.send(reason);
                     });
@@ -247,10 +247,13 @@ const runLogin = (req, callback) => {
 
     if (req.session["loginTries"] > 5) {
         // do captcha check
+        // @ts-ignore
         recaptcha.verify(req, function (error, info) {
             if (!error) {
                 login({
+                    // @ts-ignore
                     "username": req.body.username,
+                    // @ts-ignore
                     "password": req.body.password
                 }, function (result) {
                     if (result.err)
@@ -281,7 +284,9 @@ const runLogin = (req, callback) => {
         });
     } else {
         login({
+            // @ts-ignore
             "username": req.body.username,
+            // @ts-ignore
             "password": req.body.password
         }, function (result) {
             if (result.err)

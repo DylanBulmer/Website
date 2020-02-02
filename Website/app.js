@@ -44,13 +44,13 @@ logger.token('subdomain', function getId(req) {
 fs.existsSync(logDirectory) || fs.mkdirSync(logDirectory);
 
 // create a rotating access write stream
-var accessLogStream = rfs(moment(new Date()).format("YYYY-MM-DD") + '.log', {
+var accessLogStream = rfs.createStream(moment(new Date()).format("YYYY-MM-DD") + '.log', {
   interval: '1d', // rotate daily
   path: path.join(logDirectory, "access")
 });
 
 // create a rotating error write stream
-var errorLogStream = rfs(moment(new Date()).format("YYYY-MM-DD") + '.log', {
+var errorLogStream = rfs.createStream(moment(new Date()).format("YYYY-MM-DD") + '.log', {
   interval: '1d', // rotate daily
   path: path.join(logDirectory, "error")
 });
@@ -260,7 +260,7 @@ app.get('/mapgame', function (req, res) {
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
     let err = new Error('Not Found');
-    err.status = 404;
+    err['status'] = 404;
     next(err);
 });
 
@@ -270,7 +270,7 @@ if (app.get('env') === 'development') {
     // development error handler
     // will print stacktrace
     app.use(function (err, req, res, next) {
-        res.status(err.status || 500);
+        res.status(err['status'] || 500);
         res.render('error', {
             message: err.message,
             error: err,
@@ -281,7 +281,7 @@ if (app.get('env') === 'development') {
     // production error handler
     // no stacktraces leaked to user
     app.use(function (err, req, res, next) {
-        res.status(err.status || 500);
+        res.status(err['status'] || 500);
         res.render('error', {
             message: err.message,
             error: {},
