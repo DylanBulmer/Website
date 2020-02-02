@@ -1,46 +1,30 @@
-
 let search = (server, callback) => {
-    let ajax;
+    let ajax = new XMLHttpRequest();
+    
+    ajax.onreadystatechange = function () {
+        if (this.readyState === 4 && this.status === 200) {
+            let body = this.response;
+            //console.log(typeof body, body); // Returns true/false as a String
+            if (body === "true") server.status = "Online";
+            callback(server);
+        }
+    };
+    ajax.onerror = function (err) {
+        console.log(err);
+        callback(server);
+    };
 
     switch (server.game) {
         case "Garry's Mod":
         case "Unturned":
-            ajax = new XMLHttpRequest();
-            ajax.onreadystatechange = function () {
-                if (this.readyState === 4 && this.status === 200) {
-                    let body = this.response;
-                    //console.log(typeof body, body); // Returns true/false as a String
-                    if (body === "true") server.status = "Online";
-                    callback(server);
-                }
-            };
-            ajax.onerror = function (err) {
-                console.log(err);
-                callback(server);
-            };
             ajax.open("GET", (config.https ? "https://" : "http://") + "gaming." + config.url + "/api/check/steam/" + server.host + "/" + server.port, true);
-            ajax.send();
-
             break;
         case "Minecraft":
-            ajax = new XMLHttpRequest();
-            ajax.onreadystatechange = function () {
-                if (this.readyState === 4 && this.status === 200) {
-                    let body = this.response;
-                    //console.log(typeof body, body); // Returns true/false as a String
-                    if (body === "true") server.status = "Online";
-                    console.log(server);
-                    callback(server);
-                }
-            };
-            ajax.onerror = function (err) {
-                console.log(err);
-                callback(server);
-            };
             ajax.open("GET", (config.https ? "https://" : "http://") + "gaming." + config.url + "/api/check/minecraft/" + server.host + "/" + server.port, true);
-            ajax.send();
             break;
     }
+
+    ajax.send();
 };
 
 let postServers = () => {
