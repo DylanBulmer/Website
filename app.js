@@ -10,9 +10,10 @@ var compression = require('compression');
 var rfs = require('rotating-file-stream');
 var moment = require('moment');
 var fs = require('fs');
-var proxy = require('http-proxy-middleware');
+//var proxy = require('http-proxy-middleware');
 
-var data = require('./config.json');
+require('dotenv');
+var data = process.env;
 
 // Route Files
 var www = require('./routes/index');
@@ -60,12 +61,12 @@ var app = express();
 app.use(compression());
 
 app.use(require('express-session')({
-    secret: data.secret,
+    secret: data.SECRET,
     resave: false,
     saveUninitialized: true,
     cookie: {
         path: '/',
-        domain: data.url
+        domain: data.URL
     }
 }));
 
@@ -83,7 +84,7 @@ app.use(passport.session());
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
-app.set('env', data.env);
+app.set('env', data.ENV);
 app.set('db', require('./modules/database'));
 
 /* loggers
@@ -107,7 +108,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 // Set Up Subdomains
-app.use(subdomain({ base: data.url, removeWWW: true }));
+app.use(subdomain({ base: data.URL, removeWWW: true }));
 app.use('/subdomain/blog/', blog);
 app.use('/subdomain/gaming/', gaming);
 app.use('/subdomain/account/', account);
@@ -116,7 +117,7 @@ app.use('/subdomain/admin/', admin);
 app.use('/subdomain/api/', api);
 
 // adding in reverse proxy
-for (let i = 0; i < data.routes.length; i++) {
+/* for (let i = 0; i < data.routes.length; i++) {
     let route = data.routes[i];
 
     app.use(route.route,
@@ -129,7 +130,7 @@ for (let i = 0; i < data.routes.length; i++) {
             }
         })
     );
-}
+} */
 
 // Set subdomain directories
 
@@ -238,23 +239,23 @@ app.use('/', www);
 
 // Create Redirects
 app.get('/blog', function (req, res) {
-    res.redirect('http://blog.' + data.url);
+    res.redirect('http://blog.' + data.URL);
 });
 
 app.get('/account', function (req, res) {
-    res.redirect('http://account.' + data.url);
+    res.redirect('http://account.' + data.URL);
 });
 
 app.get('/gaming', function (req, res) {
-    res.redirect('http://gaming.' + data.url);
+    res.redirect('http://gaming.' + data.URL);
 });
 
 app.get('/store', function (req, res) {
-    res.redirect('http://store.' + data.url);
+    res.redirect('http://store.' + data.URL);
 });
 
 app.get('/mapgame', function (req, res) {
-    res.redirect('http://mapgame.' + data.url);
+    res.redirect('http://mapgame.' + data.URL);
 });
 
 // catch 404 and forward to error handler
@@ -291,7 +292,7 @@ if (app.get('env') === 'development') {
 }
 
 
-if (data.https) {
+if (data.HTTPS) {
     // HTTPS Settings
     app.set('port', 443);
 
