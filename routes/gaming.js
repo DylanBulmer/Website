@@ -1,7 +1,7 @@
 'use strict';
 var express = require('express');
 var app = express();
-var data = require('../config.json');
+var data = process.env;
 var tools = require('../tools');
 var dateformat = require('dateformat');
 var net = require('net');

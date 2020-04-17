@@ -9,7 +9,7 @@ var md = require('markdown-it')({
 });
 var express = require('express');
 var app = express();
-var config = require('../config.json');
+var config = process.env;
 var tools = require('../tools');
 var fs = require('fs');
 var path = require('path');

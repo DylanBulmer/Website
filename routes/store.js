@@ -1,7 +1,7 @@
 'use strict';
 var express = require('express');
 var router = express.Router();
-var config = require('../config.json');
+var config = process.env;
 var tools = require('../tools');
 
 /* GET users listing. */

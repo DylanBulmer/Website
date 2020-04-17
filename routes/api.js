@@ -1,7 +1,7 @@
 'use strict';
 var express = require('express');
 var app = express();
-var config = require('../config.json');
+var config = process.env;
 var tools = require('../tools');
 var bcrypt = require('bcryptjs');
 var db = require('../modules/database').get();

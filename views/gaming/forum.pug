@@ -21,9 +21,9 @@ html
                 a(href="/forums") Forums
                 a(href="http://steamcommunity.com/groups/piggahbrostudios" target="_BLANK") Steam Group
                 if user
-                    a(href=http + "account." + config.url + "/logout" target="_BLANK") Logout
+                    a(href=http + "account." + config.URL + "/logout" target="_BLANK") Logout
                 else
-                    a(href=http + "account." + config.url + "/signin" target="_BLANK") Login / Signup
+                    a(href=http + "account." + config.URL + "/signin" target="_BLANK") Login / Signup
         side
             discord
                 title Discord
@@ -38,7 +38,7 @@ html
                     joined(style="margin-bottom:1em;")= 'Joined on '+user.joined
                     posts(style="margin-bottom:1em;")= 'Posts: ' + 0
                     settings
-                        a(href= http + "account." + config.url target="_BLANK") Account Settings
+                        a(href= http + "account." + config.URL target="_BLANK") Account Settings
             else
                 member(style="text-align: center;")
                     b Join the community Today!

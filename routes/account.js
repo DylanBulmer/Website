@@ -1,7 +1,7 @@
 'use strict';
 var express = require('express');
 var app = express();
-var data = require('../config.json');
+var data = process.env;
 var passport = require('passport');
 var bcrypt = require('bcryptjs');
 var tools = require('../tools');
@@ -18,7 +18,7 @@ app.use(function (req, res, next) {
     next();
 });
 
-var recaptcha = new Recaptcha(data.reCAPTCHA["sitekey"], data.reCAPTCHA["secretkey"]);
+var recaptcha = new Recaptcha(data.RECAPTCHA_SITE_KEY, data.RECAPTCHA_SECRET);
 
 // Setup Passport
 
@@ -62,8 +62,8 @@ passport.use('local-signup', new LocalStrategy(
 var GoogleStrategy = require('passport-google-oauth20').Strategy;
 
 passport.use(new GoogleStrategy({
-    clientID: data.google.clientID,
-    clientSecret: data.google.clientSecret,
+    clientID: data.GOOGLE_CLIENTID,
+    clientSecret: data.GOOGLE_CLIENTSECRET,
     callbackURL: "/signin/google/callback"
 },
     function (accessToken, refreshToken, profile, done) {
@@ -80,8 +80,8 @@ passport.use(new GoogleStrategy({
 ));
 
 passport.use('google-signup', new GoogleStrategy({
-    clientID: data.google.clientID,
-    clientSecret: data.google.clientSecret,
+    clientID: data.GOOGLE_CLIENTID,
+    clientSecret: data.GOOGLE_CLIENTSECRET,
     callbackURL: "/signup/google/callback"
 },
     function (accessToken, refreshToken, profile, done) {
@@ -98,8 +98,8 @@ passport.use('google-signup', new GoogleStrategy({
 ));
 
 passport.use('google-connect', new GoogleStrategy({
-    clientID: data.google.clientID,
-    clientSecret: data.google.clientSecret,
+    clientID: data.GOOGLE_CLIENTID,
+    clientSecret: data.GOOGLE_CLIENTSECRET,
     callbackURL: "/connect/google/callback"
 },
     function (accessToken, refreshToken, profile, done) {
@@ -114,8 +114,8 @@ passport.use('google-connect', new GoogleStrategy({
 var FacebookStrategy = require('passport-facebook').Strategy;
 
 passport.use(new FacebookStrategy({
-    clientID: data.facebook.clientID,
-    clientSecret: data.facebook.clientSecret,
+    clientID: data.FACEBOOK_CLIENTID,
+    clientSecret: data.FACEBOOK_CLIENTSECRET,
     callbackURL: "/signin/facebook/callback"
 },
     function (accessToken, refreshToken, profile, done) {
@@ -132,8 +132,8 @@ passport.use(new FacebookStrategy({
 ));
 
 passport.use('facebook-signup', new FacebookStrategy({
-    clientID: data.facebook.clientID,
-    clientSecret: data.facebook.clientSecret,
+    clientID: data.FACEBOOK_CLIENTID,
+    clientSecret: data.FACEBOOK_CLIENTSECRET,
     callbackURL: "/signup/facebook/callback"
 },
     function (accessToken, refreshToken, profile, done) {
@@ -150,8 +150,8 @@ passport.use('facebook-signup', new FacebookStrategy({
 ));
 
 passport.use('facebook-connect', new FacebookStrategy({
-    clientID: data.facebook.clientID,
-    clientSecret: data.facebook.clientSecret,
+    clientID: data.FACEBOOK_CLIENTID,
+    clientSecret: data.FACEBOOK_CLIENTSECRET,
     callbackURL: "/connect/facebook/callback"
 },
     function (accessToken, refreshToken, profile, done) {
@@ -166,8 +166,8 @@ passport.use('facebook-connect', new FacebookStrategy({
 var TwitterStrategy = require('passport-twitter').Strategy;
 
 passport.use(new TwitterStrategy({
-    consumerKey: data.twitter.clientID,
-    consumerSecret: data.twitter.clientSecret,
+    clientID: data.TWITTER_CLIENTID,
+    clientSecret: data.TWITTER_CLIENTSECRET,
     callbackURL: "/signin/twitter/callback"
 },
     function (token, tokenSecret, profile, done) {
@@ -184,8 +184,8 @@ passport.use(new TwitterStrategy({
 ));
 
 passport.use('twitter-signup', new TwitterStrategy({
-    consumerKey: data.twitter.clientID,
-    consumerSecret: data.twitter.clientSecret,
+    clientID: data.TWITTER_CLIENTID,
+    clientSecret: data.TWITTER_CLIENTSECRET,
     callbackURL: "/signup/twitter/callback"
 },
     function (token, tokenSecret, profile, done) {
@@ -202,8 +202,8 @@ passport.use('twitter-signup', new TwitterStrategy({
 ));
 
 passport.use('twitter-connect', new TwitterStrategy({
-    consumerKey: data.twitter.clientID,
-    consumerSecret: data.twitter.clientSecret,
+    clientID: data.TWITTER_CLIENTID,
+    clientSecret: data.TWITTER_CLIENTSECRET,
     callbackURL: "/connect/twitter/callback"
 },
     function (token, tokenSecret, profile, done) {
@@ -218,8 +218,8 @@ passport.use('twitter-connect', new TwitterStrategy({
 var DiscordStrategy = require('passport-discord').Strategy;
 
 passport.use(new DiscordStrategy({
-    clientID: data.discord.clientID,
-    clientSecret: data.discord.clientSecret,
+    clientID: data.DISCORD_CLIENTID,
+    clientSecret: data.DISCORD_CLIENTSECRET,
     callbackURL: "/signin/discord/callback"
 },
     function (accessToken, refreshToken, profile, done) {
@@ -236,8 +236,8 @@ passport.use(new DiscordStrategy({
 ));
 
 passport.use('discord-signup', new DiscordStrategy({
-    clientID: data.discord.clientID,
-    clientSecret: data.discord.clientSecret,
+    clientID: data.DISCORD_CLIENTID,
+    clientSecret: data.DISCORD_CLIENTSECRET,
     callbackURL: "/signup/discord/callback"
 },
     function (accessToken, refreshToken, profile, done) {
@@ -254,8 +254,8 @@ passport.use('discord-signup', new DiscordStrategy({
 ));
 
 passport.use('discord-connect', new DiscordStrategy({
-    clientID: data.discord.clientID,
-    clientSecret: data.discord.clientSecret,
+    clientID: data.DISCORD_CLIENTID,
+    clientSecret: data.DISCORD_CLIENTSECRET,
     callbackURL: "/connect/discord/callback"
 },
     function (accessToken, refreshToken, profile, done) {
@@ -270,9 +270,9 @@ passport.use('discord-connect', new DiscordStrategy({
 var SteamStrategy = require('passport-steam').Strategy;
 
 passport.use(new SteamStrategy({
-    returnURL: (data.https ? 'https://' : 'http://') + 'account.' + data.url + '/signin/steam/callback',
-    realm: (data.https ? 'https://' : 'http://') + 'account.' + data.url + '/',
-    apiKey: data.steam.key
+    returnURL: (data.HTTPS ? 'https://' : 'http://') + 'account.' + data.URL + '/signin/steam/callback',
+    realm: (data.HTTPS ? 'https://' : 'http://') + 'account.' + data.URL + '/',
+    apiKey: data.STEAM_KEY
 },
     function (identifier, profile, done) {
         process.nextTick(function () {
@@ -288,9 +288,9 @@ passport.use(new SteamStrategy({
 ));
 
 passport.use('steam-signup', new SteamStrategy({
-    returnURL: (data.https ? 'https://' : 'http://') + 'account.' + data.url + '/signup/steam/callback',
-    realm: (data.https ? 'https://' : 'http://') + 'account.' + data.url + '/',
-    apiKey: data.steam.key
+    returnURL: (data.HTTPS ? 'https://' : 'http://') + 'account.' + data.URL + '/signin/steam/callback',
+    realm: (data.HTTPS ? 'https://' : 'http://') + 'account.' + data.URL + '/',
+    apiKey: data.STEAM_KEY
 },
     function (identifier, profile, done) {
         process.nextTick(function () {
@@ -306,9 +306,9 @@ passport.use('steam-signup', new SteamStrategy({
 ));
 
 passport.use('steam-connect', new SteamStrategy({
-    returnURL: (data.https ? 'https://' : 'http://') + 'account.' + data.url + '/connect/steam/callback',
-    realm: (data.https ? 'https://' : 'http://') + 'account.' + data.url + '/',
-    apiKey: data.steam.key
+    returnURL: (data.HTTPS ? 'https://' : 'http://') + 'account.' + data.URL + '/signin/steam/callback',
+    realm: (data.HTTPS ? 'https://' : 'http://') + 'account.' + data.URL + '/',
+    apiKey: data.STEAM_KEY
 },
     function (identifier, profile, done) {
         process.nextTick(function () {

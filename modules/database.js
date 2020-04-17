@@ -1,14 +1,17 @@
 'use strict';
 
 var mysql = require('mysql');
-var Store = require('./store');
-var store = new Store();
 
 class Database {
 
   constructor() {
 
-    this.data = store.get("mysql");
+    this.data = {
+      host: process.env.MYSQL_HOST,
+      datadase: process.env.MySQL_DATABASE,
+      username: process.env.MySQL_USERNAME,
+      password: process.env.MySQL_PASSWORD
+    };
 
     this.connect();
 
@@ -19,7 +22,7 @@ class Database {
   connect() {
 
     if (typeof this.data === 'undefined')
-      this.data = store.get('mysql');
+      this.data = process.env;
 
     this.db = mysql.createConnection(this.data);
 
@@ -65,7 +68,7 @@ class Database {
 
         console.log("\nRestarting database connection!\n");
 
-        this.data = store.get("mysql");
+        this.data = process.env;
         this.connect();
 
         resolve(true);

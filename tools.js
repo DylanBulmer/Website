@@ -1,4 +1,4 @@
-var privileges = require("./config.json")["privileges"];
+var privileges = [1,2,3,4,5,6,7,8,9,10];
 
 module.exports = {
     userTest: function userTest() {
