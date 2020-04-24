@@ -62,8 +62,8 @@ passport.use('local-signup', new LocalStrategy(
 var GoogleStrategy = require('passport-google-oauth20').Strategy;
 
 passport.use(new GoogleStrategy({
-    clientID: data.GOOGLE_CLIENTID,
-    clientSecret: data.GOOGLE_CLIENTSECRET,
+    clientID: data.GOOGLE_CLIENT_ID,
+    clientSecret: data.GOOGLE_CLIENT_SECRET,
     callbackURL: "/signin/google/callback"
 },
     function (accessToken, refreshToken, profile, done) {
@@ -80,8 +80,8 @@ passport.use(new GoogleStrategy({
 ));
 
 passport.use('google-signup', new GoogleStrategy({
-    clientID: data.GOOGLE_CLIENTID,
-    clientSecret: data.GOOGLE_CLIENTSECRET,
+    clientID: data.GOOGLE_CLIENT_ID,
+    clientSecret: data.GOOGLE_CLIENT_SECRET,
     callbackURL: "/signup/google/callback"
 },
     function (accessToken, refreshToken, profile, done) {
@@ -98,8 +98,8 @@ passport.use('google-signup', new GoogleStrategy({
 ));
 
 passport.use('google-connect', new GoogleStrategy({
-    clientID: data.GOOGLE_CLIENTID,
-    clientSecret: data.GOOGLE_CLIENTSECRET,
+    clientID: data.GOOGLE_CLIENT_ID,
+    clientSecret: data.GOOGLE_CLIENT_SECRET,
     callbackURL: "/connect/google/callback"
 },
     function (accessToken, refreshToken, profile, done) {
@@ -114,8 +114,8 @@ passport.use('google-connect', new GoogleStrategy({
 var FacebookStrategy = require('passport-facebook').Strategy;
 
 passport.use(new FacebookStrategy({
-    clientID: data.FACEBOOK_CLIENTID,
-    clientSecret: data.FACEBOOK_CLIENTSECRET,
+    clientID: data.FACEBOOK_CLIENT_ID,
+    clientSecret: data.FACEBOOK_CLIENT_SECRET,
     callbackURL: "/signin/facebook/callback"
 },
     function (accessToken, refreshToken, profile, done) {
@@ -132,8 +132,8 @@ passport.use(new FacebookStrategy({
 ));
 
 passport.use('facebook-signup', new FacebookStrategy({
-    clientID: data.FACEBOOK_CLIENTID,
-    clientSecret: data.FACEBOOK_CLIENTSECRET,
+    clientID: data.FACEBOOK_CLIENT_ID,
+    clientSecret: data.FACEBOOK_CLIENT_SECRET,
     callbackURL: "/signup/facebook/callback"
 },
     function (accessToken, refreshToken, profile, done) {
@@ -150,8 +150,8 @@ passport.use('facebook-signup', new FacebookStrategy({
 ));
 
 passport.use('facebook-connect', new FacebookStrategy({
-    clientID: data.FACEBOOK_CLIENTID,
-    clientSecret: data.FACEBOOK_CLIENTSECRET,
+    clientID: data.FACEBOOK_CLIENT_ID,
+    clientSecret: data.FACEBOOK_CLIENT_SECRET,
     callbackURL: "/connect/facebook/callback"
 },
     function (accessToken, refreshToken, profile, done) {
@@ -166,8 +166,8 @@ passport.use('facebook-connect', new FacebookStrategy({
 var TwitterStrategy = require('passport-twitter').Strategy;
 
 passport.use(new TwitterStrategy({
-    clientID: data.TWITTER_CLIENTID,
-    clientSecret: data.TWITTER_CLIENTSECRET,
+    consumerKey: data.TWITTER_CLIENT_ID,
+    consumerSecret: data.TWITTER_CLIENT_SECRET,
     callbackURL: "/signin/twitter/callback"
 },
     function (token, tokenSecret, profile, done) {
@@ -184,8 +184,8 @@ passport.use(new TwitterStrategy({
 ));
 
 passport.use('twitter-signup', new TwitterStrategy({
-    clientID: data.TWITTER_CLIENTID,
-    clientSecret: data.TWITTER_CLIENTSECRET,
+    consumerKey: data.TWITTER_CLIENT_ID,
+    consumerSecret: data.TWITTER_CLIENT_SECRET,
     callbackURL: "/signup/twitter/callback"
 },
     function (token, tokenSecret, profile, done) {
@@ -202,8 +202,8 @@ passport.use('twitter-signup', new TwitterStrategy({
 ));
 
 passport.use('twitter-connect', new TwitterStrategy({
-    clientID: data.TWITTER_CLIENTID,
-    clientSecret: data.TWITTER_CLIENTSECRET,
+    consumerKey: data.TWITTER_CLIENT_ID,
+    consumerSecret: data.TWITTER_CLIENT_SECRET,
     callbackURL: "/connect/twitter/callback"
 },
     function (token, tokenSecret, profile, done) {
@@ -218,8 +218,8 @@ passport.use('twitter-connect', new TwitterStrategy({
 var DiscordStrategy = require('passport-discord').Strategy;
 
 passport.use(new DiscordStrategy({
-    clientID: data.DISCORD_CLIENTID,
-    clientSecret: data.DISCORD_CLIENTSECRET,
+    clientID: data.DISCORD_CLIENT_ID,
+    clientSecret: data.DISCORD_CLIENT_SECRET,
     callbackURL: "/signin/discord/callback"
 },
     function (accessToken, refreshToken, profile, done) {
@@ -236,8 +236,8 @@ passport.use(new DiscordStrategy({
 ));
 
 passport.use('discord-signup', new DiscordStrategy({
-    clientID: data.DISCORD_CLIENTID,
-    clientSecret: data.DISCORD_CLIENTSECRET,
+    clientID: data.DISCORD_CLIENT_ID,
+    clientSecret: data.DISCORD_CLIENT_SECRET,
     callbackURL: "/signup/discord/callback"
 },
     function (accessToken, refreshToken, profile, done) {
@@ -254,8 +254,8 @@ passport.use('discord-signup', new DiscordStrategy({
 ));
 
 passport.use('discord-connect', new DiscordStrategy({
-    clientID: data.DISCORD_CLIENTID,
-    clientSecret: data.DISCORD_CLIENTSECRET,
+    clientID: data.DISCORD_CLIENT_ID,
+    clientSecret: data.DISCORD_CLIENT_SECRET,
     callbackURL: "/connect/discord/callback"
 },
     function (accessToken, refreshToken, profile, done) {

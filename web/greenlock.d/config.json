@@ -1,0 +1,26 @@
+{
+  "defaults": {
+    "store": {
+      "module": "greenlock-store-fs"
+    },
+    "challenges": {
+      "http-01": {
+        "module": "acme-http-01-standalone"
+      }
+    },
+    "renewOffset": "-45d",
+    "renewStagger": "3d",
+    "accountKeyType": "EC-P256",
+    "serverKeyType": "RSA-2048",
+    "subscriberEmail": "dylanmbulmer@gmail.com"
+  },
+  "sites": [
+    { "subject": "bulmersolutions.com", "altnames": ["bulmersolutions.com"] },
+    { "subject": "account.bulmersolutions.com", "altnames": ["account.bulmersolutions.com"] },
+    { "subject": "admin.bulmersolutions.com", "altnames": ["admin.bulmersolutions.com"] },
+    { "subject": "api.bulmersolutions.com", "altnames": ["api.bulmersolutions.com"] },
+    { "subject": "blog.bulmersolutions.com", "altnames": ["blog.bulmersolutions.com"] },
+    { "subject": "gaming.bulmersolutions.com", "altnames": ["gaming.bulmersolutions.com"] },
+    { "subject": "store.bulmersolutions.com", "altnames": ["store.bulmersolutions.com"] }
+  ]
+}

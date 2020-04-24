@@ -17,7 +17,7 @@ app.use(function (req, res, next) {
     next();
 });
 
-var recaptcha = new Recaptcha(config.reCAPTCHA["sitekey"], config.reCAPTCHA["secretkey"]);
+var recaptcha = new Recaptcha(config.RECAPTCHA_SITE_KEY, config.RECAPTCHA_SECRET);
 
 /* All GET and POST requests must check the project and API key to allow access */
 

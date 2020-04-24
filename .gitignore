@@ -260,9 +260,10 @@ paket-files/
 __pycache__/
 *.pyc
 
-config.json
 uploads/
 .env
 
 # Why is this even a thing???
 .DS_STORE
+
+*.sql

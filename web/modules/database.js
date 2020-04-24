@@ -6,24 +6,23 @@ class Database {
 
   constructor() {
 
+    let host = process.env.DATABASE_HOST || '127.0.0.1';
+
     this.data = {
-      host: process.env.MYSQL_HOST,
-      datadase: process.env.MySQL_DATABASE,
-      username: process.env.MySQL_USERNAME,
+      host,
+      database: process.env.MySQL_DATABASE,
+      user:     process.env.MySQL_USERNAME,
       password: process.env.MySQL_PASSWORD
     };
 
-    this.connect();
+    this.limit = 5;
+    this.count = 0;
 
-    console.log(this.isConnected());
+    this.connect();
   }
 
   // Connect to database
   connect() {
-
-    if (typeof this.data === 'undefined')
-      this.data = process.env;
-
     this.db = mysql.createConnection(this.data);
 
     let self = this;
@@ -37,7 +36,15 @@ class Database {
     this.db.on('end', function (err) {
       console.log('MySQL: Ended with message "'+ err.message + '"');
       console.log('MySQL: Reconnecting...');
-      self.connect();
+      if (self.count < self.limit) {
+        self.count++;
+
+        setTimeout(() => {
+          self.connect();
+        }, 15000);
+      } else {
+        console.log('MySQL: Reached defined limit of reconnections.')
+      }
     });
 
     /* Now connect to database */
@@ -51,6 +58,8 @@ class Database {
         } else {
           console.log();
           console.log("MySQL Connection Established");
+
+          self.count = 0;
           //self.verifyDataBase();
         }
       }

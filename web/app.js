@@ -12,7 +12,7 @@ var moment = require('moment');
 var fs = require('fs');
 //var proxy = require('http-proxy-middleware');
 
-require('dotenv');
+require('dotenv').config();
 var data = process.env;
 
 // Route Files
@@ -292,15 +292,15 @@ if (app.get('env') === 'development') {
 }
 
 
-if (data.HTTPS) {
+if (data.HTTPS === "true") {
     // HTTPS Settings
     app.set('port', 443);
 
 } else {
     // HTTP Settings
-    app.set('port', 80);
-
-    app.listen(app.get('port'));
+    app.listen(process.env.PORT,process.env.HOST, () => {
+        console.log("This server is listening on " + process.env.HOST + ":" + process.env.PORT);
+    });
 }
 
 module.exports = app;
