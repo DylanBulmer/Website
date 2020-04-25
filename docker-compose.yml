@@ -2,6 +2,10 @@
 version: '3.2'
 
 services:
+  db:
+    build: ./mysql
+    volumes:
+    - volume01:/var/lib/mysql/data
   web:
     build: ./web
     ports:
@@ -14,9 +18,5 @@ services:
     volumes:
     - .:/code
     - volume01:/var/log
-  db:
-    build: ./mysql
-    volumes:
-    - volume01:/var/lib/mysql/data
 volumes:
   volume01: {}
