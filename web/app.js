@@ -12,7 +12,9 @@ var moment = require('moment');
 var fs = require('fs');
 //var proxy = require('http-proxy-middleware');
 
-require('dotenv').config();
+require('dotenv').config({
+    path: `.env.${process.env.NODE_ENV}`
+});
 var data = process.env;
 
 // Route Files
