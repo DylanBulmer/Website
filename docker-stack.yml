@@ -1,0 +1,22 @@
+# Use root/password as user/password credentials
+version: '3.2'
+
+services:
+  db:
+    image: bulmersolutions_db:latest
+    volumes:
+    - volume01:/var/lib/mysql/data
+  web:
+    image: bulmersolutions_web:latest
+    ports:
+    - "80:80"
+    - "443:443"
+    depends_on:
+    - db
+    environment:
+    - DATABASE_HOST=db
+    volumes:
+    - .:/code
+    - volume01:/var/log
+volumes:
+  volume01: {}
