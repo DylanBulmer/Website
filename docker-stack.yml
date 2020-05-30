@@ -15,6 +15,7 @@ services:
     - db
     environment:
     - DATABASE_HOST=db
+    - NODE_ENV=production
     volumes:
     - .:/code
     - volume01:/var/log
