@@ -3,7 +3,7 @@
   "version": "0.5.2",
   "private": true,
   "scripts": {
-    "start": "node app"
+    "start": "node serve"
   },
   "description": "My Website hosted with NodeJS",
   "author": {
