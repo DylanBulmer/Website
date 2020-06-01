@@ -4,8 +4,6 @@ const {NODE_ENV} = process.env
 
 switch(NODE_ENV) {
     case "production":
-        require('./https');
-        break;
     case "development":
         require('./app');
         break;

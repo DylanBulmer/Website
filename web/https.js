@@ -6,6 +6,8 @@
 // My Secure Server
 //
 
+/// ### THIS FILE IS A GOOD RESOURCE, BUT IS NOW DEPRECATED FOR THIS PROJECT ### ///
+
 var app = require('./app.js');
 
 require('greenlock-express')

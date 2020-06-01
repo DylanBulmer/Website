@@ -8,15 +8,16 @@ services:
   web:
     image: bulmersolutions_web:latest
     ports:
-    - "80:80"
-    - "443:443"
+    - "8080:8080"
     depends_on:
     - db
     environment:
     - DATABASE_HOST=db
     - NODE_ENV=production
+    - VIRTUAL_HOST=bulmersolutions.com
+    - LETSENCRYPT_HOST=bulmersolutions.com
     volumes:
-    - .:/code
+    - ./web:/usr/src/website
     - volume01:/var/log
 volumes:
   volume01: {}
