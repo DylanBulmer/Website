@@ -7,17 +7,10 @@
   /* Image rendering */
   background: url(group-writing.jpg);
   background-size: cover;
-  background-position-y: -120px;
   filter: saturate(125%) brightness(40%);
 
   /* To not filter everything on the page... */
   z-index: -100;
-}
-
-.container {
-  padding: 40px;
-  height: calc(100vh - 80px);
-  position: relative;
 }
 
 .box {

@@ -22,7 +22,8 @@ export default function Home() {
           designer, which is what brought me to starting this project and allows me 
           to grow as a developer as I learn new design techniques.
           <br />
-          As a final note, due to the effort and my striving nature to acheive better,
+          <br />
+          As a final note, due to the efforts and my striving nature to acheive better,
         </p>
         <i>"Bulmer solutions is where quality work gets done."</i>
       </div>
