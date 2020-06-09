@@ -1,0 +1,15 @@
+.Header {
+  width: 100%;
+  position: relative;
+}
+
+.title {
+  font-size: 24px;
+}
+
+.nav {
+  position: absolute;
+  right: 0;
+  display: inline;
+  font-size: 24px;
+}
