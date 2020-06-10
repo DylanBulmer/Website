@@ -5,9 +5,10 @@
   left: 0px;
   top: 0px;
   /* Image rendering */
-  background: url(group-writing.jpg);
+  background: linear-gradient(rgba(0, 0, 0, .55), rgba(0, 0, 0, .55)), url(group-meeting-2.jpg) no-repeat;
   background-size: cover;
-  filter: saturate(125%) brightness(40%);
+  background-position: center center;
+  filter: brightness(1) contrast(1.15) saturate(0.9);
 
   /* To not filter everything on the page... */
   z-index: -100;

@@ -1,4 +1,4 @@
-.Servers {
+.Blog {
   position: absolute;
   width: 100%;
   height: 100vh;
@@ -6,9 +6,8 @@
   top: 0px;
 
   /* Image rendering */
-  background: url(datacenter.jpg);
+  background: linear-gradient(rgba(0, 0, 0, .75), rgba(0, 0, 0, .75)), url(chalkboard.jpg);
   background-size: cover;
-  filter: saturate(200%) brightness(40%);
 
   /* To not filter everything on the page... */
   z-index: -100;

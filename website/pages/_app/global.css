@@ -1,6 +1,7 @@
 body {
   margin: 0;
   padding: 40px;
+  background: #485563;
 
   /* Font Configuration */
   color: #ffffff;
@@ -9,10 +10,6 @@ body {
   font-weight: lighter;
   font-size: 18px;
   text-shadow: 0px 3px 6px rgba(0, 0, 0, 0.25);
-}
-
-html {
-  background: linear-gradient(146.96deg, #485563 0%, #29323C 100%);
 }
 
 h1, h2, h3, h4, h5, h6 {

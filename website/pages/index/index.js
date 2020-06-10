@@ -1,31 +1,33 @@
 import Head from 'next/head';
 import styles from './home.module.css';
 import { Header } from '../../components';
+import img from './group-writing.jpg'
 
 export default function Home() {
   return (
     <div className={styles.container}>
       <Head>
-        <title>Create Next App</title>
+        <title>Home | Bulmer Solutions</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Header title="Home"/>
       <div className={styles.box}>
         <h3>Welcome!</h3>
         <p>
-          During my time in quarantine, I have been working hard to create 
-          a new modern feel for Bulmer Solutions' website. Instead of sitting 
-          around, binge watch the Office as I know many of us do, I found that this time can be best 
-          utilized to reflect on what we know from our experiences so then we can 
-          learn new techniques, and gain new experiences in areas that we do not
-          feel comfortable in. After some time, I have realized that I am a weak 
-          designer, which is what brought me to starting this project and allows me 
-          to grow as a developer as I learn new design techniques.
-          <br />
-          <br />
-          As a final note, due to the efforts and my striving nature to acheive better,
+          During my time in quarantine, I have decided to work
+          hard instead of sitting around, binge watching the Office
+          as I know many of us do. I found that this time can be
+          best utilized to reflect on the knowledge we currently 
+          have and find the areas where we do not feel comfortable 
+          in. After some time, I have realized that I am a weak 
+          designer. I have taken this and started to learn new 
+          design techniques so I can grow as a developer. Although 
+          this may be a tough time, we still have the opertunity 
+          to grow and show that we are resilient.
         </p>
-        <i>"Bulmer solutions is where quality work gets done."</i>
+        <p>
+          Here at Bulmer Solutions, showing resilience and prevaling is how quality work gets done.
+        </p>
       </div>
       <div className={styles.Home} />
     </div>
