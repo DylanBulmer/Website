@@ -18,7 +18,7 @@ services:
        - "traefik.enable=true"
        - "traefik.docker.network=proxy"
        - "traefik.http.routers.bulmersolutions.rule=Host(`www.bulmersolutions.com`) || Host(`bulmersolutions.com`)"
-       - "traefik.http.routers.bulmersolutions.entrypoints=https"
+       - "traefik.http.routers.bulmersolutions.entrypoints=https,http"
        - "traefik.http.routers.bulmersolutions.tls.certresolver=le"
        - "traefik.http.services.bulmersolutions.loadbalancer.server.port=3000"
       placement:
