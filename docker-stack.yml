@@ -2,7 +2,7 @@ version: '3.3'
 
 services:
   web:
-    build: BulmerSolutions_web
+    image: bulmersolutions_web
     networks:
       - proxy
     ports:
