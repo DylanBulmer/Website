@@ -7,16 +7,17 @@ services:
       - proxy
     ports:
       - target: 3000
-        published: 3000
+        published: 3001
         protocol: tpc
         mode: host
     deploy:
       mode: replicated
       replicas: 1
       labels:
-       - traefik.port=3000
-       - traefik.docker.network=proxy
+       - traefik.port=3001
        - traefik.frontend.rule=Host(`bulmersolutions.com`, `www.bulmersolutions.com`)
+       - "traefik.enable=true"
+       - "traefik.http.routers.bulmersolutions.entrypoints=http"
       placement:
         constraints:
           # Once a registry is deployed, this will be forced to a worker
