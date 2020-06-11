@@ -21,3 +21,7 @@ services:
         constraints:
           # Once a registry is deployed, this will be forced to a worker
           - node.role==manager
+
+networks:
+  proxy:
+    external: true
