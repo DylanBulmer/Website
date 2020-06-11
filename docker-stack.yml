@@ -4,6 +4,7 @@ services:
   web:
     image: bulmersolutions_web
     networks:
+      - default
       - proxy
     ports:
       - target: 3000
@@ -14,6 +15,7 @@ services:
       replicas: 1
       labels:
        - "traefik.enable=true"
+       - "traefik.docker.network=proxy"
        - "traefik.http.routers.bulmersolutions.rule=Host(`www.bulmersolutions.com`, `bulmersolutions.com`)"
        - "traefik.http.routers.bulmersolutions.entrypoints=https"
        - "traefik.http.routers.bulmersolutions.tls.certresolver=le"
