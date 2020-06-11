@@ -14,10 +14,10 @@ services:
       mode: replicated
       replicas: 1
       labels:
-       - traefik.port=3001
-       - traefik.frontend.rule=Host(`bulmersolutions.com`, `www.bulmersolutions.com`)
        - "traefik.enable=true"
-       - "traefik.http.routers.bulmersolutions.entrypoints=http"
+       - "traefik.http.routers.whoami.rule=Host(`www.bulmersolutions.com`, `bulmersolutions.com`)"
+       - "traefik.http.routers.whoami.entrypoints=https"
+       - "traefik.http.routers.whoami.tls.certresolver=le"
       placement:
         constraints:
           # Once a registry is deployed, this will be forced to a worker
