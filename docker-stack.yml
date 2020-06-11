@@ -1,0 +1,23 @@
+version: '3.3'
+
+services:
+  web:
+    build: BulmerSolutions_web
+    networks:
+      - proxy
+    ports:
+      - target: 3000
+        published: 3000
+        protocol: tpc
+        mode: host
+    deploy:
+      mode: replicated
+      replicas: 1
+      labels:
+       - traefik.port=3000
+       - traefik.docker.network=proxy
+       - traefik.frontend.rule=Host(`bulmersolutions.com`, `www.bulmersolutions.com`)
+      placement:
+        constraints:
+          # Once a registry is deployed, this will be forced to a worker
+          - node.role==manager

@@ -18,8 +18,8 @@ export default function Home() {
           hard instead of sitting around, binge watching the Office
           as I know many of us do. I found that this time can be
           best utilized to reflect on the knowledge we currently 
-          have and find the areas where we do not feel comfortable 
-          in. After some time, I have realized that I am a weak 
+          have and find areas where we can improve. 
+          After some time, I have realized that I am a weak 
           designer. I have taken this and started to learn new 
           design techniques so I can grow as a developer. Although 
           this may be a tough time, we still have the opertunity 
