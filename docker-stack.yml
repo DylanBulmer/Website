@@ -14,6 +14,7 @@ services:
       mode: replicated
       replicas: 1
       labels:
+       - "traefik.constraint-label=proxy"
        - "traefik.enable=true"
        - "traefik.docker.network=proxy"
        - "traefik.http.routers.bulmersolutions.rule=Host(`www.bulmersolutions.com`, `bulmersolutions.com`)"
