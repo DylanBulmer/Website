@@ -20,6 +20,7 @@ services:
        - "traefik.http.routers.bulmersolutions.rule=Host(`www.bulmersolutions.com`, `bulmersolutions.com`)"
        - "traefik.http.routers.bulmersolutions.entrypoints=https"
        - "traefik.http.routers.bulmersolutions.tls.certresolver=le"
+       - "traefik.http.services.bulmersolutions.loadbalancer.server.port=3000"
       placement:
         constraints:
           # Once a registry is deployed, this will be forced to a worker
