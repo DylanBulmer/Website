@@ -22,7 +22,7 @@ export default function Home() {
           After some time, I have realized that I am a weak 
           designer. I have taken this and started to learn new 
           design techniques so I can grow as a developer. Although 
-          this may be a tough time, we still have the opertunity 
+          this may be a tough time, we still have the opportunity 
           to grow and show that we are resilient.
         </p>
         <p>
