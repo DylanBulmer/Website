@@ -6,11 +6,18 @@
   top: 0px;
 
   /* Image rendering */
-  background: linear-gradient(rgba(0, 0, 0, .55), rgba(0, 0, 0, .55)), url(paper-plant.jpg);
+  background: url(man-writing.jpg);
   background-size: cover;
-  filter: saturate(150%) contrast(1.3);
-  background-position-y: -55px;
+  filter: contrast(1.25);
 
   /* To not filter everything on the page... */
   z-index: -100;
+}
+
+.Portfolio:before {
+  background: linear-gradient(rgba(0,0,0,0.5),rgba(0,0,0,0.55));
+  content: '';
+  width: 100%;
+  height: 100vh;
+  display: block;
 }

@@ -12,19 +12,19 @@ function Header(props) {
             Home
           </a>
         </Link>
-        <span> • </span>
+        <span> / </span>
         <Link href="/portfolio">
           <a className={styles.link}>
             Portfolio
           </a>
         </Link>
-        <span> • </span>
+        <span> / </span>
         <Link href="/blog">
           <a className={styles.link}>
             Blog
           </a>
         </Link>
-        <span> • </span>
+        <span> / </span>
         <Link href="/servers">
           <a className={styles.link}>
             Servers

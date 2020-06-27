@@ -18,6 +18,7 @@
   text-decoration: none;
   color: white;
   line-height: 36px;
+  font-weight: normal;
 }
 
 .link:hover {
