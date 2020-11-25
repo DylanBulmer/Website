@@ -22,7 +22,7 @@
     "express-session": "^1.15.6",
     "express-subdomain": "^1.0.5",
     "greenlock-express": "^4.0.3",
-    "highlight.js": "^9.13.1",
+    "highlight.js": "^10.1.2",
     "http-errors": "^1.7.1",
     "http-proxy-middleware": "^0.19.1",
     "markdown-it": "^8.4.2",
