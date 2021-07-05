@@ -12,11 +12,12 @@ const styles = css`
     top: 0px;
 
     /* Image rendering */
-    background: linear-gradient(rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0.75)),
-      url("/image/chalkboard.jpg");
+    background: linear-gradient(rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0.25)),
+      url("/image/paper-plant.jpg");
     background-size: cover;
-    background-position: center;
+    background-position: top;
     background-repeat: no-repeat;
+    filter: blur(1px);
 
     /* To not filter everything on the page... */
     z-index: -100;
@@ -25,10 +26,9 @@ const styles = css`
 
 export default function Servers() {
   return (
-    <div className={styles.container}>
+    <div css={styles}>
       <Head>
         <title>Blog | Bulmer Solutions</title>
-        <link rel="icon" href="/favicon.ico" />
       </Head>
       <Header title="Blog" />
       <div className="Blog" />

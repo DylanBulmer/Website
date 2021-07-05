@@ -1,7 +1,2 @@
-import Header from './Header';
-import Logo from './Logo'
-
-export {
-  Header,
-  Logo
-}
+export { default as Header } from "./Header";
+export { default as Logo } from "./Logo";

@@ -28,7 +28,6 @@ export default function Servers() {
     <div css={styles}>
       <Head>
         <title>Servers | Bulmer Solutions</title>
-        <link rel="icon" href="/favicon.ico" />
       </Head>
       <Header title="Servers" />
       <div className="Servers" />

@@ -51,7 +51,6 @@ export default function Home() {
     <div css={styles} className="container">
       <Head>
         <title>Home | Bulmer Solutions</title>
-        <link rel="icon" href="/favicon.ico" />
       </Head>
       <Header title="Home" />
       <div className="box">
