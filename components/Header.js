@@ -3,18 +3,19 @@ import Link from "next/link";
 import { Logo } from ".";
 
 const styles = css`
-  width: 100%;
+  width: calc(100% - 16px);
   position: relative;
-  background-color: rgba(0, 0, 0, 0.2);
-  padding: 4px 8px;
+  background-color: rgba(0, 0, 0, 0.25);
+  padding: 8px 8px;
+  height: 36px;
+  box-shadow: 4px 4px 4px rgba(0,0,0,0.1);
 
   .title {
     font-size: 24px;
   }
 
   .nav {
-    position: absolute;
-    right: 0;
+    float: right;
     display: inline;
     font-size: 24px;
   }
@@ -32,7 +33,7 @@ const styles = css`
   }
 `;
 
-function Header(props) {
+function Header() {
   return (
     <div css={styles}>
       <Logo.Full />

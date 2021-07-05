@@ -1,6 +1,7 @@
 // import App from 'next/app'
 import Head from "next/head";
 import { css, Global } from "@emotion/react";
+import {Layout} from "@/components";
 
 const styles = css`
   body {
@@ -42,7 +43,10 @@ function App({ Component, pageProps }) {
         <title>Bulmer Solutions</title>
       </Head>
       <Global styles={styles} />
+      <Layout>
+
       <Component {...pageProps} />
+      </Layout>
     </>
   );
 }

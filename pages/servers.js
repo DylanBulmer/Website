@@ -1,6 +1,5 @@
 import React from "react";
 import Head from "next/head";
-import { Header } from "@/components";
 import { css } from "@emotion/react";
 
 const styles = css`
@@ -29,7 +28,6 @@ export default function Servers() {
       <Head>
         <title>Servers | Bulmer Solutions</title>
       </Head>
-      <Header title="Servers" />
       <div className="Servers" />
     </div>
   );

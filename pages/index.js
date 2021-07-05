@@ -1,6 +1,5 @@
 import React from "react";
 import Head from "next/head";
-import { Header } from "@/components";
 import { css } from "@emotion/react";
 
 const styles = css`
@@ -52,7 +51,6 @@ export default function Home() {
       <Head>
         <title>Home | Bulmer Solutions</title>
       </Head>
-      <Header title="Home" />
       <div className="box">
         <h3>Welcome!</h3>
       </div>
